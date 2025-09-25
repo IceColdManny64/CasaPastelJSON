@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Panel de Administración</title>
-                <a href="loginUsuario.html">Salir</a>
+                <a href="index.html">Salir</a>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -224,7 +224,7 @@
 
 <div class="botones">
   <button onclick="mostrarProductos()">Gestión de Productos</button>
-  <button onclick="mostrarFormularioAgregarPostre()">Agregar Receta</button>
+  <button onclick="mostrarFormularioAgregarPostre()">Agregar Postre</button>
   <button onclick="mostrarUsuarios()">Gestión de Usuarios</button>
 
 </div>
@@ -268,7 +268,7 @@
 
   function mostrarFormularioAgregarPostre() {
     document.getElementById("contenido").innerHTML = `
-      <p class="titulo-contenido">Agregar Nueva Receta</p>
+      <p class="titulo-contenido">Agregar Postre Nuevo</p>
       <form>
         <label>Título</label><input type="text"><br><br>
         <label>Descripción</label><textarea></textarea><br><br>
@@ -428,7 +428,7 @@
 </div>
 
 
-<script src="adminDashboard.js"></script>
+<script src="administradorDashboard.js"></script>
 
 </body>
 

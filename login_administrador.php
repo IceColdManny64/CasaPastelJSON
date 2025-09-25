@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contrasena = $_POST['contrasena'];
 
     $jsonHelper = new JsonHelper('./data/');
-    $admin = $jsonHelper->authenticateUser('admins', 'usuario', 'passw', $usuario, $contrasena);
+    $admin = $jsonHelper->authenticateUser('admons', 'usuario', 'passw', $usuario, $contrasena);
 
     if ($admin) {
         $_SESSION['rol'] = 'admin';

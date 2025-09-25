@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($result) {
         echo "<script>
                 alert('Registro exitoso. Ahora puedes iniciar sesión.');
-                window.location.href='loginUsuario.html';
+                window.location.href='index.html';
               </script>";
     } else {
         echo "<script>
