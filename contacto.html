@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto - La Casa del Pastel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: 'Playfair Display', serif;
+      color: white;
+    }
+
+    body {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                  url('https://img.freepik.com/premium-photo/chocolate-cake-with-chocolate-icing-chocolate-shavings_762785-94211.jpg') no-repeat center center/cover;
+      z-index: -1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+      color: white;
+    }
+
+    .logo-img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: white;
+      font-size: 1em;
+    }
+
+    .icons a {
+      margin-left: 15px;
+      text-decoration: none;
+    }
+
+    .icon-img {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s;
+    }
+
+    .icon-img:hover {
+      transform: scale(1.1);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 50px auto;
+      background-color: rgba(255,255,255,0.95);
+      color: #000;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .title {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #b33f4f;
+    }
+
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .info p {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+
+    .map {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .map iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .social {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .social img {
+      width: 28px;
+    }
+
+    .address {
+      margin-top: 20px;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="CasaPastel.png" alt="Logo" class="logo-img">
+      La Casa del Pastel
+    </div>
+    <nav>
+      <a href="PantallaPrincipal.html">Inicio</a>
+      <a href="menu.html">Menú</a>
+      <a href="conocenos.html">Conócenos</a>
+      <a href="ofertas.php">Ofertas</a>
+    </nav>
+        <div class="icons">
+            <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
+            <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
+            <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
+            <a href="carritoCompra.html">🛒</a>
+        </div>
+  </header>
+
+  <div class="container">
+    <h1 class="title">Contáctanos 🍰</h1>
+    <div class="content">
+      <div class="info">
+        <p><strong>Horario:</strong> Abre pronto: 8 a.m. · <a href="#" style="color:#3479e6;">Más horarios</a></p><br>
+       <br><p><strong>Teléfono:</strong> 449 658 7335</p>
+
+
+        <p class="address">
+          <br>📍 Plaza Terracota, Av Independencia 1402, San José del Arenal, 20130 Aguascalientes, Ags
+        </p>
+      </div>
+
+      <div class="map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.2117894724716!2d-102.31867172579217!3d21.882352080174188!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8429ee5eeb134fdf%3A0xc97c74cd09fa0eea!2sPastelukiss!5e0!3m2!1ses-419!2smx!4v1721493940000!5m2!1ses-419!2smx"
+          loading="lazy"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

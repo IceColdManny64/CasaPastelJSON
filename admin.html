@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Administrador - La Casa del Pastel</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ee2b2b;
+    }
+
+    .left {
+      flex: 1;
+      background-image: url('https://s1.ppllstatics.com/diariovasco/www/multimedia/201909/09/media/cortadas/postres-sin-azucar-kPaE-RHqLy3xgNxM4BJcU7OrSbTL-624x385@Diario%20Vasco.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f57c00;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 350px;
+      background-color: #fff3e0;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #b33f4f;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #fff;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #ff7043, #e53935);
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .login-container button:hover {
+      background: linear-gradient(to right, #e64a19, #c62828);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="left"></div>
+
+  <div class="right">
+    <div class="login-container">
+      <h2>Login Administrador</h2>
+      <form action="login_admin.php" method="POST">
+        <input type="text" name="usuario" placeholder="Usuario" required>
+        <input type="password" name="contrasena" placeholder="Contraseña" required>
+        <button type="submit">Iniciar Sesión</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

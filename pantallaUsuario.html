@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil de Usuario - La Casa del Pastel</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(to right, #d6001c, #f08080);
+        color: white;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    header {
+        width: 100%;
+        background-color: #a30015;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+    }
+
+    header img {
+        height: 50px;
+    }
+
+    .menu a {
+        margin-left: 15px;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .perfil {
+        background-color: white;
+        color: #333;
+        margin-top: 50px;
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .perfil h2 {
+        text-align: center;
+        color: #d6001c;
+        margin-bottom: 20px;
+    }
+
+    .perfil-info p {
+        margin: 10px 0;
+        font-size: 16px;
+    }
+
+    .btn-regresar {
+        display: block;
+        margin: 30px auto 0;
+        padding: 10px 20px;
+        background-color: #d6001c;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-regresar:hover {
+        background-color: #a30015;
+    }
+
+    .foto-perfil {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid #d6001c;
+        object-fit: cover;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+</style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="LOGO2.png" alt="Logo">
+      <h1 style="font-size: 20px;">La Casa Del Pastel</h1>
+    </div>
+    <nav class="menu">
+      <a href="">Inicio</a>
+      <a href="carritoCompra.html">Carrito</a>
+    </nav>
+  </header>
+
+  <div class="perfil">
+    <div style="text-align: center;">
+        <img src="perfil.png" alt="Foto de perfil" class="foto-perfil">
+    </div>
+    <h2>Perfil de Usuario</h2>
+    <div class="perfil-info">
+      <p><strong>Nombre:</strong> Sharon Tapia</p>
+      <p><strong>Correo:</strong> sharon@example.com</p>
+      <p><strong>Teléfono:</strong> +52 449 123 4567</p>
+      <p><strong>Dirección:</strong> Calle Dulce, #123, Aguascalientes</p>
+    </div>
+    <a href="catalago.html" class="btn-regresar">Regresar al catálogo</a>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carrito de Compras - La Casa Del Pastel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #d6001c, #f08080);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #a30015;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .logo img {
+      height: 50px;
+    }
+
+    header nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    header nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    header nav a:hover {
+      background-color: #d6001c;
+    }
+
+    #btn-pagar {
+      background-color: #ff6347;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #btn-pagar:hover {
+      background-color: #e5533d;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      color: black;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      min-height: 300px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #d6001c;
+      text-align: center;
+    }
+
+    #contenedor-carrito {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .producto-carrito {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    .producto-carrito img {
+      width: 120px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .producto-detalles {
+      flex-grow: 1;
+    }
+
+    .producto-detalles .nombre {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: #a30015;
+    }
+
+    .producto-detalles .precio {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .producto-detalles .descripcion {
+      font-size: 14px;
+      color: #333;
+    }
+
+    #vaciar-carrito {
+      margin-top: 20px;
+      background-color: #a30015;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    #vaciar-carrito:hover {
+      background-color: #d6001c;
+    }
+
+    #mensaje-vacio {
+      text-align: center;
+      font-size: 18px;
+      color: #555;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="LOGO2.png" alt="Logo La Casa Del Pastel" />
+      <h1 style="color: white; font-size: 20px;">La Casa Del Pastel</h1>
+    </div>
+
+    <nav>
+      <a href="menu.html">Catálogo</a>
+      <a href="pantallaUsuario.html">Perfil</a>
+      <button id="btn-pagar" onclick="irAPago()">Realizar pago</button>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Carrito de Compras</h1>
+<div id="carrito-lista"></div>
+<div id="carrito-total" style="text-align: right; font-weight: bold; margin-top: 20px;"></div>
+
+
+<script>
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  const lista = document.getElementById("carrito-lista");
+
+  carrito.forEach(producto => {
+    lista.innerHTML += `
+      <div style="display:flex; align-items:center; margin-bottom:20px; border-bottom:1px solid #ccc; padding-bottom:15px;">
+        <img src="${producto.imagen_url}" alt="${producto.titulo}" style="width:80px; height:80px; object-fit:cover; border-radius:6px; margin-right:15px;">
+        <div>
+          <h3 style="margin:0; color:#b33f4f;">${producto.titulo}</h3>
+          <p><strong>$${producto.precio}</strong></p>
+          <p>${producto.descripcion}</p>
+          <p><small>Cantidad: ${producto.cantidad}</small></p>
+        </div>
+      </div>
+    `;
+  });
+</script>
+
+    <button id="vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
+  </main>
+
+  <script>
+    function mostrarCarrito() {
+      const contenedor = document.getElementById('contenedor-carrito');
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      contenedor.innerHTML = "";
+
+      if (carrito.length === 0) {
+        contenedor.innerHTML = `<div id="mensaje-vacio">Tu carrito está vacío.</div>`;
+        document.getElementById('vaciar-carrito').style.display = 'none';
+        return;
+      } else {
+        document.getElementById('vaciar-carrito').style.display = 'inline-block';
+      }
+
+      carrito.forEach(producto => {
+        contenedor.innerHTML += `
+          <div class="producto-carrito">
+            <img src="${producto.img}" alt="${producto.nombre}" />
+            <div class="producto-detalles">
+              <div class="nombre">${producto.nombre}</div>
+              <div class="precio">${producto.precio}</div>
+              <div class="descripcion">${producto.descripcion}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function vaciarCarrito() {
+      if(confirm('¿Seguro que quieres vaciar el carrito?')) {
+        localStorage.removeItem('carrito');
+        mostrarCarrito();
+      }
+    }
+
+    function irAPago() {
+      // Aquí defines a dónde redirigir al usuario para pagar:
+      window.location.href = 'pago.html'; 
+    }
+
+    window.onload = mostrarCarrito;
+  </script>
+<script>
+  function mostrarCarrito() {
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const lista = document.getElementById("carrito-lista");
+    const totalDiv = document.getElementById("carrito-total");
+
+    lista.innerHTML = "";
+    let totalGeneral = 0;
+
+    carrito.forEach((producto, index) => {
+      const totalPorProducto = (producto.precio * producto.cantidad).toFixed(2);
+      totalGeneral += parseFloat(totalPorProducto);
+
+      lista.innerHTML += `
+        <div style="display:flex; align-items:center; margin-bottom:20px; border-bottom:1px solid #ccc; padding-bottom:15px;">
+          <img src="${producto.imagen_url}" alt="${producto.titulo}" style="width:80px; height:80px; object-fit:cover; border-radius:6px; margin-right:15px;">
+          <div style="flex:1;">
+            <h3 style="margin:0; color:#b33f4f;">${producto.titulo}</h3>
+            <p><strong>Precio unitario:</strong> $${producto.precio}</p>
+            <p>${producto.descripcion}</p>
+            <label for="cantidad-${index}">Cantidad:</label>
+            <input type="number" id="cantidad-${index}" min="1" value="${producto.cantidad}" 
+                   style="width: 60px; padding: 5px; margin-left: 8px; border: 1px solid #ccc; border-radius: 4px;"
+                   onchange="actualizarCantidad(${index}, this.value)">
+            <p><strong>Total: $${totalPorProducto}</strong></p>
+            
+          </div>
+        </div>
+      `;
+    });
+
+    totalDiv.innerHTML = `Total del carrito: $${totalGeneral.toFixed(2)}`;
+  }
+
+function actualizarCantidad(index, nuevaCantidad) {
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  nuevaCantidad = parseInt(nuevaCantidad);
+
+  if (nuevaCantidad < 1) {
+    alert("La cantidad debe ser al menos 1.");
+    mostrarCarrito();
+    return;
+  }
+
+  const disponible = carrito[index].stock;
+
+  if (nuevaCantidad > disponible) {
+    alert(`Lo sentimos. Solo hay ${disponible} unidades disponibles de "${carrito[index].titulo}".`);
+    mostrarCarrito();
+    return;
+  }
+
+  carrito[index].cantidad = nuevaCantidad;
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+  mostrarCarrito(); // recargar vista
+}
+
+
+  // Inicializar al cargar
+  mostrarCarrito();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar - La Casa del Pastel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: 'Playfair Display', serif;
+      color: white;
+    }
+
+    body {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+ body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url('https://img.freepik.com/premium-photo/chocolate-cake-with-chocolate-icing-chocolate-shavings_762785-94211.jpg') no-repeat center center/cover;
+            z-index: -1;
+        }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+    }
+
+    .logo-img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: white;
+      font-size: 1em;
+    }
+
+    .icons a {
+      margin-left: 15px;
+      text-decoration: none;
+    }
+
+    .icon-img {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s;
+    }
+
+    .icon-img:hover {
+      transform: scale(1.1);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      background-color: rgba(255, 255, 255, 0.92);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      color: #000;
+    }
+
+    .container h2 {
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      color: #b33f4f;
+    }
+
+    .search-bar {
+      display: flex;
+      margin-bottom: 30px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+    }
+
+    .search-bar button {
+      background-color: #b33f4f;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+    }
+
+    .main-content {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .products {
+      flex: 3;
+    }
+
+    .filters {
+      flex: 1;
+    }
+
+    .product {
+      display: flex;
+      background-color: #fff;
+      color: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .product img {
+      width: 140px;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-info p {
+      margin-bottom: 6px;
+    }
+
+    .filters h3 {
+      margin-bottom: 10px;
+      color: #b33f4f;
+    }
+
+    .filters ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 30px;
+    }
+
+    .filters li {
+      margin-bottom: 5px;
+    }
+
+    .filters label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .filters input[type="checkbox"] {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="CasaPastel.png" alt="Logo" class="logo-img">
+      La Casa del Pastel
+    </div>
+  <nav>
+      <a href="PantallaPrincipal.html">Inicio</a>
+      <a href="menu.html">Menú</a>
+      <a href="conocenos.html">Conócenos</a>
+      <a href="ofertas.html">Ofertas</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="icons">
+            <a href="#"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
+            <a href="#"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
+            <a href="#"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
+            <a href="#">🛒 0</a>
+        </div>
+  </header>
+
+
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar productos..." />
+      <button>🔍</button>
+    </div>
+
+    <h2>Se muestran resultados para: <strong>Gelatinas de fruta</strong></h2>
+
+    <div class="main-content">
+      <div class="products">
+        <div class="product">
+          <img src="https://www.laflordeaguascalientes.com/wp-content/uploads/2020/04/DSC08499_3.jpg" alt="Gelatina 1">
+          <div class="product-info">
+            <p><strong>$200.00</strong></p>
+            <p>Gelatina de agua con frutas (melón, cerezas, piña)</p>
+            <p>Para 16 Personas</p>
+            <p><strong>Disponible</strong></p>
+          </div>
+        </div>
+
+        <div class="product">
+          <img src="https://editorialtelevisa.brightspotcdn.com/dims4/default/96ea1a0/2147483647/strip/true/crop/996x560+2+0/resize/500x281!/quality/90/?url=https:%2F%2Fk2-prod-editorial-televisa.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fwp-content%2Fuploads%2F2018%2F05%2Fgelatina-mixta-de-frutas.jpg" alt="Gelatina 2">
+          <div class="product-info">
+            <p><strong>$320.00</strong></p>
+            <p>Gelatina de agua con frutas (fresa, mora, nuez, kiwi) con base de leche</p>
+            <p>Para 20 Personas</p>
+            <p><strong>Disponible</strong></p>
+          </div>
+        </div>
+
+        <div class="product">
+          <img src="https://th.bing.com/th/id/R.f5a01106af1bc59b96df42ebf2e089af?rik=DiwCCWUtTIE2pw&pid=ImgRaw&r=0" alt="Gelatina 3">
+          <div class="product-info">
+            <p><strong>$200.00</strong></p>
+            <p>Gelatina de agua con frutas (fresa)</p>
+            <p>Para 16 Personas</p>
+            <p><strong>Disponible</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <h3>Búsquedas recientes</h3>
+        <ul>
+          <li>Pastel de tres leches</li>
+          <li>Gelatina de nuez</li>
+          <li>Cupcakes</li>
+          <li>Polvorón</li>
+        </ul>
+
+        <h3>Ordenar por:</h3>
+        <label><input type="checkbox"> Precio</label>
+        <label><input type="checkbox"> Disponibilidad</label>
+        <label><input type="checkbox"> Capacidad</label>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Catálogo - La Casa Del Pastel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #d6001c, #f08080);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #a30015;
+      padding: 10px 20px;
+    }
+
+    header img { height: 50px; }
+
+    .menu {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .buscar {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .buscar input {
+      border: none;
+      padding: 5px;
+      width: 150px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .buscar input:focus { outline: none; }
+
+    main {
+      display: flex;
+      padding: 20px;
+      flex-grow: 1;
+    }
+
+    .productos {
+      width: 100%;
+    }
+
+    .productos h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .producto {
+      background-color: white;
+      color: #000;
+      display: flex;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .producto img {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .producto-info {
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .producto-info h3 {
+      margin-bottom: 5px;
+      font-size: 18px;
+      color: #d6001c;
+    }
+
+    .producto-info p { font-size: 14px; margin: 3px 0; }
+    .precio { font-weight: bold; margin-bottom: 5px; }
+
+    .producto-info button {
+      align-self: flex-start;
+      background-color: #d6001c;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .producto-info button:hover {
+      background-color: #a30015;
+    }
+
+    /* Menú desplegable personalizado */
+    .custom-select {
+      position: relative;
+      width: 250px;
+      user-select: none;
+      margin-bottom: 25px;
+    }
+
+    .select-selected {
+      background-color: #a30015;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      font-size: 16px;
+    }
+
+    /* Flecha */
+    .select-selected::after {
+      content: "";
+      border: 6px solid transparent;
+      border-color: white transparent transparent transparent;
+      margin-left: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    /* Al abrir */
+    .select-selected.select-arrow-active::after {
+      border-color: transparent transparent white transparent;
+      transform: rotate(180deg);
+      margin-top: 4px;
+    }
+
+    .select-items {
+      position: absolute;
+      background-color: white;
+      color: #a30015;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 99;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      font-size: 15px;
+    }
+
+    .select-items div {
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .select-items div:hover {
+      background-color: #d6001c;
+      color: white;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="LOGO2.png" alt="Logo" />
+      <h1 style="font-size: 20px;">La Casa Del Pastel</h1>
+    </div>
+    <nav class="menu">
+      <a href="#">Página principal</a>
+      <a href="carritoCompra.html">Carrito</a>
+      <a href="pantallaUsuario.html">Perfil</a>
+    </nav>
+    <div class="buscar">
+      <input type="text" placeholder="Buscar..." />
+    </div>
+  </header>
+
+  <main>
+    <section class="productos">
+      <h2>Seleccione una categoría:</h2>
+
+      <div class="custom-select" id="customSelect">
+        <div class="select-selected">-- Elige una categoría --</div>
+        <div class="select-items">
+          <div data-value="pasteles">Pasteles</div>
+          <div data-value="galletas">Galletas y Brownies</div>
+          <div data-value="pies">Pies</div>
+          <div data-value="frutas">Postres de frutas</div>
+          <div data-value="flanes">Pudines y Flanes</div>
+          <div data-value="chocolates">Chocolates y Caramelos</div>
+          <div data-value="cupcakes">Cupcakes</div>
+          <div data-value="fritos">Postres fritos</div>
+          <div data-value="otros">Otros</div>
+        </div>
+      </div>
+
+      <div id="contenedor-productos"></div>
+    </section>
+  </main>
+
+  <script>
+    const productos = {
+      pasteles: [
+        { nombre: "Pastel de chocolate", precio: "$300.00", descripcion: "Delicioso pastel con betún", img: "img/pastel1.jpg" },
+        { nombre: "Pastel de tres leches", precio: "$350.00", descripcion: "Suave y cremoso", img: "img/pastel2.jpg" }
+      ],
+      galletas: [
+        { nombre: "Galletas de mantequilla", precio: "$120.00", descripcion: "Suaves y dulces", img: "img/galleta1.jpg" },
+        { nombre: "Brownies con nuez", precio: "$150.00", descripcion: "Chocolate intenso", img: "img/brownie1.jpg" }
+      ],
+      pies: [
+        { nombre: "Pay de limón", precio: "$200.00", descripcion: "Ácido y dulce", img: "img/pie1.jpg" },
+        { nombre: "Pay de queso", precio: "$250.00", descripcion: "Cremoso y suave", img: "img/pie2.jpg" }
+      ],
+      frutas: [
+        { nombre: "Gelatina de frutas", precio: "$200.00", descripcion: "Con trozos de frutas", img: "img/gelatina1.jpg" },
+        { nombre: "Brochetas de frutas", precio: "$100.00", descripcion: "Frescas y saludables", img: "img/fruta1.jpg" }
+      ],
+      flanes: [
+        { nombre: "Flan napolitano", precio: "$180.00", descripcion: "Tradicional y delicioso", img: "img/flan1.jpg" },
+        { nombre: "Pudín de vainilla", precio: "$160.00", descripcion: "Textura suave", img: "img/pudin1.jpg" }
+      ],
+      chocolates: [
+        { nombre: "Trufas", precio: "$130.00", descripcion: "Rellenas de licor", img: "img/trufa1.jpg" },
+        { nombre: "Caramelos artesanales", precio: "$90.00", descripcion: "Sabores surtidos", img: "img/caramelo1.jpg" }
+      ],
+      cupcakes: [
+        { nombre: "Cupcake de fresa", precio: "$80.00", descripcion: "Con betún rosa", img: "img/cupcake1.jpg" },
+        { nombre: "Cupcake de vainilla", precio: "$80.00", descripcion: "Con chispas", img: "img/cupcake2.jpg" }
+      ],
+      fritos: [
+        { nombre: "Churros rellenos", precio: "$100.00", descripcion: "Con cajeta", img: "img/churro1.jpg" },
+        { nombre: "Buñuelos", precio: "$90.00", descripcion: "Crujientes", img: "img/bunuelos1.jpg" }
+      ],
+      otros: [
+        { nombre: "Rosca de reyes", precio: "$250.00", descripcion: "Tradicional", img: "img/rosca1.jpg" },
+        { nombre: "Tarta de zanahoria", precio: "$220.00", descripcion: "Con nuez", img: "img/zanahoria1.jpg" }
+      ]
+    };
+
+    const customSelect = document.getElementById('customSelect');
+    const selected = customSelect.querySelector('.select-selected');
+    const itemsContainer = customSelect.querySelector('.select-items');
+
+    selected.addEventListener('click', () => {
+      itemsContainer.style.display = itemsContainer.style.display === 'block' ? 'none' : 'block';
+      selected.classList.toggle('select-arrow-active');
+    });
+
+    itemsContainer.querySelectorAll('div').forEach(item => {
+      item.addEventListener('click', () => {
+        selected.textContent = item.textContent;
+        selected.dataset.value = item.dataset.value;
+        itemsContainer.style.display = 'none';
+        selected.classList.remove('select-arrow-active');
+        mostrarProductos(item.dataset.value);
+      });
+    });
+
+    // Cierra el menú si se hace click fuera
+    document.addEventListener('click', (e) => {
+      if (!customSelect.contains(e.target)) {
+        itemsContainer.style.display = 'none';
+        selected.classList.remove('select-arrow-active');
+      }
+    });
+
+    function mostrarProductos(categoria) {
+      const contenedor = document.getElementById('contenedor-productos');
+      contenedor.innerHTML = "";
+
+      if (categoria && productos[categoria]) {
+        productos[categoria].forEach((p, index) => {
+          contenedor.innerHTML += `
+            <div class="producto">
+              <img src="${p.img}" alt="${p.nombre}">
+              <div class="producto-info">
+                <div class="precio">${p.precio}</div>
+                <h3>${p.nombre}</h3>
+                <p>${p.descripcion}</p>
+                <p>Disponible</p>
+                <button onclick="agregarAlCarrito('${categoria}', ${index})">Agregar al carrito</button>
+              </div>
+            </div>`;
+        });
+      }
+    }
+
+    function agregarAlCarrito(categoria, index) {
+      const producto = productos[categoria][index];
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+      carrito.push(producto);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+
+      // Redirigir a la página del carrito
+      window.location.href = 'carritoCompra.html';
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Administración</title>
+                <a href="loginUsuario.html">Salir</a>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #eba952cf;
+      color: #fff;
+    }
+
+    header {
+      background-color: #e77d20;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .botones {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .botones button {
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #D32F2F;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .botones button:hover {
+      background-color: #B71C1C;
+    }
+
+    #contenido {
+      max-width: 1100px;
+      margin: auto;
+      margin-top: 40px;
+      background-color: #fff8f3;
+      color: #333;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .titulo-contenido {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #b33f4f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4bebe;
+      color: #333;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fdf3f3;
+    }
+
+    .acciones button {
+      padding: 6px 12px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .btn-editar {
+      background-color: #FFA000;
+      color: white;
+    }
+
+    .btn-eliminar {
+      background-color: #C62828;
+      color: white;
+    }
+
+    /* Modal (se mantiene para uso futuro) */
+    #modalEditar {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+      /* Overlay */
+  #modalEditar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+/* Modal overlay */
+#modalEditar {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal content */
+.modal-contenido {
+  background: #ffffff;
+  color: #333333;
+  border-radius: 12px;
+  padding: 20px 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;            /* Limita altura */
+  overflow-y: auto;            /* Scroll si hay exceso */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Título centrado */
+.modal-contenido h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #b33f4f;
+  text-align: center;
+}
+
+/* Etiquetas y campos con más espacio */
+.modal-contenido label {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+.modal-contenido input,
+.modal-contenido textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+  font-family: inherit;
+  margin-bottom: 10px;       /* espacio extra */
+}
+.modal-contenido textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Botones siempre visibles al fondo */
+.modal-contenido .modal-botones {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding-top: 15px;
+  text-align: center;
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+}
+.modal-contenido .modal-botones button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.modal-contenido .modal-botones button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+}
+.modal-contenido .modal-botones button[type="submit"]:hover {
+  background-color: #218838;
+}
+.modal-contenido .modal-botones button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+.modal-contenido .modal-botones button[type="button"]:hover {
+  background-color: #bbb;
+}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Panel del Administrador</h1>
+</header>
+
+<div class="botones">
+  <button onclick="mostrarProductos()">Gestión de Productos</button>
+  <button onclick="mostrarFormularioAgregarPostre()">Agregar Receta</button>
+  <button onclick="mostrarUsuarios()">Gestión de Usuarios</button>
+
+</div>
+
+<div id="contenido">
+  <p class="titulo-contenido">Selecciona una opción para comenzar</p>
+</div>
+
+<script>
+  function mostrarProductos() {
+    document.getElementById("contenido").innerHTML = `
+      <p class="titulo-contenido">Gestión de Productos</p>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Pastel de Chocolate</td>
+          <td>$150.00</td>
+          <td class="acciones">
+            <button class="btn-editar">Editar</button>
+            <button class="btn-eliminar">Eliminar</button>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Gelatina de Frutas</td>
+          <td>$90.00</td>
+          <td class="acciones">
+            <button class="btn-editar">Editar</button>
+            <button class="btn-eliminar">Eliminar</button>
+          </td>
+        </tr>
+      </table>
+    `;
+  }
+
+  function mostrarFormularioAgregarPostre() {
+    document.getElementById("contenido").innerHTML = `
+      <p class="titulo-contenido">Agregar Nueva Receta</p>
+      <form>
+        <label>Título</label><input type="text"><br><br>
+        <label>Descripción</label><textarea></textarea><br><br>
+        <label>Precio</label><input type="number"><br><br>
+        <label>Categoría</label><input type="text"><br><br>
+        <label>Tamaño</label><input type="text"><br><br>
+        <label>Sabor</label><input type="text"><br><br>
+        <label>Imagen URL</label><input type="text"><br><br>
+        <label>Stock</label><input type="number"><br><br>
+        <button type="submit">Agregar</button>
+      </form>
+    `;
+  }
+
+  // Mostrar la tabla de usuarios
+  function mostrarUsuarios() {
+    fetch('listar_usuarios.php')
+      .then(res => res.json())
+      .then(data => {
+        let html = `<p class="titulo-contenido">Gestión de Usuarios</p>`;
+        if (!data.length) {
+          html += '<p>No hay usuarios registrados.</p>';
+        } else {
+          html += `
+            <table>
+              <tr>
+                <th>ID</th><th>Correo</th><th>Contraseña</th><th>Acciones</th>
+              </tr>`;
+          data.forEach(u => {
+            html += `
+              <tr>
+                <td>${u.id}</td>
+                <td>${u.correo}</td>
+                <td>${u.pass}</td>
+                <td class="acciones">
+                  <button class="btn-editar" onclick="abrirModalUsuario(${u.id})">Editar</button>
+                  <button class="btn-eliminar" onclick="eliminarUsuario(${u.id})">Eliminar</button>
+                </td>
+              </tr>`;
+          });
+          html += `</table>`;
+        }
+        document.getElementById('contenido').innerHTML = html;
+      });
+  }
+
+  // Eliminar usuario
+  function eliminarUsuario(id) {
+    if (!confirm('¿Eliminar este usuario?')) return;
+    const fd = new FormData();
+    fd.append('id', id);
+    fetch('eliminar_usuario.php', { method: 'POST', body: fd })
+      .then(res => res.json())
+      .then(resp => {
+        alert(resp.msg);
+        mostrarUsuarios();
+      });
+  }
+
+  // Abrir modal y cargar datos
+  function abrirModalUsuario(id) {
+    fetch(`listar_usuario_individual.php?id=${id}`)
+      .then(res => res.json())
+      .then(u => {
+        document.getElementById('usuario_id').value = u.id;
+        document.getElementById('usuario_correo').value = u.correo;
+        document.getElementById('usuario_pass').value = u.pass;
+        document.getElementById('modalEditarUsuario').style.display = 'flex';
+      });
+  }
+
+  // Cerrar modal
+  function cerrarModalUsuario() {
+    document.getElementById('modalEditarUsuario').style.display = 'none';
+  }
+
+  // Enviar edición
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('formEditarUsuario').addEventListener('submit', e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      fetch('editar_usuario.php', { method: 'POST', body: fd })
+        .then(res => res.json())
+        .then(resp => {
+          alert(resp.msg);
+          cerrarModalUsuario();
+          mostrarUsuarios();
+        });
+    });
+  });
+</script>
+<!-- Modal para editar postre -->
+<!-- Modal mejorado -->
+<div id="modalEditar">
+  <div class="modal-contenido">
+    <h2>Editar Receta</h2>
+    <form id="formEditarPostre">
+      <input type="hidden" id="editar_id" name="id">
+
+      <label for="editar_titulo">Título</label>
+      <input type="text" id="editar_titulo" name="titulo" required>
+
+      <label for="editar_descripcion">Descripción</label>
+      <textarea id="editar_descripcion" name="descripcion" rows="4" required></textarea>
+
+      <label for="editar_precio">Precio</label>
+      <input type="number" step="0.01" id="editar_precio" name="precio" required>
+
+      <label for="editar_categoria">Categoría</label>
+      <input type="text" id="editar_categoria" name="categoria">
+
+      <label for="editar_tamanio">Tamaño</label>
+      <input type="text" id="editar_tamanio" name="tamanio">
+
+      <label for="editar_sabor">Sabor</label>
+      <input type="text" id="editar_sabor" name="sabor">
+
+      <label for="editar_imagen_url">URL de Imagen</label>
+      <input type="text" id="editar_imagen_url" name="imagen_url">
+
+      <label for="editar_stock">Stock</label>
+      <input type="number" id="editar_stock" name="stock">
+
+      <div class="modal-botones">
+        <button type="submit">Guardar Cambios</button>
+        <button type="button" onclick="cerrarModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal para editar usuario -->
+<div id="modalEditarUsuario" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+">
+  <div class="modal-contenido">
+    <h2>Editar Usuario</h2>
+    <form id="formEditarUsuario">
+      <input type="hidden" id="usuario_id" name="id">
+      <label for="usuario_correo">Correo</label>
+      <input type="email" id="usuario_correo" name="correo" required>
+      <label for="usuario_pass">Contraseña</label>
+      <input type="text" id="usuario_pass" name="pass" required>
+      <div class="modal-botones">
+        <button type="submit">Guardar Cambios</button>
+        <button type="button" onclick="cerrarModalUsuario()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script src="adminDashboard.js"></script>
+
+</body>
+
+
+</html>

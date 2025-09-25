@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Playfair Display', serif;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  background: transparent;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+              url('https://img.freepik.com/premium-photo/chocolate-cake-with-chocolate-icing-chocolate-shavings_762785-94211.jpg') no-repeat center center/cover;
+  z-index: -1;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+  color: white;
+}
+
+.logo-img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: white;
+  font-size: 1em;
+}
+
+.icons a {
+  margin-left: 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.icon-img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s;
+}
+
+.icon-img:hover {
+  transform: scale(1.1);
+}
+
+.menu-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 5;
+}
+
+.menu-header {
+  background: linear-gradient(to right, #b33f4f, #f08080);
+  color: white;
+  padding: 25px 30px;
+  text-align: center;
+  border-radius: 12px 12px 0 0;
+}
+
+.menu-header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+/* Búsqueda */
+.search-bar {
+  display: flex;
+  margin: 20px auto 30px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.search-bar input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  background-color: white;
+  outline: none;
+}
+
+.search-bar button {
+  background-color: #b33f4f;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: #8e2b36;
+}
+
+.menu-content {
+  display: flex;
+  padding: 20px;
+  gap: 30px;
+}
+
+/* Categorías + filtros */
+.categories {
+  width: 280px;
+  background-color: #f9d1d1;
+  padding: 20px;
+  border-radius: 10px;
+  color: #5a3d7a;
+}
+
+.categories h2 {
+  font-size: 1.4em;
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.categories ul {
+  list-style: none;
+  padding: 0;
+}
+
+.categories li {
+  padding: 10px 0;
+  border-bottom: 1px solid #e5bcbc;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.categories li:hover {
+  background-color: #f4bebe;
+  padding-left: 10px;
+}
+
+.active-category {
+  background-color: #f08080;
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+.filter-box {
+  margin-top: 25px;
+}
+
+.filter-box label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-box input,
+.filter-box select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Productos */
+.products {
+  flex: 1;
+}
+
+.category-title {
+  font-size: 1.8em;
+  color: #5a3d7a;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #5a3d7a;
+}
+
+.product-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-name {
+  font-size: 1.4em;
+  color: #5a3d7a;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  font-weight: bold;
+  color: #2e7d32;
+  margin-bottom: 5px;
+}
+.product-details {
+  font-size: 0.95em;
+  color: #444;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+
+.product-description {
+  color: #666;
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.select-btn {
+  background-color: #6498c5;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.select-btn:hover {
+  background-color: #2a5d32;
+}
+
+.see-more {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.see-more a {
+  color: #5a3d7a;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.see-more a:hover {
+  text-decoration: underline;
+}
+
+</style>
+
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="CasaPastel.png" alt="Logo" class="logo-img">
+      La Casa del Pastel
+    </div>
+    <nav>
+      <a href="PantallaPrincipal.html">Inicio</a>
+      <a href="conocenos.html">Conócenos</a>
+      <a href="ofertas.php">Ofertas</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="icons">
+      <a href="https://instagram.com" target="_blank"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" class="icon-img" alt="Instagram"></a>
+      <a href="https://facebook.com" target="_blank"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" class="icon-img" alt="Facebook"></a>
+      <a href="https://x.com" target="_blank"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" class="icon-img" alt="Twitter"></a>
+      <a href="carritoCompra.html">🛒</a>
+    </div>
+  </header>
+
+  <div class="menu-container">
+    <div class="menu-header">
+      <h1>MENÚ DE POSTRES</h1>
+    </div>
+
+    <div class="menu-content">
+
+
+      <div class="categories">
+        <h2>CATEGORÍA DE POSTRES</h2>
+              <div class="search-bar" style="margin-bottom: 20px;">
+  <input type="text" id="barra-busqueda" placeholder="Buscar productos..." style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+</div>
+        <ul id="lista-categorias"></ul>
+        <div class="filter-box">
+          <label>Precio mínimo</label>
+          <input type="number" id="precio-min" placeholder="Ej: 10">
+          <label>Precio máximo</label>
+          <input type="number" id="precio-max" placeholder="Ej: 100">
+          <label for="tamano-filtro">Tamaño</label>
+          <select id="tamano-filtro">
+            <option value="">Todos los tamaños</option>
+            <option value="P">Pequeño</option>
+            <option value="M">Mediano</option>
+            <option value="G">Grande</option>
+            <option value="XL">Extra grande</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="products">
+        <h2 class="category-title" id="categoria-titulo">categoría: todos</h2>
+        <div id="contenedor-productos"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+let todosLosPostres = [];
+let categoriasUnicas = [];
+let categoriaActual = 'todos';
+
+function aplicarFiltros(postres) {
+  const precioMin = parseFloat(document.getElementById("precio-min").value) || 0;
+  const precioMax = parseFloat(document.getElementById("precio-max").value) || Infinity;
+  const tamano = document.getElementById("tamano-filtro").value.trim().toUpperCase();
+
+  return postres.filter(p => {
+    const cumplePrecio = p.precio >= precioMin && p.precio <= precioMax;
+    const cumpleTamano = tamano ? p.tamanio.toUpperCase() === tamano : true;
+    return cumplePrecio && cumpleTamano;
+  });
+}
+
+function renderizarProductos(productos) {
+  const contenedor = document.getElementById("contenedor-productos");
+  contenedor.innerHTML = "";
+  const filtrados = aplicarFiltros(productos);
+  filtrados.forEach(p => {
+    contenedor.innerHTML += `
+      <div class="product-card">
+        <img src="${p.imagen_url}" alt="${p.titulo}">
+        <div class="product-info">
+          <h3 class="product-name">${p.titulo}</h3>
+          <p class="product-price">$${parseFloat(p.precio).toFixed(2)}</p>
+          <p class="product-details">
+            <strong>Sabor:</strong> ${p.sabor || 'N/A'}<br>
+            <strong>Tamaño:</strong> ${p.tamanio.toUpperCase()}
+          </p>
+          <p class="product-description">${p.descripcion}</p>
+          <div class="actions">
+            <!-- NUEVO: botón que lleva al detalle -->
+            <button class="select-btn" 
+                    onclick="window.location='detalle_postre.php?id=${p.id}'">
+              Ver detalle
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+
+
+function renderizarCategorias() {
+  const lista = document.getElementById("lista-categorias");
+  lista.innerHTML = "<li data-cat='todos' class='active-category'>Todos</li>";
+  categoriasUnicas.forEach(cat => {
+    lista.innerHTML += `<li data-cat="${cat}">${cat}</li>`;
+  });
+
+  document.querySelectorAll("#lista-categorias li").forEach(li => {
+    li.addEventListener("click", () => {
+      categoriaActual = li.getAttribute("data-cat");
+      document.getElementById("categoria-titulo").textContent = `categoría: ${categoriaActual}`;
+      document.querySelectorAll("#lista-categorias li").forEach(el => el.classList.remove("active-category"));
+      li.classList.add("active-category");
+
+      const productosFiltrados = categoriaActual === 'todos'
+        ? todosLosPostres
+        : todosLosPostres.filter(p => p.categoria === categoriaActual);
+      renderizarProductos(productosFiltrados);
+    });
+  });
+}
+
+function filtrarPorTodo() {
+  const precioMin = parseFloat(document.getElementById("precio-min").value) || 0;
+  const precioMax = parseFloat(document.getElementById("precio-max").value) || Infinity;
+  const tamano = document.getElementById("tamano-filtro").value.trim().toUpperCase();
+  const busqueda = document.getElementById("barra-busqueda").value.trim().toLowerCase();
+
+  const productosFiltrados = (categoriaActual === 'todos'
+    ? todosLosPostres
+    : todosLosPostres.filter(p => p.categoria === categoriaActual)
+  ).filter(p => {
+    const cumplePrecio = p.precio >= precioMin && p.precio <= precioMax;
+    const cumpleTamano = tamano ? p.tamanio.toUpperCase() === tamano : true;
+    const coincideBusqueda =
+      p.titulo.toLowerCase().includes(busqueda) ||
+      p.descripcion.toLowerCase().includes(busqueda) ||
+      p.sabor.toLowerCase().includes(busqueda);
+
+    return cumplePrecio && cumpleTamano && coincideBusqueda;
+  });
+
+  renderizarProductos(productosFiltrados);
+}
+
+function inicializarFiltros() {
+  document.getElementById("precio-min").addEventListener("input", filtrarPorTodo);
+  document.getElementById("precio-max").addEventListener("input", filtrarPorTodo);
+  document.getElementById("tamano-filtro").addEventListener("input", filtrarPorTodo);
+  document.getElementById("barra-busqueda").addEventListener("input", filtrarPorTodo); // ← ¡nuevo!
+}
+
+
+// Cargar postres
+fetch("listar_postres.php")
+  .then(res => res.json())
+  .then(data => {
+    todosLosPostres = data;
+    categoriasUnicas = [...new Set(data.map(p => p.categoria))];
+    renderizarCategorias();
+    inicializarFiltros();
+    renderizarProductos(todosLosPostres);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Opciones de Alojamiento — Proyecto Pastelería</title>
+  <style>
+    :root{
+      --bg:#4d3c13;          /* gris-azul oscuro */
+      --panel:#111827;       /* panel oscuro */
+      --card:#1f2937;        /* tarjeta */
+      --muted:#22ef25;       /* texto secundario */
+      --text:#e5e7eb;        /* texto principal */
+      --primary:#22d3ee;     /* acento */
+      --ok:#10b981;          /* verde */
+      --warn:#f59e0b;        /* amarillo */
+      --danger:#ef4444;      /* rojo */
+      --radius:16px;
+      --gap:16px;
+      --shadow:0 10px 30px rgba(203, 171, 13, 0.25);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% 10%, #3d3726 0%, var(--bg) 50%);
+      color:var(--text); line-height:1.5;
+    }
+    header{
+      padding:24px; border-bottom:1px solid #1f2937; background:rgba(17,24,39,.6); backdrop-filter:saturate(140%) blur(6px);
+      position:sticky; top:0; z-index:10;
+    }
+    header h1{margin:0; font-size:1.25rem}
+    main{max-width:1100px; margin:24px auto; padding:0 16px 64px}
+    .section{
+      background: linear-gradient(180deg, rgba(181, 62, 15, 0.355), rgba(34,211,238,0) 50%), var(--panel);
+      border:1px solid #2e3a4c; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:24px;
+    }
+    .section h2{margin:0 0 12px; font-size:1.25rem}
+    .muted{color:var(--muted); font-size:.95rem}
+    .grid{display:grid; gap:var(--gap)}
+    @media (min-width: 780px){ .grid.cols-2{grid-template-columns:1fr 1fr} }
+    @media (min-width: 780px){ .grid.cols-3{grid-template-columns:1fr 1fr 1fr} }
+    .card{
+      background: var(--card); border:1px solid #a6a610; border-radius:var(--radius);
+      padding:16px; box-shadow: var(--shadow);
+    }
+    .badge{display:inline-block; padding:4px 10px; border-radius:999px; font-size:.8rem; background:#0b1324; border:1px solid #334155}
+    .badge.primary{border-color:var(--primary); color:var(--primary)}
+    .badge.ok{border-color:var(--ok); color:var(--ok)}
+    .badge.warn{border-color:var(--warn); color:var(--warn)}
+    .list{margin:.25rem 0 0 .75rem; padding:0}
+    .list li{margin:.15rem 0}
+    .cta{
+      display:inline-flex; align-items:center; gap:8px; padding:12px 16px; border-radius:12px; text-decoration:none;
+      border:1px solid #1f2937; background:linear-gradient(180deg, rgba(34,211,238,.12), rgba(34,211,238,0));
+      color:var(--text); transition:transform .06s ease, box-shadow .2s ease;
+    }
+    .cta:hover{transform:translateY(-1px); box-shadow:0 8px 20px rgba(34,211,238,.15)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .danger{color:var(--danger)}
+    details{border:1px solid #334155; border-radius:12px; background:#0b1324; padding:12px}
+    summary{cursor:pointer; font-weight:600}
+    .kpis{display:grid; gap:12px; margin-top:12px}
+    @media (min-width:680px){ .kpis{grid-template-columns:repeat(4,1fr)} }
+    .kpi{background:#0f172a; border:1px solid #1f2937; border-radius:12px; padding:12px; text-align:center}
+    .kpi .n{font-size:1.25rem; font-weight:700}
+    .pill{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid #334155; background:#0b1324; font-size:.85rem}
+    .checklist{display:grid; gap:8px; margin-top:8px}
+    .row{display:flex; align-items:center; gap:10px}
+    input[type="checkbox"]{width:18px; height:18px; accent-color: var(--primary)}
+    .footnote{font-size:.85rem; color:#94a3b8}
+    .code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; background:#0b1324; border:1px solid #334155; border-radius:10px; padding:10px}
+    .highlight{background:rgba(34,211,238,0.1); padding:2px 6px; border-radius:4px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Opciones de Alojamiento — Proyecto Pastelería</h1>
+  </header>
+
+  <main>
+    
+    <section class="section" aria-labelledby="plataformas">
+      <h2 id="plataformas">Opciones de alojamiento para nuestro proyecto de pastelería</h2>
+      <p class="muted">Nuestro proyecto utiliza <span class="highlight">HTML, PHP, JavaScript y MySQL</span> para simular una tienda de pasteles. A continuación se muestran opciones de alojamiento adecuadas para este tipo de aplicación.</p>
+
+      <div class="grid cols-3" role="list">
+        <!-- InfinityFree -->
+        <article class="card" role="listitem" aria-label="InfinityFree">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <h3 style="margin:0;">InfinityFree</h3>
+            <span class="badge ok">En Pruebas</span>
+          </div>
+          <p class="muted">Alojamiento gratuito con soporte para PHP y MySQL, ideal para proyectos educativos.</p>
+          <ul class="list">
+            <li>✔ Soporte para PHP y MySQL</li>
+            <li>✔ Dominio gratuito (.epizy.com)</li>
+            <li>✔ phpMyAdmin incluido</li>
+            <li>⚠ Límites de almacenamiento y tráfico</li>
+            <li>⚠ Publicidad en el sitio</li>
+          </ul>
+          <a class="cta" href="#demo-admin" aria-describedby="nota1">Ver detalles técnicos</a>
+          <p id="nota1" class="footnote">Actualmente estamos probando esta plataforma.</p>
+        </article>
+
+        <!-- 000WebHost -->
+        <article class="card" role="listitem" aria-label="000WebHost">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <h3 style="margin:0;">000WebHost</h3>
+            <span class="badge">Gratuito</span>
+          </div>
+          <p class="muted">Alojamiento gratuito de Hostinger con características similares a InfinityFree.</p>
+          <ul class="list">
+            <li>✔ PHP y MySQL incluidos</li>
+            <li>✔ Sin límites de ancho de banda</li>
+            <li>✔ Panel de control intuitivo</li>
+            <li>⚠ Sin soporte por correo electrónico</li>
+            <li>⚠ Inactividad después de 30 días sin login</li>
+          </ul>
+          <a class="cta" href="#demo-admin" aria-describedby="nota2">Ver detalles técnicos</a>
+          <p id="nota2" class="footnote">Alternativa gratuita con buen rendimiento.</p>
+        </article>
+
+        <!-- Hostinger -->
+        <article class="card" role="listitem" aria-label="Hostinger">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <h3 style="margin:0;">Hostinger</h3>
+            <span class="badge primary">Opción fuerte</span>
+          </div>
+          <p class="muted">Servicio de hosting económico con excelente relación calidad-precio.</p>
+          <ul class="list">
+            <li>✔ Alto rendimiento y disponibilidad</li>
+            <li>✔ Soporte técnico 24/7</li>
+            <li>✔ Dominio gratuito por 1 año</li>
+            <li>⚠ Requiere inversión mensual/anual</li>
+            <li>⚠ Planes más limitados en versión básica</li>
+          </ul>
+          <a class="cta" href="#demo-admin" aria-describedby="nota3">Ver detalles técnicos</a>
+          <p id="nota3" class="footnote">Ideal para un proyecto que crecerá.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="flujos">
+      <h2 id="flujos">Análisis técnico del proyecto actual</h2>
+      <p class="muted">Basado en el código PHP proporcionado, hemos identificado las siguientes características técnicas:</p>
+
+      <div class="grid cols-2">
+        <div class="card">
+          <h3 style="margin-top:0;">Tecnologías utilizadas</h3>
+          <div class="checklist">
+            <label class="row"><input type="checkbox" checked disabled> PHP para lógica del servidor</label>
+            <label class="row"><input type="checkbox" checked disabled> MySQL para base de datos</label>
+            <label class="row"><input type="checkbox" checked disabled> HTML/CSS/JS para frontend</label>
+            <label class="row"><input type="checkbox" checked disabled> Sistema de sesiones PHP</label>
+            <label class="row"><input type="checkbox" checked disabled> Consultas preparadas (seguridad)</label>
+          </div>
+          <p class="footnote">*El código hace uso de <span class="code">session_start()</span> y consultas preparadas con <span class="code">bind_param()</span>.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">Requisitos de alojamiento</h3>
+          <div class="checklist">
+            <label class="row"><input type="checkbox" checked disabled> Servidor con soporte PHP 7+</label>
+            <label class="row"><input type="checkbox" checked disabled> Base de datos MySQL</label>
+            <label class="row"><input type="checkbox" checked disabled> Acceso a phpMyAdmin (deseable)</label>
+            <label class="row"><input type="checkbox" checked disabled> Soporte para sesiones PHP</label>
+            <label class="row"><input type="checkbox" checked disabled> Capacidad para subir archivos vía FTP</label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" style="margin-top: 16px;">
+        <h3 style="margin-top:0;">Sobre el uso de JSON</h3>
+        <p>En el código PHP actual <span class="warn">no se utiliza JSON</span>. La comunicación con la base de datos se realiza directamente mediante consultas SQL preparadas.</p>
+        <p>Sin embargo, es posible hacer que otras partes del proyecto (como el carrito de compras) utilicen JSON o LocalStorage en el frontend a futuro para gestionar datos temporalmente.</p>
+      </div>
+    </section>
+
+    <section id="demo-admin" class="section" aria-labelledby="admin">
+      <h2 id="admin">Detalles de implementación por plataforma</h2>
+      <p class="muted">Configuraciones específicas necesarias para cada opción de alojamiento.</p>
+
+      <details class="card">
+        <summary>InfinityFree — Configuración actual</summary>
+        <div style="margin-top:12px;">
+          <div class="kpis">
+            <div class="kpi"><div class="n">PHP 7.4</div><div class="muted">Versión PHP</div></div>
+            <div class="kpi"><div class="n">MySQL</div><div class="muted">Base de datos</div></div>
+            <div class="kpi"><div class="n ok">Gratuito</div><div class="muted">Costo</div></div>
+            <div class="kpi"><div class="n warn">Limitado</div><div class="muted">Almacenamiento</div></div>
+          </div>
+          <p class="muted">Pasos para implementar:</p>
+          <div class="code" role="table" aria-label="Pasos InfinityFree">
+            <div>1. Crear cuenta en InfinityFree</div>
+            <div>2. Configurar base de datos desde panel de control</div>
+            <div>3. Subir archivos via FTP o administrador de archivos</div>
+            <div>4. Importar estructura de BD a través de phpMyAdmin</div>
+            <div>5. Ajustar configuración de conexión en archivos PHP</div>
+          </div>
+          <p class="footnote">Actualmente estamos en el paso 3-4 del proceso.</p>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary>000WebHost — Configuración recomendada</summary>
+        <div style="margin-top:12px;">
+          <div class="code" role="list">
+            <div role="listitem">1. Registro gratuito en 000WebHost</div>
+            <div role="listitem">2. Crear base de datos MySQL desde panel</div>
+            <div role="listitem">3. Subir archivos mediante administrador o FTP</div>
+            <div role="listitem">4. Importar datos a la nueva base de datos</div>
+            <div role="listitem">5. Actualizar credenciales en archivo de conexión</div>
+          </div>
+          <p class="footnote">Similar a InfinityFree pero con algunas ventajas en rendimiento.</p>
+        </div>
+      </details>
+
+      <details class="card">
+        <summary>Hostinger — Para crecimiento futuro</summary>
+        <div style="margin-top:12px;">
+          <div class="code" role="list">
+            <div role="listitem">1. Seleccionar plan de hosting adecuado</div>
+            <div role="listitem">2. Registrar o transferir dominio</div>
+            <div role="listitem">3. Configurar base de datos MySQL</div>
+            <div role="listitem">4. Migrar archivos y base de datos</div>
+            <div role="listitem">5. Configurar SSL para seguridad</div>
+          </div>
+          <p class="footnote">Recomendado si el proyecto evoluciona a un entorno de producción real.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <h2>Conclusión final</h2>
+      <ul class="list">
+        <li>✔ <strong>InfinityFree es adecuado para pruebas</strong>: Ya lo estamos usando y funciona para nuestro proyecto educativo.</li>
+        <li>✔ <strong>000WebHost es una buena alternativa gratuita</strong>: Ofrece mejor rendimiento que InfinityFree.</li>
+        <li>✔ <strong>Hostinger es la opción profesional</strong>: Ideal si el proyecto se convierte en una tienda real.</li>
+        <li>⚠ <strong>Todas soportan nuestras tecnologías</strong>: PHP, MySQL y el stack frontend funcionan en estas plataformas.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantalla de Pago</title>
+  <style>
+    body {
+        background: linear-gradient(to right, #d6001c, #f08080);
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    header {
+        width: 100%;
+        background-color: #a30015;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 30px;
+        box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+    }
+
+    header img {
+        height: 55px;
+    }
+
+    header h1 {
+        font-size: 22px;
+        color: white;
+        margin: 0;
+    }
+
+    .menu {
+        display: flex;
+        gap: 20px;
+    }
+
+    .menu a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 15px;
+        transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .menu a:hover {
+        color: #ffe0e0;
+        text-shadow: 0 0 5px rgba(255,255,255,0.5);
+    }
+
+    .contenedor-pago {
+        max-width: 400px;
+        margin: 40px auto;
+        background-color: white;
+        border-radius: 15px;
+        padding: 30px;
+        border: 3px solid #ac3b1d;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .contenedor-pago img {
+        display: block;
+        margin: 0 auto 10px;
+        width: 100px;
+        height: auto;
+    }
+
+    .contenedor-pago h1 {
+        text-align: center;
+        color: #5e2a00;
+        font-size: 22px;
+        margin-bottom: 25px;
+    }
+
+    .seccion {
+        margin-top: 30px;
+    }
+
+    h3 {
+        border-bottom: 1px solid #bbb;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        color: #3a1f00;
+    }
+
+    label {
+        display: block;
+        margin: 8px 0;
+        cursor: pointer;
+    }
+
+    .formas-pago {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .forma-opcion {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #f9f9f9;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex: 1 1 150px;
+    }
+
+    .forma-opcion:hover {
+        background-color: #ececec;
+    }
+
+    .forma-opcion input[type="radio"] {
+        accent-color: #ff69b4;
+        transform: scale(1.2);
+    }
+
+    .etiqueta {
+        font-weight: 600;
+        color: #333;
+        white-space: nowrap;
+    }
+
+    .tarjeta-info {
+        margin-top: 30px;
+        padding: 15px;
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .btn-pagar {
+        display: block;
+        margin: 30px auto 0;
+        background-color: #d6001c;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-pagar:hover {
+        background-color: #b43812;
+    }
+    .resumen-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.resumen-item {
+  display: flex;
+  align-items: center;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.resumen-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.resumen-item .info {
+  flex: 1;
+}
+
+.resumen-item .info h4 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  color: #b33f4f;
+}
+
+.resumen-item .info p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <img src="LOGO2.png" alt="Logo">
+      <h1>La Casa Del Pastel</h1>
+    </div>
+    <nav class="menu">
+      <a href="#">Inicio</a>
+      <a href="carritoCompra.html">Carrito</a>
+      <a href="perfil.html">Mi perfil</a>
+    </nav>
+  </header>
+<div class="seccion">
+  <h3>Resumen de tu pedido</h3>
+  <div id="resumen-productos" class="resumen-grid"></div>
+</div>
+
+  <div class="contenedor-pago">
+    <img src="LOGO3.png" alt="Logo">
+    <h1>LA CASA DEL PASTEL</h1>
+    
+    <div class="seccion">
+      <h3>Tipo de envío</h3>
+      <label><input type="radio" name="envio" checked> Estándar</label>
+      <label><input type="radio" name="envio"> Recoger en tienda</label>
+    </div>
+
+    <div class="seccion">
+      <h3>Forma de pago</h3>
+      <div class="formas-pago">
+        <label class="forma-opcion">
+          <input type="radio" name="pago" value="efectivo">
+          <span class="etiqueta">💵 Efectivo</span>
+        </label>
+        <label class="forma-opcion">
+          <input type="radio" name="pago" value="transferencia">
+          <span class="etiqueta">🏦 Transferencia</span>
+        </label>
+        <label class="forma-opcion">
+          <input type="radio" name="pago" value="credito">
+          <span class="etiqueta">💳 Crédito</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="tarjeta-info">
+      <h4>Usuario</h4>
+      <p>Banco: **</p>
+      <p>N° de Cuenta: 0123 4567 8901</p>
+      <p>Tarjeta: ●●●● ●●●● ●●●● 2345</p>
+    </div>
+
+    <button class="btn-pagar">Realizar pago</button>
+  </div>
+<script>
+  const resumen = document.getElementById("resumen-productos");
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+  if (carrito.length === 0) {
+    resumen.innerHTML = "<p>No hay productos en el carrito.</p>";
+  } else {
+    carrito.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("resumen-item");
+
+      div.innerHTML = `
+        <img src="${item.imagen_url}" alt="${item.titulo}">
+        <div class="info">
+          <h4>${item.titulo}</h4>
+          <p>Cantidad: ${item.cantidad}</p>
+          <p>Precio unitario: $${parseFloat(item.precio).toFixed(2)}</p>
+          <p>Total: $${(item.precio * item.cantidad).toFixed(2)}</p>
+        </div>
+      `;
+
+      resumen.appendChild(div);
+    });
+  }
+
+  document.querySelector(".btn-pagar").addEventListener("click", () => {
+    if (carrito.length === 0) {
+      alert("Tu carrito está vacío.");
+      return;
+    }
+
+    fetch("procesar_pago.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(carrito)
+    })
+    .then(res => res.text())
+    .then(resp => {
+      alert(resp);
+      localStorage.removeItem("carrito");
+      location.href = "PantallaPrincipal.html";
+    })
+    .catch(err => {
+      alert("Hubo un error al procesar el pago.");
+    });
+  });
+</script>
+
+
+</body>
+</html>
