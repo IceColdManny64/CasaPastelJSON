@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Servicio - La Casa del Pastel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .status-icon {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .kpi-label {
+            color: #94a3b8;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value.good {
+            color: #10b981;
+        }
+
+        .kpi-value.warning {
+            color: #f59e0b;
+        }
+
+        .kpi-value.excellent {
+            color: #3b82f6;
+        }
+
+        .kpi-description {
+            color: #64748b;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .services-section {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+        }
+
+        .services-section h2 {
+            color: #fff;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #0f172a;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #10b981;
+        }
+
+        .service-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .service-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .service-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+        }
+
+        .metrics-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .metric-box {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+        }
+
+        .metric-box h3 {
+            color: #94a3b8;
+            font-size: 1em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-name {
+            color: #cbd5e1;
+        }
+
+        .metric-value {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .timestamp {
+            text-align: center;
+            color: #64748b;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🧁 Estado del Servicio</h1>
+            <p class="subtitle">La Casa del Pastel - Monitoreo en Tiempo Real</p>
+            <div class="status-badge">
+                <span class="status-icon"></span>
+                Todos los Sistemas Operativos
+            </div>
+        </header>
+
+        <!-- KPIs Principales -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">⏱️ Uptime</div>
+                <div class="kpi-value good">99.9%</div>
+                <div class="kpi-description">Disponibilidad en los últimos 30 días</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 99.9%"></div>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">⚡ Latencia Promedio</div>
+                <div class="kpi-value excellent">120ms</div>
+                <div class="kpi-description">Tiempo de respuesta del servidor</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">📊 Solicitudes/min</div>
+                <div class="kpi-value">1,247</div>
+                <div class="kpi-description">Tráfico actual en la plataforma</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">💾 Uso de CPU</div>
+                <div class="kpi-value warning">45%</div>
+                <div class="kpi-description">Capacidad de procesamiento utilizada</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%)"></div>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">🗄️ Uso de Memoria</div>
+                <div class="kpi-value good">62%</div>
+                <div class="kpi-description">RAM utilizada del sistema</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 62%"></div>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">✅ Tasa de Éxito</div>
+                <div class="kpi-value good">99.7%</div>
+                <div class="kpi-description">Transacciones completadas exitosamente</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 99.7%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado de Servicios -->
+        <section class="services-section">
+            <h2>🔧 Estado de Servicios</h2>
+            
+            <div class="service-item">
+                <div class="service-name">
+                    <span>🌐</span>
+                    <span>Sitio Web Principal</span>
+                </div>
+                <div class="service-status">
+                    <span class="status-dot"></span>
+                    <span>Operativo</span>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-name">
+                    <span>🛒</span>
+                    <span>Sistema E-commerce</span>
+                </div>
+                <div class="service-status">
+                    <span class="status-dot"></span>
+                    <span>Operativo</span>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-name">
+                    <span>💳</span>
+                    <span>Pasarela de Pagos</span>
+                </div>
+                <div class="service-status">
+                    <span class="status-dot"></span>
+                    <span>Operativo</span>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-name">
+                    <span>📧</span>
+                    <span>Sistema de Notificaciones</span>
+                </div>
+                <div class="service-status">
+                    <span class="status-dot"></span>
+                    <span>Operativo</span>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-name">
+                    <span>🔐</span>
+                    <span>API de Autenticación</span>
+                </div>
+                <div class="service-status">
+                    <span class="status-dot"></span>
+                    <span>Operativo</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Métricas Adicionales -->
+        <div class="metrics-section">
+            <div class="metric-box">
+                <h3>📈 Métricas de Rendimiento</h3>
+                <div class="metric-row">
+                    <span class="metric-name">Tiempo de carga promedio</span>
+                    <span class="metric-value">1.2s</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Peticiones fallidas</span>
+                    <span class="metric-value">0.3%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Usuarios activos</span>
+                    <span class="metric-value">342</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Pedidos procesados hoy</span>
+                    <span class="metric-value">89</span>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <h3>🌍 Métricas de Red</h3>
+                <div class="metric-row">
+                    <span class="metric-name">Ancho de banda usado</span>
+                    <span class="metric-value">45 MB/s</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Paquetes perdidos</span>
+                    <span class="metric-value">0.01%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Conexiones SSL</span>
+                    <span class="metric-value">100%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">CDN activo</span>
+                    <span class="metric-value">Sí</span>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <h3>🗃️ Base de Datos</h3>
+                <div class="metric-row">
+                    <span class="metric-name">Consultas/segundo</span>
+                    <span class="metric-value">156</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Tiempo de consulta</span>
+                    <span class="metric-value">24ms</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Conexiones activas</span>
+                    <span class="metric-value">28/100</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Espacio utilizado</span>
+                    <span class="metric-value">3.2 GB</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="timestamp">
+            📅 Última actualización: <span id="timestamp"></span>
+        </div>
+    </div>
+
+    <script>
+        // Actualizar timestamp con fecha y hora actual
+        function actualizarTimestamp() {
+            const ahora = new Date();
+            const opciones = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            document.getElementById('timestamp').textContent = 
+                ahora.toLocaleDateString('es-MX', opciones);
+        }
+
+        actualizarTimestamp();
+        
+        // Actualizar cada minuto
+        setInterval(actualizarTimestamp, 60000);
+    </script>
+</body>
+
+</html>
