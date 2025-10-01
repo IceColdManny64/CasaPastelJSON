@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justificación de Recursos - EcoTienda MX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2e7d32;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        .justificacion {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Justificación de Recursos del Proyecto</h1>
+    <div class="justificacion">
+        <p>
+            Para el proyecto <strong>EcoTienda MX</strong>, se definió una infraestructura hipotética que 
+            permite iniciar operaciones con un catálogo de tamaño mediano y tráfico moderado. 
+            Cada recurso fue seleccionado considerando un balance entre rendimiento, seguridad y costos.
+        </p>
+
+        <h2>Componentes empleados</h2>
+        <ul>
+            <li>
+                <strong>Cliente/Usuario (Navegador)</strong>: 
+                Permite acceso universal desde PC o móvil mediante Chrome, Firefox u otros navegadores.
+            </li>
+            <li>
+                <strong>Internet / ISP</strong>: 
+                Canal público de comunicación que conecta al cliente con el servidor. 
+                Puede ser red fija o móvil (4G/5G).
+            </li>
+            <li>
+                <strong>CDN (opcional)</strong>: 
+                Mejora la velocidad de carga y reduce la carga del servidor principal en campañas con alto tráfico.
+            </li>
+            <li>
+                <strong>Firewall / WAF básico</strong>: 
+                Protege contra accesos maliciosos y ataques comunes como inyecciones o bots automatizados.
+            </li>
+            <li>
+                <strong>Servidor Web / Hosting</strong>: 
+                Aloja los archivos HTML, CSS y JS del sitio. En este escenario solo se considera contenido estático.
+            </li>
+            <li>
+                <strong>Sistema Operativo y Servidor</strong>: 
+                Linux Ubuntu junto con Nginx o Apache, tecnologías probadas, estables y de bajo costo.
+            </li>
+            <li>
+                <strong>Recursos de hardware</strong>: 
+                2 vCPU, 4 GB RAM, 50 GB SSD y 1 TB de ancho de banda. 
+                Estos parámetros son suficientes para un inicio estable de una PyME.
+            </li>
+        </ul>
+
+        <h2>Conclusión</h2>
+        <p>
+            La elección de estos recursos responde a la necesidad de ofrecer un sistema 
+            accesible, seguro y con capacidad suficiente para un negocio en etapa inicial. 
+            Además, la arquitectura es flexible: puede crecer a un VPS más robusto o a la nube 
+            con balanceo y CDN a medida que la demanda aumente.
+        </p>
+    </div>
+</body>
+</html>

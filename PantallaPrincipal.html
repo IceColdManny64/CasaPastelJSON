@@ -2,155 +2,206 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pantalla Principal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pantalla Principal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        html,
-        body {
-            height: 100%;
-            font-family: 'Playfair Display', serif;
-        }
+    html,
+    body {
+      height: 100%;
+      font-family: 'Playfair Display', serif;
+    }
 
-        body {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    body {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-                url('https://img.freepik.com/premium-photo/chocolate-cake-with-chocolate-icing-chocolate-shavings_762785-94211.jpg') no-repeat center center/cover;
-            z-index: -1;
-        }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url('https://img.freepik.com/premium-photo/chocolate-cake-with-chocolate-icing-chocolate-shavings_762785-94211.jpg') no-repeat center center/cover;
+      z-index: -1;
+    }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 60px;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 1;
-        }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 10;
+      position: relative;
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5em;
-            color: white;
-        }
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+      color: white;
+    }
 
-        .logo-img {
-            height: 40px;
-            margin-right: 10px;
-        }
+    .logo-img {
+      height: 40px;
+      margin-right: 10px;
+    }
 
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: white;
-            font-size: 1em;
-        }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-        .icons a {
-            margin-left: 15px;
-            color: white;
-            text-decoration: none;
-        }
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-size: 1em;
+    }
 
-        .icon-img {
-            width: 24px;
-            height: 24px;
-            transition: transform 0.2s;
-        }
+    /* --- Estilo para submenu --- */
+    .submenu {
+      position: relative;
+    }
 
-        .icon-img:hover {
-            transform: scale(1.1);
-        }
+    .submenu > a {
+      cursor: pointer;
+    }
 
-        .hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px 20px;
-            z-index: 1;
-        }
+    .submenu-content {
+      display: none;
+      position: absolute;
+      top: 100%; /* debajo del botón */
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      min-width: 220px;
+      border-radius: 5px;
+      z-index: 999;
+    }
 
-        .hero h1 {
-            font-size: 3em;
-            color: white;
-            margin-bottom: 20px;
-        }
+    .submenu-content a {
+      color: white;
+      padding: 10px 15px;
+      display: block;
+      text-decoration: none;
+      white-space: nowrap;
+    }
 
-        .hero p {
-            font-size: 1.5em;
-            color: white;
-            margin-bottom: 40px;
-        }
+    .submenu-content a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
 
-        .btn {
-            background-color: #f4a261;
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1em;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
+    /* Mantener abierto mientras esté en hover el contenedor */
+    .submenu:hover .submenu-content {
+      display: block;
+    }
 
-        .btn:hover {
-            background-color: #e76f51;
-        }
-    </style>
+    .icons a {
+      margin-left: 15px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .icon-img {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s;
+    }
+
+    .icon-img:hover {
+      transform: scale(1.1);
+    }
+
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 3em;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.5em;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      background-color: #f4a261;
+      color: black;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #e76f51;
+    }
+  </style>
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">
-            <img src="CasaPastel.png" alt="Logo" class="logo-img">
-            La Casa del Pastel
-        </div>
-        <nav>
-            <a href="menu.html">Menú</a>
-            <a href="conocenos.html">Conócenos</a>
-            <a href="ofertas.php">Ofertas</a>
-            <a href="contacto.html">Contacto</a>
-            <a href="ind.html">Explicacion</a>
-            <a href="index.html">Salir</a>
-        </nav>
-        <div class="icons">
-            <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
-            <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
-            <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
-            <a href="carritoCompra.html">🛒</a>
-        </div>
-    </header>
-
-    <div class="hero">
-        <h1>Pasteles, galletas y muchas más delicias</h1>
-        <p>¡Ofertas de Temporada!</p>
-        <a href="menu.html" class="btn">Comprar ahora</a>
+  <header>
+    <div class="logo">
+      <img src="CasaPastel.png" alt="Logo" class="logo-img">
+      La Casa del Pastel
     </div>
+    <nav>
+      <a href="menu.html">Menú</a>
+      <a href="conocenos.html">Conócenos</a>
+      <a href="ofertas.php">Ofertas</a>
+      <a href="contacto.html">Contacto</a>
+
+      <!-- Nuevo menú para documentos -->
+      <div class="submenu">
+        <a>Proyecto ▼</a>
+        <div class="submenu-content">
+          <a href="infraestructura.html">Justificación de Recursos</a>
+          <a href="ind.html">Plataformas abiertas/cerradas</a>
+        </div>
+      </div>
+
+      <a href="index.html">Salir</a>
+    </nav>
+    <div class="icons">
+      <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
+      <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
+      <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
+      <a href="carritoCompra.html">🛒</a>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>Pasteles, galletas y muchas más delicias</h1>
+    <p>¡Ofertas de Temporada!</p>
+    <a href="menu.html" class="btn">Comprar ahora</a>
+  </div>
 
 </body>
-
 </html>

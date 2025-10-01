@@ -1,244 +1,410 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Opciones de Alojamiento — Proyecto Pastelería</title>
-  <style>
-    :root{
-      --bg:#4d3c13;          /* gris-azul oscuro */
-      --panel:#111827;       /* panel oscuro */
-      --card:#1f2937;        /* tarjeta */
-      --muted:#22ef25;       /* texto secundario */
-      --text:#e5e7eb;        /* texto principal */
-      --primary:#22d3ee;     /* acento */
-      --ok:#10b981;          /* verde */
-      --warn:#f59e0b;        /* amarillo */
-      --danger:#ef4444;      /* rojo */
-      --radius:16px;
-      --gap:16px;
-      --shadow:0 10px 30px rgba(203, 171, 13, 0.25);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-      background: radial-gradient(1200px 800px at 10% 10%, #3d3726 0%, var(--bg) 50%);
-      color:var(--text); line-height:1.5;
-    }
-    header{
-      padding:24px; border-bottom:1px solid #1f2937; background:rgba(17,24,39,.6); backdrop-filter:saturate(140%) blur(6px);
-      position:sticky; top:0; z-index:10;
-    }
-    header h1{margin:0; font-size:1.25rem}
-    main{max-width:1100px; margin:24px auto; padding:0 16px 64px}
-    .section{
-      background: linear-gradient(180deg, rgba(181, 62, 15, 0.355), rgba(34,211,238,0) 50%), var(--panel);
-      border:1px solid #2e3a4c; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:24px;
-    }
-    .section h2{margin:0 0 12px; font-size:1.25rem}
-    .muted{color:var(--muted); font-size:.95rem}
-    .grid{display:grid; gap:var(--gap)}
-    @media (min-width: 780px){ .grid.cols-2{grid-template-columns:1fr 1fr} }
-    @media (min-width: 780px){ .grid.cols-3{grid-template-columns:1fr 1fr 1fr} }
-    .card{
-      background: var(--card); border:1px solid #a6a610; border-radius:var(--radius);
-      padding:16px; box-shadow: var(--shadow);
-    }
-    .badge{display:inline-block; padding:4px 10px; border-radius:999px; font-size:.8rem; background:#0b1324; border:1px solid #334155}
-    .badge.primary{border-color:var(--primary); color:var(--primary)}
-    .badge.ok{border-color:var(--ok); color:var(--ok)}
-    .badge.warn{border-color:var(--warn); color:var(--warn)}
-    .list{margin:.25rem 0 0 .75rem; padding:0}
-    .list li{margin:.15rem 0}
-    .cta{
-      display:inline-flex; align-items:center; gap:8px; padding:12px 16px; border-radius:12px; text-decoration:none;
-      border:1px solid #1f2937; background:linear-gradient(180deg, rgba(34,211,238,.12), rgba(34,211,238,0));
-      color:var(--text); transition:transform .06s ease, box-shadow .2s ease;
-    }
-    .cta:hover{transform:translateY(-1px); box-shadow:0 8px 20px rgba(34,211,238,.15)}
-    .ok{color:var(--ok)} .warn{color:var(--warn)} .danger{color:var(--danger)}
-    details{border:1px solid #334155; border-radius:12px; background:#0b1324; padding:12px}
-    summary{cursor:pointer; font-weight:600}
-    .kpis{display:grid; gap:12px; margin-top:12px}
-    @media (min-width:680px){ .kpis{grid-template-columns:repeat(4,1fr)} }
-    .kpi{background:#0f172a; border:1px solid #1f2937; border-radius:12px; padding:12px; text-align:center}
-    .kpi .n{font-size:1.25rem; font-weight:700}
-    .pill{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid #334155; background:#0b1324; font-size:.85rem}
-    .checklist{display:grid; gap:8px; margin-top:8px}
-    .row{display:flex; align-items:center; gap:10px}
-    input[type="checkbox"]{width:18px; height:18px; accent-color: var(--primary)}
-    .footnote{font-size:.85rem; color:#94a3b8}
-    .code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; background:#0b1324; border:1px solid #334155; border-radius:10px; padding:10px}
-    .highlight{background:rgba(34,211,238,0.1); padding:2px 6px; border-radius:4px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integración Tecnológica (Simulada)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: #e0e1dd;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            color: #778da9;
+            margin-bottom: 40px;
+            font-weight: 300;
+            font-size: 1.3em;
+        }
+
+        h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1b263b, #162030);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .card p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #c7cdd8;
+        }
+
+        button {
+            background: linear-gradient(135deg, #415a77 0%, #4a6380 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #778da9 0%, #8599b3 100%);
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .output {
+            margin-top: 20px;
+            background: #0d1b2a;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #415a77;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .output:empty {
+            display: none;
+        }
+
+        .output h4 {
+            color: #778da9;
+            margin-bottom: 15px;
+        }
+
+        .output ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .output li {
+            padding: 8px 0;
+            border-bottom: 1px solid #1b263b;
+        }
+
+        .output li:last-child {
+            border-bottom: none;
+        }
+
+        .producto-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1b263b;
+        }
+
+        .producto-item:last-child {
+            border-bottom: none;
+        }
+
+        img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .flujos-section {
+            background: linear-gradient(145deg, #1b263b, #162030);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .flujos-section h2 {
+            text-align: left;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .flujos-section > p {
+            color: #c7cdd8;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .flujos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .flujo-card {
+            background: #0d1b2a;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #415a77;
+        }
+
+        .flujo-card h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #778da9;
+        }
+
+        .flujo-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .flujo-card li {
+            padding: 8px 0;
+            color: #c7cdd8;
+            line-height: 1.5;
+        }
+
+        .explicacion-section {
+            background: linear-gradient(145deg, #415a77, #364a63);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid #778da9;
+        }
+
+        .explicacion-section h2 {
+            text-align: left;
+            color: #fff;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        .explicacion-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .explicacion-section li {
+            padding: 15px;
+            margin-bottom: 12px;
+            background: rgba(13, 27, 42, 0.5);
+            border-radius: 8px;
+            line-height: 1.6;
+            font-size: 1.05em;
+            color: #e0e1dd;
+        }
+
+        .explicacion-section strong {
+            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .explicacion-section em {
+            color: #a8b5c9;
+        }
+
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .flujos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <header>
-    <h1>Opciones de Alojamiento — Proyecto Pastelería</h1>
-  </header>
+    <div class="container">
+        <h1>🧁 Integración Tecnológica (Simulada)</h1>
+        <h2>Proyecto: La Casa del Pastel</h2>
 
-  <main>
-    
-    <section class="section" aria-labelledby="plataformas">
-      <h2 id="plataformas">Opciones de alojamiento para nuestro proyecto de pastelería</h2>
-      <p class="muted">Nuestro proyecto utiliza <span class="highlight">HTML, PHP, JavaScript y MySQL</span> para simular una tienda de pasteles. A continuación se muestran opciones de alojamiento adecuadas para este tipo de aplicación.</p>
+        <!-- Opciones A y B -->
+        <div class="options-grid">
+            <!-- Plan A -->
+            <div class="card">
+                <h3>📦 Opción A — WordPress + WooCommerce</h3>
+                <p>
+                    Plataforma abierta que permite flexibilidad, bajo costo y control total
+                    sobre la tienda en línea. Requiere más gestión técnica, pero evita
+                    dependencia de proveedores.
+                </p>
+                <button onclick="consultarAdmin()">🔐 Consultar Admin</button>
+                <div id="adminOutput" class="output"></div>
+            </div>
 
-      <div class="grid cols-3" role="list">
-        <!-- InfinityFree -->
-        <article class="card" role="listitem" aria-label="InfinityFree">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-            <h3 style="margin:0;">InfinityFree</h3>
-            <span class="badge ok">En Pruebas</span>
-          </div>
-          <p class="muted">Alojamiento gratuito con soporte para PHP y MySQL, ideal para proyectos educativos.</p>
-          <ul class="list">
-            <li>✔ Soporte para PHP y MySQL</li>
-            <li>✔ Dominio gratuito (.epizy.com)</li>
-            <li>✔ phpMyAdmin incluido</li>
-            <li>⚠ Límites de almacenamiento y tráfico</li>
-            <li>⚠ Publicidad en el sitio</li>
-          </ul>
-          <a class="cta" href="#demo-admin" aria-describedby="nota1">Ver detalles técnicos</a>
-          <p id="nota1" class="footnote">Actualmente estamos probando esta plataforma.</p>
-        </article>
-
-        <!-- 000WebHost -->
-        <article class="card" role="listitem" aria-label="000WebHost">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-            <h3 style="margin:0;">000WebHost</h3>
-            <span class="badge">Gratuito</span>
-          </div>
-          <p class="muted">Alojamiento gratuito de Hostinger con características similares a InfinityFree.</p>
-          <ul class="list">
-            <li>✔ PHP y MySQL incluidos</li>
-            <li>✔ Sin límites de ancho de banda</li>
-            <li>✔ Panel de control intuitivo</li>
-            <li>⚠ Sin soporte por correo electrónico</li>
-            <li>⚠ Inactividad después de 30 días sin login</li>
-          </ul>
-          <a class="cta" href="#demo-admin" aria-describedby="nota2">Ver detalles técnicos</a>
-          <p id="nota2" class="footnote">Alternativa gratuita con buen rendimiento.</p>
-        </article>
-
-        <!-- Hostinger -->
-        <article class="card" role="listitem" aria-label="Hostinger">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-            <h3 style="margin:0;">Hostinger</h3>
-            <span class="badge primary">Opción fuerte</span>
-          </div>
-          <p class="muted">Servicio de hosting económico con excelente relación calidad-precio.</p>
-          <ul class="list">
-            <li>✔ Alto rendimiento y disponibilidad</li>
-            <li>✔ Soporte técnico 24/7</li>
-            <li>✔ Dominio gratuito por 1 año</li>
-            <li>⚠ Requiere inversión mensual/anual</li>
-            <li>⚠ Planes más limitados en versión básica</li>
-          </ul>
-          <a class="cta" href="#demo-admin" aria-describedby="nota3">Ver detalles técnicos</a>
-          <p id="nota3" class="footnote">Ideal para un proyecto que crecerá.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="flujos">
-      <h2 id="flujos">Análisis técnico del proyecto actual</h2>
-      <p class="muted">Basado en el código PHP proporcionado, hemos identificado las siguientes características técnicas:</p>
-
-      <div class="grid cols-2">
-        <div class="card">
-          <h3 style="margin-top:0;">Tecnologías utilizadas</h3>
-          <div class="checklist">
-            <label class="row"><input type="checkbox" checked disabled> PHP para lógica del servidor</label>
-            <label class="row"><input type="checkbox" checked disabled> MySQL para base de datos</label>
-            <label class="row"><input type="checkbox" checked disabled> HTML/CSS/JS para frontend</label>
-            <label class="row"><input type="checkbox" checked disabled> Sistema de sesiones PHP</label>
-            <label class="row"><input type="checkbox" checked disabled> Consultas preparadas (seguridad)</label>
-          </div>
-          <p class="footnote">*El código hace uso de <span class="code">session_start()</span> y consultas preparadas con <span class="code">bind_param()</span>.</p>
+            <!-- Plan B -->
+            <div class="card">
+                <h3>🛍️ Opción B — Shopify</h3>
+                <p>
+                    Opción cerrada que ofrece rapidez y hosting incluido, pero con
+                    dependencia del proveedor y costos de suscripción mensual.
+                </p>
+                <button onclick="consultarPostres()">🍰 Consultar Postres</button>
+                <div id="postresOutput" class="output"></div>
+            </div>
         </div>
 
-        <div class="card">
-          <h3 style="margin-top:0;">Requisitos de alojamiento</h3>
-          <div class="checklist">
-            <label class="row"><input type="checkbox" checked disabled> Servidor con soporte PHP 7+</label>
-            <label class="row"><input type="checkbox" checked disabled> Base de datos MySQL</label>
-            <label class="row"><input type="checkbox" checked disabled> Acceso a phpMyAdmin (deseable)</label>
-            <label class="row"><input type="checkbox" checked disabled> Soporte para sesiones PHP</label>
-            <label class="row"><input type="checkbox" checked disabled> Capacidad para subir archivos vía FTP</label>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card" style="margin-top: 16px;">
-        <h3 style="margin-top:0;">Sobre el uso de JSON</h3>
-        <p>En el código PHP actual <span class="warn">no se utiliza JSON</span>. La comunicación con la base de datos se realiza directamente mediante consultas SQL preparadas.</p>
-        <p>Sin embargo, es posible hacer que otras partes del proyecto (como el carrito de compras) utilicen JSON o LocalStorage en el frontend a futuro para gestionar datos temporalmente.</p>
-      </div>
-    </section>
+        <!-- Flujos Simulados -->
+        <section class="flujos-section">
+            <h2>⚡ Flujos ya simulados en el Front</h2>
+            <p>Estos flujos funcionan sin back-end, usando datos de ejemplo y navegación entre pantallas.</p>
 
-    <section id="demo-admin" class="section" aria-labelledby="admin">
-      <h2 id="admin">Detalles de implementación por plataforma</h2>
-      <p class="muted">Configuraciones específicas necesarias para cada opción de alojamiento.</p>
+            <div class="flujos-grid">
+                <!-- E-commerce -->
+                <div class="flujo-card">
+                    <h3>👤 Cara al cliente (E-commerce)</h3>
+                    <ul>
+                        <li>✅ Catálogo desde JSON</li>
+                        <li>✅ Detalle de producto</li>
+                        <li>✅ Carrito (localStorage)</li>
+                        <li>✅ Checkout con confirmación (simulado)</li>
+                    </ul>
+                </div>
 
-      <details class="card">
-        <summary>InfinityFree — Configuración actual</summary>
-        <div style="margin-top:12px;">
-          <div class="kpis">
-            <div class="kpi"><div class="n">PHP 7.4</div><div class="muted">Versión PHP</div></div>
-            <div class="kpi"><div class="n">MySQL</div><div class="muted">Base de datos</div></div>
-            <div class="kpi"><div class="n ok">Gratuito</div><div class="muted">Costo</div></div>
-            <div class="kpi"><div class="n warn">Limitado</div><div class="muted">Almacenamiento</div></div>
-          </div>
-          <p class="muted">Pasos para implementar:</p>
-          <div class="code" role="table" aria-label="Pasos InfinityFree">
-            <div>1. Crear cuenta en InfinityFree</div>
-            <div>2. Configurar base de datos desde panel de control</div>
-            <div>3. Subir archivos via FTP o administrador de archivos</div>
-            <div>4. Importar estructura de BD a través de phpMyAdmin</div>
-            <div>5. Ajustar configuración de conexión en archivos PHP</div>
-          </div>
-          <p class="footnote">Actualmente estamos en el paso 3-4 del proceso.</p>
-        </div>
-      </details>
+                <!-- E-business -->
+                <div class="flujo-card">
+                    <h3>⚙️ Back-office (E-business, simulado)</h3>
+                    <ul>
+                        <li>✅ Inventario (tabla editable ficticia)</li>
+                        <li>✅ Órdenes (lista mock + detalle)</li>
+                        <li>✅ Soporte (formulario con éxito simulado)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-      <details class="card">
-        <summary>000WebHost — Configuración recomendada</summary>
-        <div style="margin-top:12px;">
-          <div class="code" role="list">
-            <div role="listitem">1. Registro gratuito en 000WebHost</div>
-            <div role="listitem">2. Crear base de datos MySQL desde panel</div>
-            <div role="listitem">3. Subir archivos mediante administrador o FTP</div>
-            <div role="listitem">4. Importar datos a la nueva base de datos</div>
-            <div role="listitem">5. Actualizar credenciales en archivo de conexión</div>
-          </div>
-          <p class="footnote">Similar a InfinityFree pero con algunas ventajas en rendimiento.</p>
-        </div>
-      </details>
+        <!-- Explicación Final -->
+        <section class="explicacion-section">
+            <h2>📋 Explicación del Proyecto</h2>
+            
+            <div style="background: rgba(13, 27, 42, 0.5); padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                <h3 style="color: #778da9; margin-bottom: 15px; font-size: 1.3em;">🎯 ¿Qué es esto?</h3>
+                <p style="line-height: 1.7; color: #e0e1dd;">
+                    Esta página es un <strong>prototipo front-end</strong> que demuestra de forma <strong>explicativa</strong> 
+                    cómo funcionaría la integración tecnológica de "La Casa del Pastel" con plataformas de e-commerce, 
+                    <strong>sin conexión real a servidores</strong>.
+                </p>
+            </div>
 
-      <details class="card">
-        <summary>Hostinger — Para crecimiento futuro</summary>
-        <div style="margin-top:12px;">
-          <div class="code" role="list">
-            <div role="listitem">1. Seleccionar plan de hosting adecuado</div>
-            <div role="listitem">2. Registrar o transferir dominio</div>
-            <div role="listitem">3. Configurar base de datos MySQL</div>
-            <div role="listitem">4. Migrar archivos y base de datos</div>
-            <div role="listitem">5. Configurar SSL para seguridad</div>
-          </div>
-          <p class="footnote">Recomendado si el proyecto evoluciona a un entorno de producción real.</p>
-        </div>
-      </details>
-    </section>
+            <h3 style="color: #778da9; margin-bottom: 15px; font-size: 1.2em;">🔑 Términos Clave</h3>
+            <ul>
+                <li>
+                    ✔ <strong>Front-end only</strong>: Todo funciona en el navegador, sin backend ni base de datos real.
+                </li>
+                <li>
+                    ✔ <strong>Simulación de APIs</strong>: Los datos (admins, productos) se cargan desde arrays JavaScript que simulan respuestas JSON de un servidor.
+                </li>
+                <li>
+                    ✔ <strong>Mock data</strong>: Datos ficticios para demostrar funcionalidad sin conexión real.
+                </li>
+                <li>
+                    ✔ <strong>E-commerce vs E-business</strong>: Diferencia entre la cara al cliente (tienda) y el panel administrativo (gestión).
+                </li>
+                <li>
+                    ✔ <strong>Integración explicativa</strong>: Muestra el <em>"cómo se conectaría"</em> conceptualmente, no una conexión funcional.
+                </li>
+                <li>
+                    ✔ <strong>Prototipo interactivo</strong>: Los botones consultan datos simulados para demostrar flujos de trabajo.
+                </li>
+            </ul>
+        </section>
+    </div>
 
-    <section class="section">
-      <h2>Conclusión final</h2>
-      <ul class="list">
-        <li>✔ <strong>InfinityFree es adecuado para pruebas</strong>: Ya lo estamos usando y funciona para nuestro proyecto educativo.</li>
-        <li>✔ <strong>000WebHost es una buena alternativa gratuita</strong>: Ofrece mejor rendimiento que InfinityFree.</li>
-        <li>✔ <strong>Hostinger es la opción profesional</strong>: Ideal si el proyecto se convierte en una tienda real.</li>
-        <li>⚠ <strong>Todas soportan nuestras tecnologías</strong>: PHP, MySQL y el stack frontend funcionan en estas plataformas.</li>
-      </ul>
-    </section>
-  </main>
+    <script>
+        // Simulación de JSON de Admin (Plan A)
+        const admins = [
+            { "id": 1, "usuario": "login@admin123", "passw": "admin" },
+            { "id": 2, "usuario": "login@admin321", "passw": "admin" }
+        ];
+
+        // Simulación de JSON de Postres (Plan B)
+        const postres = [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "descripcion": "Pastel de chocolate amargo con pan suave y humedecido con leche",
+                "precio": 119.99,
+                "imagen_url": "https://www.recetasnestle.com.ve/sites/default/files/srh_recipes/72c1474b902d923d6a33f394e1d65b4b.jpg"
+            },
+            {
+                "id": 2,
+                "titulo": "Galleta estilo nueva york",
+                "descripcion": "Galleta grande estilo nueva york con chispas de tamaño extragrande",
+                "precio": 29.99,
+                "imagen_url": "https://sarasellos.com/wp-content/uploads/2024/06/Galletas-New-York-con-oreos3.jpg"
+            },
+            {
+                "id": 3,
+                "titulo": "Brownie de momia",
+                "descripcion": "Brownie de chocolate envuelto con cubierta de azúcar glass y ojitos hechos de luneta",
+                "precio": 19.99,
+                "imagen_url": "https://www.bettycrocker.lat/mx/wp-content/uploads/sites/2/2020/12/BCmexico-recipe-brownies-de-momia.png"
+            }
+        ];
+
+        function consultarAdmin() {
+            let output = "<h4>Usuarios Admin:</h4><ul>";
+            admins.forEach(a => {
+                output += `<li><strong>${a.usuario}</strong> - Pass: ${a.passw}</li>`;
+            });
+            output += "</ul>";
+            document.getElementById("adminOutput").innerHTML = output;
+        }
+
+        function consultarPostres() {
+            let output = "<h4>Postres Disponibles:</h4>";
+            postres.forEach(p => {
+                output += `
+          <div class="producto-item">
+            <strong>${p.titulo}</strong> - $${p.precio}<br>
+            <em>${p.descripcion}</em><br>
+            <img src="${p.imagen_url}" alt="${p.titulo}">
+          </div>`;
+            });
+            document.getElementById("postresOutput").innerHTML = output;
+        }
+    </script>
 </body>
+
 </html>
