@@ -3,152 +3,148 @@
 <head>
   <meta charset="UTF-8" />
   <title>Carrito de Compras - La Casa Del Pastel</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
+    :root{
+      --red-700:#a30015;
+      --red-500:#d6001c;
+      --card-bg: #ffffff;
+      --muted: #666;
+      --radius: 12px;
+      --maxwidth: 900px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
       background: linear-gradient(to right, #d6001c, #f08080);
+      color:#111;
+    }
+
+    /* Header */
+    header{
+      background-color: var(--red-700);
+      padding: 12px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       color: white;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      gap:12px;
+    }
+    .logo{display:flex; align-items:center; gap:12px}
+    .logo img{height:46px}
+    .logo h1{font-size:18px; margin:0; font-weight:800}
+    nav.header-nav{display:flex; gap:14px; align-items:center}
+    nav.header-nav a{color:white; text-decoration:none; font-weight:700; padding:6px 10px; border-radius:8px}
+    nav.header-nav a:hover{background: rgba(255,255,255,0.06)}
+    .header-actions{display:flex; gap:12px; align-items:center}
+
+    .cart-indicator{
+      background: rgba(255,255,255,0.06);
+      padding:6px 10px;
+      border-radius:8px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
 
-    header {
-      background-color: #a30015;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Main card */
+    main{
+      flex:1;
+      width:100%;
+      max-width:var(--maxwidth);
+      margin:24px auto;
+      padding:22px;
+      background: var(--card-bg);
+      color: #111;
+      border-radius: var(--radius);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     }
 
-    header .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    h1{ text-align:center; color:var(--red-500); margin-bottom:18px; }
+
+    /* Lista del carrito */
+    #carrito-lista{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
     }
 
-    header .logo img {
-      height: 50px;
+    .item{
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      border-radius:10px;
+      padding:14px;
+      background:#fff7f7;
+      border:1px solid rgba(214,0,28,0.05);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
     }
 
-    header nav {
-      display: flex;
-      gap: 20px;
-      align-items: center;
+    .item img{
+      width:120px;
+      height:90px;
+      object-fit:cover;
+      border-radius:8px;
+      flex-shrink:0;
     }
 
-    header nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
-      padding: 6px 12px;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
+    .item-body{flex:1}
+    .item-title{font-weight:800; color:var(--red-700); margin-bottom:6px}
+    .item-desc{color:var(--muted); margin-bottom:8px}
+    .item-price{font-weight:800; margin-bottom:8px}
+    .qty-row{display:flex; align-items:center; gap:8px; margin-top:6px}
+
+    input[type="number"]{
+      width:70px; padding:6px; border-radius:6px; border:1px solid #e6e6e6;
     }
 
-    header nav a:hover {
-      background-color: #d6001c;
+    .item-total{font-weight:800; text-align:right; min-width:120px}
+
+    /* Acciones */
+    .actions{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:20px;
     }
 
-    #btn-pagar {
-      background-color: #ff6347;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+    .btn-primary{
+      background: linear-gradient(90deg, var(--red-500), var(--red-700));
+      color:white; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; font-weight:800;
     }
 
-    #btn-pagar:hover {
-      background-color: #e5533d;
+    #vaciar-carrito{
+      background: #a30015; color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700;
     }
 
-    main {
-      flex-grow: 1;
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      color: black;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      min-height: 300px;
+    #vaciar-carrito[hidden]{display:none}
+
+    #carrito-total{
+      font-weight:900; color:var(--red-700); font-size:1.05rem;
     }
 
-    h1 {
-      margin-bottom: 20px;
-      color: #d6001c;
-      text-align: center;
+    #mensaje-vacio{
+      text-align:center;
+      color:var(--muted);
+      padding:40px 10px;
+      border-radius:8px;
+      background:#fff7f7;
+      border:1px dashed rgba(214,0,28,0.07);
+      margin:18px 0;
     }
 
-    #contenedor-carrito {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .producto-carrito {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 10px;
-    }
-
-    .producto-carrito img {
-      width: 120px;
-      height: 90px;
-      object-fit: cover;
-      border-radius: 5px;
-    }
-
-    .producto-detalles {
-      flex-grow: 1;
-    }
-
-    .producto-detalles .nombre {
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 6px;
-      color: #a30015;
-    }
-
-    .producto-detalles .precio {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .producto-detalles .descripcion {
-      font-size: 14px;
-      color: #333;
-    }
-
-    #vaciar-carrito {
-      margin-top: 20px;
-      background-color: #a30015;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-
-    #vaciar-carrito:hover {
-      background-color: #d6001c;
-    }
-
-    #mensaje-vacio {
-      text-align: center;
-      font-size: 18px;
-      color: #555;
-      margin-top: 50px;
+    @media (max-width:720px){
+      .item{flex-direction:column; align-items:center}
+      .item img{width:90%; height:160px}
+      .item-total{text-align:center; width:100%}
+      .actions{flex-direction:column; align-items:stretch}
     }
   </style>
 </head>
@@ -156,148 +152,138 @@
 
   <header>
     <div class="logo">
-      <img src="LOGO2.png" alt="Logo La Casa Del Pastel" />
-      <h1 style="color: white; font-size: 20px;">La Casa Del Pastel</h1>
+      <img src="LOGO2.png" alt="Logo La Casa Del Pastel">
+      <h1>La Casa Del Pastel</h1>
     </div>
 
-    <nav>
-      <a href="menu.html">Catálogo</a>
-      <a href="pantallaUsuario.html">Perfil</a>
-      <button id="btn-pagar" onclick="irAPago()">Realizar pago</button>
-    </nav>
+    <div class="header-actions">
+      <nav class="header-nav" aria-label="principal">
+        <a href="menu.html">Catálogo</a>
+        <a href="pantallaUsuario.html">Perfil</a>
+        <a href="ofertas.php">Ofertas</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="cart-indicator" id="cartIndicator" title="Estado del carrito">
+        <!-- Se rellena por JS -->
+      </div>
+    </div>
   </header>
 
   <main>
     <h1>Carrito de Compras</h1>
-<div id="carrito-lista"></div>
-<div id="carrito-total" style="text-align: right; font-weight: bold; margin-top: 20px;"></div>
 
+    <!-- Lista generada por JS -->
+    <div id="carrito-lista" aria-live="polite"></div>
 
-<script>
-  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-  const lista = document.getElementById("carrito-lista");
+    <!-- Mensaje de vacío (se mostrará si no hay items) -->
+    <div id="mensaje-vacio" style="display:none">Tu carrito está vacío. Explora el catálogo y agrega tus delicias favoritas 🍰</div>
 
-  carrito.forEach(producto => {
-    lista.innerHTML += `
-      <div style="display:flex; align-items:center; margin-bottom:20px; border-bottom:1px solid #ccc; padding-bottom:15px;">
-        <img src="${producto.imagen_url}" alt="${producto.titulo}" style="width:80px; height:80px; object-fit:cover; border-radius:6px; margin-right:15px;">
-        <div>
-          <h3 style="margin:0; color:#b33f4f;">${producto.titulo}</h3>
-          <p><strong>$${producto.precio}</strong></p>
-          <p>${producto.descripcion}</p>
-          <p><small>Cantidad: ${producto.cantidad}</small></p>
-        </div>
-      </div>
-    `;
-  });
-</script>
-
-    <button id="vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
+    <div class="actions">
+      <button id="vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
+      <div id="carrito-total">Total: $0.00</div>
+      <button class="btn-primary" id="btn-pagar" onclick="irAPago()">Realizar pago</button>
+    </div>
   </main>
 
   <script>
+    // Mantengo la funcionalidad existente (lee localStorage 'carrito' con estructura esperada)
     function mostrarCarrito() {
-      const contenedor = document.getElementById('contenedor-carrito');
-      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-      contenedor.innerHTML = "";
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      const lista = document.getElementById("carrito-lista");
+      const totalDiv = document.getElementById("carrito-total");
+      const mensajeVacio = document.getElementById("mensaje-vacio");
+      const vaciarBtn = document.getElementById("vaciar-carrito");
+      const cartIndicator = document.getElementById("cartIndicator");
+
+      lista.innerHTML = "";
+      let totalGeneral = 0;
 
       if (carrito.length === 0) {
-        contenedor.innerHTML = `<div id="mensaje-vacio">Tu carrito está vacío.</div>`;
-        document.getElementById('vaciar-carrito').style.display = 'none';
+        // Mostrar mensaje de carrito vacío
+        mensajeVacio.style.display = "block";
+        vaciarBtn.hidden = true;
+        totalDiv.textContent = "Total: $0.00";
+        cartIndicator.textContent = "Carrito vacío";
         return;
       } else {
-        document.getElementById('vaciar-carrito').style.display = 'inline-block';
+        mensajeVacio.style.display = "none";
+        vaciarBtn.hidden = false;
       }
 
-      carrito.forEach(producto => {
-        contenedor.innerHTML += `
-          <div class="producto-carrito">
-            <img src="${producto.img}" alt="${producto.nombre}" />
-            <div class="producto-detalles">
-              <div class="nombre">${producto.nombre}</div>
-              <div class="precio">${producto.precio}</div>
-              <div class="descripcion">${producto.descripcion}</div>
+      carrito.forEach((producto, index) => {
+        // soporta campos: imagen_url, titulo, precio, descripcion, cantidad, stock
+        const cantidad = Number(producto.cantidad) || 1;
+        const unitPrice = Number(producto.precio) || 0;
+        const totalPorProducto = (unitPrice * cantidad);
+        totalGeneral += totalPorProducto;
+
+        const item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+          <img src="${producto.imagen_url || producto.img || 'https://via.placeholder.com/150'}" alt="${producto.titulo || producto.nombre || 'Producto'}">
+          <div class="item-body">
+            <div class="item-title">${producto.titulo || producto.nombre || 'Producto sin nombre'}</div>
+            <div class="item-desc">${producto.descripcion || ''}</div>
+            <div class="item-price">Precio unitario: $${unitPrice.toFixed(2)}</div>
+            <div class="qty-row">
+              <label for="cantidad-${index}" style="font-weight:700; color:var(--red-700)">Cantidad:</label>
+              <input id="cantidad-${index}" type="number" min="1" value="${cantidad}" onchange="actualizarCantidad(${index}, this.value)">
+              <span style="margin-left:10px; color:var(--muted)">Stock: ${producto.stock ?? '—'}</span>
             </div>
           </div>
+          <div class="item-total">
+            <div>Total: $${totalPorProducto.toFixed(2)}</div>
+          </div>
         `;
+        lista.appendChild(item);
       });
+
+      totalDiv.textContent = `Total: $${totalGeneral.toFixed(2)}`;
+
+      // Indicador en header: número de items y total
+      const count = carrito.reduce((s, p) => s + (Number(p.cantidad) || 0), 0);
+      cartIndicator.textContent = `${count} item(s) • $${totalGeneral.toFixed(2)}`;
+    }
+
+    function actualizarCantidad(index, nuevaCantidad) {
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      nuevaCantidad = parseInt(nuevaCantidad);
+
+      if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
+        alert("La cantidad debe ser al menos 1.");
+        mostrarCarrito();
+        return;
+      }
+
+      const disponible = carrito[index].stock ?? Infinity;
+
+      if (nuevaCantidad > disponible) {
+        alert(`Lo sentimos. Solo hay ${disponible} unidades disponibles de "${carrito[index].titulo || carrito[index].nombre}".`);
+        mostrarCarrito();
+        return;
+      }
+
+      carrito[index].cantidad = nuevaCantidad;
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+      mostrarCarrito(); // recargar vista
     }
 
     function vaciarCarrito() {
-      if(confirm('¿Seguro que quieres vaciar el carrito?')) {
+      if (confirm('¿Seguro que quieres vaciar el carrito?')) {
         localStorage.removeItem('carrito');
         mostrarCarrito();
       }
     }
 
     function irAPago() {
-      // Aquí defines a dónde redirigir al usuario para pagar:
-      window.location.href = 'pago.html'; 
+      // No modifiqué tu flujo: redirige a pago.html (puedes cambiar si lo deseas)
+      window.location.href = 'pago.html';
     }
 
-    window.onload = mostrarCarrito;
+    // Inicializar
+    mostrarCarrito();
   </script>
-<script>
-  function mostrarCarrito() {
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    const lista = document.getElementById("carrito-lista");
-    const totalDiv = document.getElementById("carrito-total");
-
-    lista.innerHTML = "";
-    let totalGeneral = 0;
-
-    carrito.forEach((producto, index) => {
-      const totalPorProducto = (producto.precio * producto.cantidad).toFixed(2);
-      totalGeneral += parseFloat(totalPorProducto);
-
-      lista.innerHTML += `
-        <div style="display:flex; align-items:center; margin-bottom:20px; border-bottom:1px solid #ccc; padding-bottom:15px;">
-          <img src="${producto.imagen_url}" alt="${producto.titulo}" style="width:80px; height:80px; object-fit:cover; border-radius:6px; margin-right:15px;">
-          <div style="flex:1;">
-            <h3 style="margin:0; color:#b33f4f;">${producto.titulo}</h3>
-            <p><strong>Precio unitario:</strong> $${producto.precio}</p>
-            <p>${producto.descripcion}</p>
-            <label for="cantidad-${index}">Cantidad:</label>
-            <input type="number" id="cantidad-${index}" min="1" value="${producto.cantidad}" 
-                   style="width: 60px; padding: 5px; margin-left: 8px; border: 1px solid #ccc; border-radius: 4px;"
-                   onchange="actualizarCantidad(${index}, this.value)">
-            <p><strong>Total: $${totalPorProducto}</strong></p>
-            
-          </div>
-        </div>
-      `;
-    });
-
-    totalDiv.innerHTML = `Total del carrito: $${totalGeneral.toFixed(2)}`;
-  }
-
-function actualizarCantidad(index, nuevaCantidad) {
-  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-  nuevaCantidad = parseInt(nuevaCantidad);
-
-  if (nuevaCantidad < 1) {
-    alert("La cantidad debe ser al menos 1.");
-    mostrarCarrito();
-    return;
-  }
-
-  const disponible = carrito[index].stock;
-
-  if (nuevaCantidad > disponible) {
-    alert(`Lo sentimos. Solo hay ${disponible} unidades disponibles de "${carrito[index].titulo}".`);
-    mostrarCarrito();
-    return;
-  }
-
-  carrito[index].cantidad = nuevaCantidad;
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-  mostrarCarrito(); // recargar vista
-}
-
-
-  // Inicializar al cargar
-  mostrarCarrito();
-</script>
 
 </body>
 </html>
