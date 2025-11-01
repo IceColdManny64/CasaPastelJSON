@@ -17,31 +17,41 @@
     html,body{height:100%}
     body{
       margin:0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100%;
+      font-family: 'Playfair Display', serif;
       min-height:100vh;
       display:flex;
       flex-direction:column;
-      background: linear-gradient(to right, #d6001c, #f08080);
+ background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') no-repeat center center/cover;
       color:#111;
     }
 
-    /* Header */
-    header{
-      background-color: var(--red-700);
-      padding: 12px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      color: white;
-      gap:12px;
+
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 10;
+      position: relative;
     }
     .logo{display:flex; align-items:center; gap:12px}
     .logo img{height:46px}
     .logo h1{font-size:18px; margin:0; font-weight:800}
-    nav.header-nav{display:flex; gap:14px; align-items:center}
-    nav.header-nav a{color:white; text-decoration:none; font-weight:700; padding:6px 10px; border-radius:8px}
-    nav.header-nav a:hover{background: rgba(255,255,255,0.06)}
-    .header-actions{display:flex; gap:12px; align-items:center}
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-size: 1em;
+    }
 
     .cart-indicator{
       background: rgba(255,255,255,0.06);
@@ -64,6 +74,43 @@
       color: #111;
       border-radius: var(--radius);
       box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    }
+
+        /* --- Estilo para submenu --- */
+    .submenu {
+      position: relative;
+    }
+
+    .submenu > a {
+      cursor: pointer;
+    }
+
+    .submenu-content {
+      display: none;
+      position: absolute;
+      top: 100%; /* debajo del botón */
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      min-width: 220px;
+      border-radius: 5px;
+      z-index: 999;
+    }
+
+    .submenu-content a {
+      color: white;
+      padding: 10px 15px;
+      display: block;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .submenu-content a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Mantener abierto mientras esté en hover el contenedor */
+    .submenu:hover .submenu-content {
+      display: block;
     }
 
     h1{ text-align:center; color:var(--red-500); margin-bottom:18px; }
@@ -152,17 +199,28 @@
 
   <header>
     <div class="logo">
-      <img src="LOGO2.png" alt="Logo La Casa Del Pastel">
+      <img src="CasaPastel.png" alt="Logo La Casa Del Pastel">
       <h1>La Casa Del Pastel</h1>
     </div>
 
-    <div class="header-actions">
-      <nav class="header-nav" aria-label="principal">
-        <a href="menu.html">Catálogo</a>
-        <a href="pantallaUsuario.html">Perfil</a>
-        <a href="ofertas.php">Ofertas</a>
-        <a href="contacto.html">Contacto</a>
-      </nav>
+
+    <nav>
+      <a href="menu.html">Menú</a>
+      <a href="conocenos.html">Conócenos</a>
+      <a href="ofertas.php">Ofertas</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="seguimiento.html">Seguimiento</a>
+
+      <!-- Nuevo menú para documentos -->
+      <div class="submenu">
+        <a>Proyecto ▼</a>
+        <div class="submenu-content">
+          <a href="infraestructura.html">Justificación de Recursos</a>
+          <a href="ind.html">Plataformas abiertas/cerradas</a>
+          <a href="status.html">Estado de servicio/recursos</a>
+        </div>
+      </div>
+    </nav>
 
       <div class="cart-indicator" id="cartIndicator" title="Estado del carrito">
         <!-- Se rellena por JS -->
@@ -183,6 +241,7 @@
       <button id="vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
       <div id="carrito-total">Total: $0.00</div>
       <button class="btn-primary" id="btn-pagar" onclick="irAPago()">Realizar pago</button>
+            
     </div>
   </main>
 

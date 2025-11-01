@@ -1,129 +1,366 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Iniciar Sesión - La Casa del Pastel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Casa del Pastel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* ---- Variables mínimas para mantener coherencia visual ---- */
+    :root{
+      --accent:#e07a5f;
+      --accent-dark:#d65a3f;
+      --brand:#d59550;
+      --muted:#a86340;
+      --card-bg: rgba(4, 2, 0, 0.689); /* MENOR opacidad para que el fondo (logo) sea más visible */
+      --radius:20px;
+      --img-width:230px;
+      --img-height:130px;
     }
 
+    
+
+    /* ---- Reset / Base ---- */
+    *{box-sizing:border-box}
     body {
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      height: 100vh;
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      /* Fondo: conserva tu imagen de logo/fondo */
+      background: url('https://www.recetasnestle.com.mx/sites/default/files/srh_recipes/57c79d042719d0ff79735f0643988c61.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #f0ebeb;
     }
 
-    .izquierda {
-      width: 50%;
-      background-color: #d6001c;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      .icons a {
+      margin-left: 0px;
+      padding-top: 10px;
       color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .izquierda img {
-      width: 80%;
-      max-width: 280px;
-      margin-bottom: 20px;
-    }
-
-    .izquierda h1 {
-      font-size: 32px;
-    }
-
-    .derecha {
-      width: 50%;
-      background-color: #fff4e6;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 40px;
-    }
-
-    .formulario {
-      width: 100%;
-      max-width: 400px;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      font-size: 28px;
-      color: #222;
-      text-align: center;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      background: linear-gradient(to right, #ff8a00, #ff3e3e);
-      border: none;
-      color: white;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: linear-gradient(to right, #ff6e00, #e32727);
-    }
-
-    .enlace {
-      margin-top: 10px;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    .enlace a {
-      color: #c40028;
       text-decoration: none;
+    }
+
+    .icon-img {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s;
+    }
+
+    .icon-img:hover {
+      transform: scale(1.2);
+    }
+
+
+
+    /* Overlay con menor opacidad para que el logo/fondo se note más */
+    .overlay {
+      background-color: var(--card-bg);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 5px 20px 30px; /* reduje un poco bottom para que la flecha quede fuera y no sobre las imágenes */
+      position: relative;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2em;
+      margin-bottom: 4px;
+      color: var(--brand);
+    }
+    header p {
+      font-size: 1.05em;
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    /* Badge de campaña, discreto */
+    .campaign-badge{
+      display:inline-block;
+      background: rgba(214, 0, 29, 0.244);
+      color: var(--brand);
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:700;
+      margin-bottom:5px;
+      font-size:0.95rem;
+      border:1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Botón principal */
+    .btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      padding: 15px 35px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display:inline-block;
+      margin-top:12px;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Sección de beneficios */
+    .benefits {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      padding: 10px 10px;
+      background-color: rgba(255, 240, 230, 0.95);
+      border-radius: 0px 0px 0 0;
+    }
+        .arrow {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 10px 10px;
+      background-color: rgba(255, 240, 230, 0.95);
+      border-radius: 60px 60px 0 0;
+    }
+    .benefit {
+      text-align: center;
+      max-width: 300px;
+      margin: 15px;
+      transition: transform 0.3s ease;
+    }
+    .benefit:hover { transform: scale(1.04); }
+    /* imágenes de beneficios con uniformidad */
+    .benefit img {
+      width: var(--img-width);
+      height: var(--img-height);
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display:block;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .benefit p{ margin:0; color:var(--muted); font-weight:600 }
+
+    /* Ofertas */
+    .offers {
+      padding: 70px 30px;
+      text-align: center;
+      background-color: #fff5f0;
+    }
+    .offers h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5em;
+      margin-bottom: 28px;
+      color:var(--brand);
+    }
+    .offers-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+    .offer-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      max-width: 260px;
+      padding: 16px;
+      transition: transform 0.3s ease;
+      text-align:left;
+    }
+    .offer-card:hover { transform: translateY(-5px); }
+    /* imágenes de ofertas con la misma medida que beneficios */
+    .offer-card img {
+      width: var(--img-width);
+      height: var(--img-height);
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display:block;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .offer-card h3 { font-size:1.25em; margin:6px 0; color:var(--brand) }
+    .offer-card p { font-size:0.95em; margin:6px 0 12px; color:var(--muted) }
+    .offer-card .btn { width:100%; text-align:center; }
+
+    /* Testimonios */
+    .testimonials {
+      padding: 60px 20px;
+      background-color: rgba(254, 246, 240, 0.95);
+      text-align: center;
+    }
+    .testimonials h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.3em;
+      margin-bottom: 18px;
+      color:var(--brand);
+    }
+    blockquote {
+      font-style: italic;
+      margin: 18px auto;
+      max-width: 720px;
+      font-size: 1.05em;
+      color:var(--muted);
+    }
+
+    /* Footer */
+    footer {
+      background-color: rgba(75, 46, 46, 0.95);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.95em;
+    }
+
+    /* Flecha / indicador: ahora en flujo bajo header, no absoluto */
+    .scroll-down {
+      display:inline-block;
+      margin-top:2px;
+      font-size:1rem;
+      color: var(--accent);
+      cursor:pointer;
+      border-radius:999px;
+      padding:6px 6px;
+      background: linear-gradient(90deg, rgba(224,122,95,0.08), rgba(214,90,63,0.06));
+      transition: transform .25s;
+    }
+    .scroll-down:hover{ transform: translateY(-4px); }
+    .scroll-down p{ margin:0; color:#a86340;; font-weight:600 }
+
+    /* Sticky order button */
+    .sticky {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      padding: 14px 22px;
+      border-radius: 50px;
+      font-weight: bold;
+      z-index: 1000;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+    .sticky:hover { transform: scale(1.05); }
+
+    /* Responsive tweaks */
+    @media (max-width:920px){
+      header { padding: 60px 18px 18px; }
+      .benefit, .offer-card { max-width: 92%; }
+      .offers-grid { gap:18px; }
+      .benefit img, .offer-card img { width:100%; height:220px; }
     }
   </style>
 </head>
+
 <body>
+  <div class="overlay">
 
-  <div class="izquierda">
-    <img src="LOGO1.png" alt="Logo La Casa del Pastel">
-    <h1>¡Bienvenido!</h1>
-  </div>
+    <header>
+      <!-- Campaign badge (discreto) -->
+      <div class="campaign-badge">El sabor que enamora</div>
 
-  <div class="derecha">
-    <form action="login.php" method="POST" class="formulario">
-      <h2>Iniciar Sesión</h2>
-      <input type="email" name="correo" placeholder="Correo electrónico" required>
-      <input type="password" name="contrasena" placeholder="Contraseña" required>
-      <button type="submit">Entrar</button>
-      <div class="enlace">
-        ¿No tienes cuenta? <a href="registroUsuario.html">Regístrate aquí</a><br>
-        ¿Eres administrador? <a href="login_administrador.html">Inicia sesión como admin</a> <br>
-        ¿Nomás andas viendo? <a href="PantallaPrincipal.html">Entra como invitado</a>
+
+      <h1>La Casa del Pastel</h1>
+
+      <h2>El invitado perfecto en tu mesa</h2>
+      <p>Pasteles artesanales, galletas recién horneadas y momentos dulces que duran para siempre.</p>
+
+            <div class="icons">
+      <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
+      <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
+      <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
       </div>
-    </form>
+
+      <a href="menu.html" class="btn">Ver el Menú</a>
+
+
+    </header>
+
+        <section class="arrow" aria-label="Beneficios">
+      <div style="margin-top:12px;">
+        
+        <button class="scroll-down" onclick="document.getElementById('offers').scrollIntoView({behavior:'smooth'})">
+          Baja para ver algunas ofertas disponibles ⬇
+        </button>
+      </div>
+      </section>
+
+    <section class="benefits" aria-label="Beneficios">
+
+      <div class="benefit">
+        <img src="https://img.freepik.com/premium-photo/chocolate-cake-with-chocolate-icing-chocolate-shavings_762785-94211.jpg" alt="Ingredientes frescos">
+        <p>Ingredientes frescos y naturales</p>
+      </div>
+
+      <div class="benefit">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp6OjVajUC2iDl0y47-pZOgXSb_bfBN4-kNQ&s" alt="Hecho a mano">
+        <p>Hecho a mano con amor</p>
+      </div>
+
+      <div class="benefit">
+        <img src="https://thumbs.dreamstime.com/b/individuo-de-la-entrega-con-un-tablero-y-una-torta-113295881.jpg" alt="Entrega">
+        <p>Entrega rápida y segura</p>
+      </div>
+    </section>
+
+
+    <section id="offers" class="offers" aria-label="Ofertas de la semana">
+      <h2>🎉 Ofertas de la Semana 🎉</h2>
+      <div class="offers-grid">
+        <div class="offer-card" role="article" aria-label="Pastel de Chocolate">
+          <img src="https://i.ytimg.com/vi/W0DeEEZZ5dE/maxresdefault.jpg" alt="Pastel">
+          <h3>Pastel de Chocolate</h3>
+          <p><small style="color:var(--muted)">Antes $450 — Ahora</small> <strong>$320</strong></p>
+
+        </div>
+
+        <div class="offer-card" role="article" aria-label="Cheesecake de Fresa">
+          <img src="https://www.recetasnestle.com.ec/sites/default/files/srh_recipes/7f9ebeaceea909a80306da27f0495c59.jpg" alt="Cheesecake">
+          <h3>Cheesecake de Fresa</h3>
+          <p class="muted">2x1 en porciones individuales</p>
+
+        </div>
+
+        <div class="offer-card" role="article" aria-label="Galletas Variadas">
+          <img src="https:\/\/sarasellos.com\/wp-content\/uploads\/2024\/06\/Galletas-New-York-con-oreos3.jpg" alt="Galletas">
+          <h3>Galletas Variadas</h3>
+          <p class="muted">Combo de 12 piezas a solo <strong>$99</strong></p>
+
+
+
+        </div>
+      </div>
+            <div class="offers-grid">
+              <a href="PantallaPrincipal.html" class="btn">Visitar sitio para ver más ofertas!</a>
+      </div>
+    </section>
+
+
+    <section class="testimonials" aria-label="Testimonios">
+      <h2>Lo que dicen nuestros clientes</h2>
+      <blockquote>“El pastel de chocolate es una obra de arte. ¡Nunca había probado algo tan delicioso!” – Ana G.</blockquote>
+      <blockquote>“La atención y el sabor de las galletas son insuperables. Repetiré sin duda.” – Luis M.</blockquote>
+      <blockquote>“Toda la familia estuvo hablando por semanas del pastel de bodas de mi hija.” – Salomé H.</blockquote>
+      <blockquote>“En la oficina no quieren donas si en la bolsa no dice que son de La Casa del Pastel.” – Gerardo R.</blockquote>
+    </section>
+
+    <footer>
+
+      <p>📍 Aguascalientes, México | ☎️ 449-123-4567 | 📧 contacto@lacasadelpastel.mx</p>
+      <p>&copy; 2025 La Casa del Pastel. Todos los derechos reservados.</p>
+      <strong>Política de privacidad | Términos y condiciones de uso</strong>
+    </footer>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("error") === "1") {
-      alert("Correo o contraseña incorrectos.");
-    }
-  </script>
+  
+
+  <a href="PantallaPrincipal.html" class="sticky">Haz tu pedido</a>
 
 </body>
 </html>

@@ -1,81 +1,149 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Justificación de Recursos - EcoTienda MX</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 40px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #2e7d32;
-        }
-        ul {
-            margin-left: 20px;
-        }
-        .justificacion {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Justificación de Recursos - La Casa del Pastel</title>
+  <style>
+    body{
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 28px;
+      background: #fffaf8;
+      color: #222;
+      line-height:1.6;
+    }
+    .card{
+      background: #fff;
+      padding:20px;
+      border-radius:12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      max-width:1100px;
+      margin:0 auto;
+    }
+    h1{ color:#a30015; font-family:'Playfair Display', serif }
+    h2{ color:#c23; margin-top:18px }
+    ul{ margin-left:18px }
+    .metrics{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px}
+    .metric{background:#fff7f7;border-radius:10px;padding:12px;border:1px solid rgba(214,0,28,0.06)}
+    .muted{color:#666; font-size:0.95rem}
+    .note{font-size:0.9rem; color:#444; margin-top:12px}
+    footer{margin-top:18px; font-size:0.9rem; color:#555}
+    @media (max-width:880px){ .metrics{grid-template-columns:1fr} }
+  </style>
 </head>
 <body>
-    <h1>Justificación de Recursos del Proyecto</h1>
-    <div class="justificacion">
-        <p>
-            Para el proyecto <strong>EcoTienda MX</strong>, se definió una infraestructura hipotética que 
-            permite iniciar operaciones con un catálogo de tamaño mediano y tráfico moderado. 
-            Cada recurso fue seleccionado considerando un balance entre rendimiento, seguridad y costos.
-        </p>
+  <div class="card">
+    <h1>Justificación de Recursos — Proyecto <span style="font-weight:700">La Casa del Pastel</span></h1>
 
-        <h2>Componentes empleados</h2>
-        <ul>
-            <li>
-                <strong>Cliente/Usuario (Navegador)</strong>: 
-                Permite acceso universal desde PC o móvil mediante Chrome, Firefox u otros navegadores.
-            </li>
-            <li>
-                <strong>Internet / ISP</strong>: 
-                Canal público de comunicación que conecta al cliente con el servidor. 
-                Puede ser red fija o móvil (4G/5G).
-            </li>
-            <li>
-                <strong>CDN (opcional)</strong>: 
-                Mejora la velocidad de carga y reduce la carga del servidor principal en campañas con alto tráfico.
-            </li>
-            <li>
-                <strong>Firewall / WAF básico</strong>: 
-                Protege contra accesos maliciosos y ataques comunes como inyecciones o bots automatizados.
-            </li>
-            <li>
-                <strong>Servidor Web / Hosting</strong>: 
-                Aloja los archivos HTML, CSS y JS del sitio. En este escenario solo se considera contenido estático.
-            </li>
-            <li>
-                <strong>Sistema Operativo y Servidor</strong>: 
-                Linux Ubuntu junto con Nginx o Apache, tecnologías probadas, estables y de bajo costo.
-            </li>
-            <li>
-                <strong>Recursos de hardware</strong>: 
-                2 vCPU, 4 GB RAM, 50 GB SSD y 1 TB de ancho de banda. 
-                Estos parámetros son suficientes para un inicio estable de una PyME.
-            </li>
-        </ul>
+    <p>
+      Este documento adapta la planificación de recursos para el proyecto <strong>La Casa del Pastel</strong>,
+      considerando que la primera fase de despliegue se realizará en <strong>InfinityFree (hosting gratuito)</strong>.
+      La idea es lanzar un prototipo público con catálogo, gestión de pedidos y panel de usuario, y validar UX/negocio
+      antes de migrar a un servicio de pago en caso de crecimiento.
+    </p>
 
-        <h2>Conclusión</h2>
-        <p>
-            La elección de estos recursos responde a la necesidad de ofrecer un sistema 
-            accesible, seguro y con capacidad suficiente para un negocio en etapa inicial. 
-            Además, la arquitectura es flexible: puede crecer a un VPS más robusto o a la nube 
-            con balanceo y CDN a medida que la demanda aumente.
-        </p>
+    <h2>Resumen técnico y objetivos</h2>
+    <p class="muted">
+      Objetivo: disponer de un sitio público con catálogo de productos, carrito y panel de usuario para clientes
+      (funcionalidad CRUD básica en la base de datos). Alcance inicial aproximado: catálogo de ~50 productos,
+      páginas estáticas y dinámicas (login, panel, carrito), y un volumen moderado de tráfico de pruebas y clientes reales.
+    </p>
+
+    <h2>Recursos propuestos en InfinityFree (métrica oficial)</h2>
+
+    <div class="metrics">
+      <div class="metric">
+        <strong>Espacio en disco</strong>
+        <div class="muted">5 GB (apropiado para archivos web y recursos comprimidos en la fase inicial).</div>
+      </div>
+
+      <div class="metric">
+        <strong>Tráfico</strong>
+        <div class="muted">Ancho de banda ilimitado (útil para pruebas de marketing y visitas iniciales).</div>
+      </div>
+
+      <div class="metric">
+        <strong>PHP / Base de datos</strong>
+        <div class="muted">PHP 8.x y MySQL/MariaDB modernas (compatibles con stacks actuales).</div>
+      </div>
+
+      <div class="metric">
+        <strong>Nº bases de datos</strong>
+        <div class="muted">Hasta cientos de bases de datos (suficiente para separar entornos si se desea).</div>
+      </div>
+
+      <div class="metric">
+        <strong>Límite por archivo</strong>
+        <div class="muted">Carga directa: límite por archivo (~10 MB). Para archivos mayores usar FTP.</div>
+      </div>
+
+      <div class="metric">
+        <strong>Política BD</strong>
+        <div class="muted">No hay un límite duro de tamaño de BD, pero existen límites de uso de CPU/consultas (fair-use).</div>
+      </div>
     </div>
+
+    <h2>Por qué InfinityFree encaja con La Casa del Pastel (justificación)</h2>
+    <ul>
+      <li>
+        <strong>Bajo coste / rápido despliegue:</strong>
+        al ser gratuito permite publicar el prototipo sin inversión inicial y validar la experiencia de compra
+        (catálogo, carrito, login) con clientes reales.
+      </li>
+      <li>
+        <strong>Recursos suficientes para la fase 1:</strong>
+        la combinación de 5 GB de disco y ancho de banda ilimitado cubre los activos del sitio (imágenes optimizadas,
+        CSS/JS y páginas) y visitas moderadas mientras la marca gana tracción.
+      </li>
+      <li>
+        <strong>Entorno técnico moderno:</strong>
+        soporte para PHP 8.x y MySQL/MariaDB actuales facilita portar el desarrollo local (XAMPP) sin reescrituras.
+      </li>
+      <li>
+        <strong>Escalado gradual y control de riesgos:</strong>
+        si el sitio crece en tráfico o complejidad (pagos, integraciones, muchos productos), la arquitectura se puede migrar
+        a VPS o cloud con balanceo y CDN. Mientras tanto, InfinityFree sirve como entorno de validación y pruebas A/B.
+      </li>
+    </ul>
+
+    <h2>Requisitos técnicos adaptados al proyecto</h2>
+    <ol>
+      <li><strong>Hosting web (InfinityFree):</strong> alojar todos los archivos públicos HTML/CSS/JS/PHP. 
+        Usar FTP para subir archivos grandes (>10MB) y mantener la raíz en <code>/htdocs</code>.</li>
+
+      <li><strong>Base de datos MySQL:</strong> una base de datos para la aplicación (usuarios, productos, pedidos).
+        Mantener índices y consultas optimizadas para evitar sobrecargar el servicio (fair-use).</li>
+
+      <li><strong>Optimización de activos:</strong> imágenes comprimidas (WebP/avif opcional), sprites o lazy-loading
+        para reducir I/O y mejorar tiempos de carga.</li>
+
+      <li><strong>Importación de BD:</strong> si el volcado (.sql) excede el límite de importación web, dividir el archivo
+        o importar por partes desde phpMyAdmin, o bien crear la BD vacía y subir datos por scripts/TUI por FTP.</li>
+
+      <li><strong>Seguridad básica:</strong> SSL (InfinityFree genera certificados gratuitos), validación de inputs
+        en servidor y uso de prepared statements para prevenir inyecciones SQL.</li>
+
+      <li><strong>Plan de respaldo y migración:</strong> mantener copia local del código y BD; si la tienda crece,
+        planificar migración a VPS/Cloud con CDN y backups programados.</li>
+    </ol>
+
+    <h2>Riesgos y limitaciones (y mitigación)</h2>
+    <ul>
+      <li>
+        <strong>Límite de tamaño de archivos:</strong> la carga directa tiene límites (~10 MB). Mitigación: subir por FTP,
+        optimizar imágenes y evitar backups pesados vía php. Esto es relevante para plantillas grandes o backups.
+      </li>
+      <li>
+        <strong>Fair-use en MySQL:</strong> no hay límite duro de tamaño, pero sí límites por uso intensivo de CPU/consultas.
+        Mitigación: queries eficientes, paginación, caché en cliente y limitar operaciones costosas.
+      </li>
+      <li>
+        <strong>Sin SLA empresarial:</strong> hosting gratuito no ofrece garantía de disponibilidad ni soporte prioritario.
+        Mitigación: planificar migración a hosting pago si se llega a tráfico o facturación significativa.
+      </li>
+    </ul>
+
+  </div>
 </body>
 </html>
+

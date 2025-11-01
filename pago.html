@@ -1,299 +1,311 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Pantalla de Pago</title>
+  <meta charset="utf-8" />
+  <title>Pago - La Casa del Pastel</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body {
-        background: linear-gradient(to right, #d6001c, #f08080);
-        font-family: 'Segoe UI', sans-serif;
-        margin: 0;
-        padding: 20px;
+    :root{
+      --red-700:#a30015;
+      --red-500:#d6001c;
+      --card-bg:#ffffff;
+      --muted:#666;
+      --radius:12px;
+      --maxwidth:1000px;
+
+      /* Tamaño de miniatura coherente con carrito */
+      --thumb-w:120px;
+      --thumb-h:90px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
+      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
+        url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') no-repeat center center/cover;
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 22px;
+      background: rgba(0,0,0,0.45);
+      color:white;
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:40px;border-radius:6px}
+    nav a{color:white;text-decoration:none;margin-left:12px}
+
+    .container{max-width:var(--maxwidth); margin:28px auto; padding:18px;}
+
+    .card{background:var(--card-bg); border-radius:var(--radius); padding:18px; box-shadow:0 12px 30px rgba(0,0,0,0.18)}
+
+    h1{color:var(--red-500); margin:0 0 6px; font-family:'Playfair Display', serif}
+
+    .layout{display:grid; grid-template-columns:1fr 360px; gap:18px; margin-top:14px}
+    @media (max-width:980px){ .layout{grid-template-columns:1fr} }
+
+    /* --- Card / item layout (copia estilo carrito) --- */
+    .summary .item{
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      border-radius:10px;
+      padding:12px;
+      background:#fff7f7;
+      border:1px solid rgba(214,0,28,0.05);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
     }
 
-    header {
-        width: 100%;
-        background-color: #a30015;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px 30px;
-        box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+    .summary .item img{
+      width:var(--thumb-w);
+      height:var(--thumb-h);
+      object-fit:cover;
+      border-radius:8px;
+      flex-shrink:0;
+      display:block;
+      background:#f6f6f6;
     }
 
-    header img {
-        height: 55px;
+    .summary .item-body{flex:1}
+    .summary .item-title{font-weight:800; color:var(--red-700); margin-bottom:6px}
+    .summary .item-desc{color:var(--muted); margin-bottom:8px}
+    .summary .item-price{font-weight:800; margin-bottom:8px; color:var(--red-700)}
+    .summary .qty-row{display:flex; align-items:center; gap:8px; margin-top:6px}
+
+    .summary .item-total{font-weight:800; text-align:right; min-width:120px}
+
+    /* contenedor de items con scroll si hay muchos */
+    #summaryItems{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      max-height:420px;
+      overflow:auto;
+      padding-right:6px;
     }
 
-    header h1 {
-        font-size: 22px;
-        color: white;
-        margin: 0;
+    .summary .totals{margin-top:12px; font-weight:900; color:var(--red-700)}
+
+    .form-row{display:flex; gap:10px; margin-top:10px}
+    .form-field{display:flex; flex-direction:column; margin-bottom:10px}
+    input, select, textarea{padding:10px; border-radius:8px; border:1px solid #e6e6e6; font-size:0.95rem}
+    textarea{min-height:80px}
+
+    .btn{padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:800}
+    .btn-primary{background:linear-gradient(90deg,var(--red-500),var(--red-700)); color:white}
+    .btn-ghost{background:transparent; border:2px solid rgba(0,0,0,0.06); color:var(--red-700)}
+
+    .muted{color:var(--muted)}
+
+    /* responsive: reducir miniatura en pantallas pequeñas */
+    @media (max-width:560px){
+      :root{ --thumb-w:100px; --thumb-h:78px; }
+      #summaryItems{ max-height:520px; }
     }
-
-    .menu {
-        display: flex;
-        gap: 20px;
-    }
-
-    .menu a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 15px;
-        transition: color 0.3s, text-shadow 0.3s;
-    }
-
-    .menu a:hover {
-        color: #ffe0e0;
-        text-shadow: 0 0 5px rgba(255,255,255,0.5);
-    }
-
-    .contenedor-pago {
-        max-width: 400px;
-        margin: 40px auto;
-        background-color: white;
-        border-radius: 15px;
-        padding: 30px;
-        border: 3px solid #ac3b1d;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .contenedor-pago img {
-        display: block;
-        margin: 0 auto 10px;
-        width: 100px;
-        height: auto;
-    }
-
-    .contenedor-pago h1 {
-        text-align: center;
-        color: #5e2a00;
-        font-size: 22px;
-        margin-bottom: 25px;
-    }
-
-    .seccion {
-        margin-top: 30px;
-    }
-
-    h3 {
-        border-bottom: 1px solid #bbb;
-        padding-bottom: 5px;
-        margin-bottom: 15px;
-        color: #3a1f00;
-    }
-
-    label {
-        display: block;
-        margin: 8px 0;
-        cursor: pointer;
-    }
-
-    .formas-pago {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-top: 10px;
-    }
-
-    .forma-opcion {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background-color: #f9f9f9;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 2px solid transparent;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        flex: 1 1 150px;
-    }
-
-    .forma-opcion:hover {
-        background-color: #ececec;
-    }
-
-    .forma-opcion input[type="radio"] {
-        accent-color: #ff69b4;
-        transform: scale(1.2);
-    }
-
-    .etiqueta {
-        font-weight: 600;
-        color: #333;
-        white-space: nowrap;
-    }
-
-    .tarjeta-info {
-        margin-top: 30px;
-        padding: 15px;
-        background-color: #f2f2f2;
-        border-radius: 10px;
-        font-size: 14px;
-    }
-
-    .btn-pagar {
-        display: block;
-        margin: 30px auto 0;
-        background-color: #d6001c;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        font-size: 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .btn-pagar:hover {
-        background-color: #b43812;
-    }
-    .resumen-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.resumen-item {
-  display: flex;
-  align-items: center;
-  background-color: #f7f7f7;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.resumen-item img {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-right: 15px;
-}
-
-.resumen-item .info {
-  flex: 1;
-}
-
-.resumen-item .info h4 {
-  margin: 0 0 5px;
-  font-size: 16px;
-  color: #b33f4f;
-}
-
-.resumen-item .info p {
-  margin: 2px 0;
-  font-size: 14px;
-  color: #555;
-}
-
   </style>
 </head>
 <body>
-
   <header>
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <img src="LOGO2.png" alt="Logo">
-      <h1>La Casa Del Pastel</h1>
+    <div class="brand">
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='CasaPastel-small.png'">
+      <div style="font-weight:800">La Casa del Pastel</div>
     </div>
-    <nav class="menu">
-      <a href="#">Inicio</a>
+    <nav>
+      <a href="menu.html">Menú</a>
       <a href="carritoCompra.html">Carrito</a>
-      <a href="perfil.html">Mi perfil</a>
+      <a href="seguimiento_pedido.html">Seguimiento</a>
     </nav>
   </header>
-<div class="seccion">
-  <h3>Resumen de tu pedido</h3>
-  <div id="resumen-productos" class="resumen-grid"></div>
-</div>
 
-  <div class="contenedor-pago">
-    <img src="LOGO3.png" alt="Logo">
-    <h1>LA CASA DEL PASTEL</h1>
-    
-    <div class="seccion">
-      <h3>Tipo de envío</h3>
-      <label><input type="radio" name="envio" checked> Estándar</label>
-      <label><input type="radio" name="envio"> Recoger en tienda</label>
-    </div>
+  <div class="container">
+    <div class="card">
+      <h1>Pago y Confirmación</h1>
+      <p class="muted">Revisa tu pedido y completa los datos de pago. Al confirmar, se creará el pedido y serás redirigido a la pantalla de seguimiento.</p>
 
-    <div class="seccion">
-      <h3>Forma de pago</h3>
-      <div class="formas-pago">
-        <label class="forma-opcion">
-          <input type="radio" name="pago" value="efectivo">
-          <span class="etiqueta">💵 Efectivo</span>
-        </label>
-        <label class="forma-opcion">
-          <input type="radio" name="pago" value="transferencia">
-          <span class="etiqueta">🏦 Transferencia</span>
-        </label>
-        <label class="forma-opcion">
-          <input type="radio" name="pago" value="credito">
-          <span class="etiqueta">💳 Crédito</span>
-        </label>
+      <div class="layout">
+        <!-- LEFT: formulario de pago -->
+        <div class="card" id="leftColumn">
+          <h3 style="margin-top:0">Datos de facturación y entrega</h3>
+
+          <div style="margin-top:8px">
+            <div class="form-field">
+              <label>Nombre</label>
+              <input id="payerName" placeholder="Nombre completo">
+            </div>
+            <div class="form-field">
+              <label>Teléfono (WhatsApp)</label>
+              <input id="payerPhone" placeholder="Ej. 4491234567">
+            </div>
+            <div class="form-field">
+              <label>Método de pago</label>
+              <select id="payMethod">
+                <option value="efectivo">Efectivo al recoger/entrega</option>
+                <option value="transferencia">Transferencia / Depósito</option>
+                <option value="tarjeta">Tarjeta (simulado)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label>Instrucciones / Dirección</label>
+              <textarea id="payerNote" placeholder="Comentarios, dirección o indicaciones"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <button id="btnPay" class="btn btn-primary">Pagar y Generar pedido</button>
+            <a href="carritoCompra.html" class="btn btn-ghost">Volver al carrito</a>
+          </div>
+
+          <p class="muted" style="margin-top:10px">Al confirmar, el pedido se registrará y se abrirá el seguimiento.</p>
+        </div>
+
+        <!-- RIGHT: resumen del pedido -->
+        <aside class="card summary" id="rightColumn">
+          <h3 style="margin:0 0 8px">Resumen del pedido</h3>
+          <!-- contenedor con scroll si es necesario -->
+          <div id="summaryItems" aria-live="polite"></div>
+          <div class="totals summaryTotals" id="summaryTotal">Total: $0.00</div>
+        </aside>
       </div>
     </div>
-
-    <div class="tarjeta-info">
-      <h4>Usuario</h4>
-      <p>Banco: **</p>
-      <p>N° de Cuenta: 0123 4567 8901</p>
-      <p>Tarjeta: ●●●● ●●●● ●●●● 2345</p>
-    </div>
-
-    <button class="btn-pagar">Realizar pago</button>
   </div>
-<script>
-  const resumen = document.getElementById("resumen-productos");
-  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-  if (carrito.length === 0) {
-    resumen.innerHTML = "<p>No hay productos en el carrito.</p>";
-  } else {
-    carrito.forEach(item => {
-      const div = document.createElement("div");
-      div.classList.add("resumen-item");
+  <script>
+    // helpers
+    function loadCart(){
+      return JSON.parse(localStorage.getItem('carrito') || '[]');
+    }
+    function escapeHtml(str){ if(!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
-      div.innerHTML = `
-        <img src="${item.imagen_url}" alt="${item.titulo}">
-        <div class="info">
-          <h4>${item.titulo}</h4>
-          <p>Cantidad: ${item.cantidad}</p>
-          <p>Precio unitario: $${parseFloat(item.precio).toFixed(2)}</p>
-          <p>Total: $${(item.precio * item.cantidad).toFixed(2)}</p>
-        </div>
-      `;
+    function renderSummary(){
+      const cart = loadCart();
+      const container = document.getElementById('summaryItems');
+      container.innerHTML = '';
+      let total = 0;
+      if(!cart || cart.length === 0){
+        container.innerHTML = '<div class="muted">No hay productos en el carrito.</div>';
+        document.getElementById('btnPay').disabled = true;
+      } else {
+        document.getElementById('btnPay').disabled = false;
+        cart.forEach((p, index)=>{
+          const qty = Number(p.cantidad) || Number(p.qty) || 1;
+          const price = Number(p.precio ?? p.price ?? 0);
+          total += price * qty;
 
-      resumen.appendChild(div);
-    });
-  }
+          // Crear tarjeta como en el carrito
+          const card = document.createElement('div');
+          card.className = 'item';
 
-  document.querySelector(".btn-pagar").addEventListener("click", () => {
-    if (carrito.length === 0) {
-      alert("Tu carrito está vacío.");
-      return;
+          const img = document.createElement('img');
+          img.src = (p.imagen_url || p.img || 'https://via.placeholder.com/300x200');
+          img.alt = (p.titulo || p.nombre || 'Producto');
+          img.onerror = function(){ this.onerror=null; this.src='https://via.placeholder.com/300x200'; };
+
+          const body = document.createElement('div');
+          body.className = 'item-body';
+          body.innerHTML = `<div class="item-title">${escapeHtml(p.titulo || p.nombre || 'Producto')}</div>
+                            <div class="item-desc">${escapeHtml(p.descripcion || '')}</div>
+                            <div class="item-price">Precio unitario: $${price.toFixed(2)}</div>
+                            <div class="qty-row"><label style="font-weight:700; color:var(--red-700)">Cant:</label>
+                              <input type="number" min="1" value="${qty}" style="width:70px; padding:6px; border-radius:6px; border:1px solid #e6e6e6"
+                                onchange="updateQtyFromSummary(${index}, this.value)">
+                              <span style="margin-left:10px; color:var(--muted)">Stock: ${p.stock ?? '—'}</span>
+                            </div>`;
+
+          const totalDiv = document.createElement('div');
+          totalDiv.className = 'item-total';
+          totalDiv.textContent = `$${(price*qty).toFixed(2)}`;
+
+          card.appendChild(img);
+          card.appendChild(body);
+          card.appendChild(totalDiv);
+          container.appendChild(card);
+        });
+      }
+      document.getElementById('summaryTotal').textContent = `Total: $${total.toFixed(2)}`;
     }
 
-    fetch("procesar_pago.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(carrito)
-    })
-    .then(res => res.text())
-    .then(resp => {
-      alert(resp);
-      localStorage.removeItem("carrito");
-      location.href = "PantallaPrincipal.html";
-    })
-    .catch(err => {
-      alert("Hubo un error al procesar el pago.");
+    // actualizar cantidad desde la vista de pago (se persiste en carrito y se re-renderiza)
+    function updateQtyFromSummary(index, nuevaCantidad){
+      nuevaCantidad = parseInt(nuevaCantidad);
+      if(isNaN(nuevaCantidad) || nuevaCantidad < 1){ alert('La cantidad debe ser al menos 1'); renderSummary(); return; }
+      let cart = loadCart();
+      if(!cart[index]){ renderSummary(); return; }
+      const disponible = cart[index].stock ?? Infinity;
+      if(nuevaCantidad > disponible){ alert(`Solo hay ${disponible} unidades disponibles.`); renderSummary(); return; }
+      cart[index].cantidad = nuevaCantidad;
+      localStorage.setItem('carrito', JSON.stringify(cart));
+      renderSummary();
+    }
+
+    function generateOrderNumber(){ return (Math.floor(100000 + Math.random()*899999)).toString(); }
+
+    function createOrderFromCartAndRedirect(){
+      const cart = loadCart();
+      if(!cart || cart.length === 0){ alert('No hay artículos en el carrito.'); return; }
+
+      let total = 0;
+      const items = cart.map(p=>{
+        const cantidad = Number(p.cantidad) || Number(p.qty) || 1;
+        const precio = Number(p.precio ?? p.price ?? 0);
+        total += precio * cantidad;
+        return {
+          titulo: p.titulo || p.nombre || 'Producto',
+          descripcion: p.descripcion || '',
+          cantidad: cantidad,
+          precio: precio,
+          imagen_url: p.imagen_url || p.img || ''
+        };
+      });
+
+      const id = Date.now();
+      const number = generateOrderNumber();
+      const now = new Date().toISOString();
+
+      const order = {
+        id,
+        number,
+        statusIndex: 0,
+        statuses: ['Recibido','En preparación','En camino','Entregado'],
+        items,
+        total: Number(total.toFixed(2)),
+        timestamps: { created: now, history: { 'Recibido': now } },
+        customer: {
+          name: document.getElementById('payerName').value.trim() || '',
+          phone: document.getElementById('payerPhone').value.trim() || '',
+          method: document.getElementById('payMethod').value,
+          note: document.getElementById('payerNote').value.trim() || ''
+        }
+      };
+
+      const orders = JSON.parse(localStorage.getItem('lcp_orders') || '[]');
+      orders.push(order);
+      localStorage.setItem('lcp_orders', JSON.stringify(orders));
+      localStorage.setItem('lcp_last_order', id);
+
+      localStorage.removeItem('carrito');
+
+      window.location.href = `seguimiento.html?order=${id}`;
+    }
+
+    document.getElementById('btnPay').addEventListener('click', function(){
+      const name = document.getElementById('payerName').value.trim();
+      const phone = document.getElementById('payerPhone').value.trim();
+      if(!name || !phone){
+        if(!confirm('No has puesto nombre o teléfono. ¿Deseas continuar sin ellos?')) return;
+      }
+      createOrderFromCartAndRedirect();
     });
-  });
-</script>
 
-
+    // render on load
+    renderSummary();
+  </script>
 </body>
 </html>
