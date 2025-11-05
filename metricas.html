@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Métricas - La Casa del Pastel</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red-700:#a30015;
+      --red-500:#d6001c;
+      --peach:#f4a261;
+      --card-bg: #ffffff;
+      --muted: #666;
+      --radius:14px;
+      --maxwidth:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Open Sans", system-ui, -apple-system, "Helvetica Neue", Arial;
+      color:#222;
+      min-height:100vh;
+      background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+                  url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') center/cover no-repeat fixed;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:16px 28px;
+      background: rgba(0,0,0,0.45);
+      color:white;
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(4px);
+    }
+    .brand{display:flex; align-items:center; gap:12px; font-family:'Playfair Display', serif; font-weight:700}
+    .brand img{height:40px; border-radius:8px}
+    nav a{color:white; text-decoration:none; margin-left:14px}
+
+    .container{
+      width:100%;
+      max-width:var(--maxwidth);
+      margin:26px auto;
+      padding:18px;
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:20px;
+    }
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr; padding:12px}
+    }
+
+    .card{
+      background: var(--card-bg);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(4,1fr);
+      gap:12px;
+      margin-bottom:12px;
+    }
+    @media (max-width:920px){ .kpis{grid-template-columns: repeat(2,1fr)} }
+
+    .kpi{
+      background: linear-gradient(90deg, rgba(214,0,28,0.06), rgba(214,0,28,0.02));
+      border-radius:12px;
+      padding:12px;
+      text-align:left;
+    }
+    .kpi .value{font-size:1.4rem; font-weight:800; color:var(--red-700)}
+    .kpi .label{color:var(--muted); font-size:0.9rem}
+
+    .controls{display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap}
+    select,input[type="date"]{padding:8px 10px; border-radius:8px; border:1px solid #e6e6e6}
+
+    .charts{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px}
+    @media (max-width:920px){ .charts{grid-template-columns:1fr} }
+
+    .chart-wrap{padding:12px; border-radius:10px; background: #fff;}
+    canvas{width:100%; height:220px; display:block}
+
+    .table { margin-top:12px; width:100%; border-collapse:collapse; font-size:0.95rem; }
+    .table th, .table td { padding:10px 8px; border-bottom:1px solid #eee; text-align:left }
+    .table th { background: #faf5f4; font-weight:700; color:var(--red-700) }
+
+    .right-column { display:flex; flex-direction:column; gap:12px; }
+    .mini-card { padding:12px; border-radius:10px; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.06) }
+
+    .muted { color:var(--muted) }
+    .center { text-align:center }
+
+    .actions { display:flex; gap:8px; margin-top:8px; }
+    .btn { padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700;}
+    .btn-primary { background: linear-gradient(90deg,var(--red-500),var(--red-700)); color:white }
+    .btn-ghost { background:transparent; border:1px solid rgba(0,0,0,0.06) }
+
+    footer { color:white; text-align:center; padding:18px 0; opacity:0.9 }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='CasaPastel-small.png'">
+      La Casa del Pastel — Métricas
+    </div>
+    <nav>
+      <a href="admin_dashboard.html">Panel</a>
+      <a href="seguimiento_pedido.html">Seguimiento</a>
+      <a href="pago.html">Pago</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section>
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
+          <div>
+            <h2 style="margin:0; font-family:'Playfair Display', serif; color:var(--red-700)">Panel de métricas</h2>
+            <div class="muted small">Datos simulados — interactúa con el rango o "Generar" para actualizar</div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <label class="muted" for="range">Rango:</label>
+            <select id="range">
+              <option value="7">Últimos 7 días</option>
+              <option value="14">Últimos 14 días</option>
+              <option value="30" selected>Últimos 30 días</option>
+              <option value="90">Últimos 90 días</option>
+            </select>
+            <button class="btn btn-ghost" id="btnRefresh">Generar</button>
+            <button class="btn btn-primary" id="btnDownload">Descargar CSV</button>
+          </div>
+        </div>
+
+        <div class="kpis" style="margin-top:12px">
+          <div class="kpi">
+            <div class="label">Visitas</div>
+            <div class="value" id="k_visitas">0</div>
+            <div class="muted small" id="k_visitas_diff">--</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Clics en pedidos</div>
+            <div class="value" id="k_clics">0</div>
+            <div class="muted small" id="k_clics_diff">--</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Pedidos</div>
+            <div class="value" id="k_pedidos">0</div>
+            <div class="muted small" id="k_pedidos_diff">--</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Tasa de conversión</div>
+            <div class="value" id="k_conv">0%</div>
+            <div class="muted small" id="k_conv_diff">--</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <label class="muted">Desde:</label>
+          <input type="date" id="dateFrom">
+          <label class="muted">Hasta:</label>
+          <input type="date" id="dateTo">
+          <div style="margin-left:auto" class="muted small">Última actualización: <span id="lastUpdate">—</span></div>
+        </div>
+
+        <div class="charts">
+          <div class="chart-wrap card">
+            <h3 style="margin-top:0; color:var(--red-700)">Visitas / Pedidos (línea)</h3>
+            <canvas id="lineChart" width="600" height="260" aria-label="Gráfico de visitas y pedidos"></canvas>
+          </div>
+
+          <div class="chart-wrap card">
+            <h3 style="margin-top:0; color:var(--red-700)">Clics por canal (barra)</h3>
+            <canvas id="barChart" width="600" height="260" aria-label="Gráfico de clics por canal"></canvas>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" class="card">
+          <h3 style="margin:0 0 8px">Eventos recientes</h3>
+          <table class="table" id="eventsTable" role="table" aria-label="Tabla de eventos recientes">
+            <thead>
+              <tr><th>Fecha</th><th>Evento</th><th>Detalle</th><th>Valor</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <aside class="right-column">
+      <div class="mini-card card">
+        <h4 style="margin:0 0 6px">Top productos (30 días)</h4>
+        <ol id="topProducts" style="margin:8px 0 0; padding-left:18px"></ol>
+      </div>
+
+      <div class="mini-card card">
+        <h4 style="margin:0 0 6px">Canales</h4>
+        <div style="display:flex; gap:8px; flex-direction:column; margin-top:8px">
+          <div><strong>Instagram</strong> <span class="muted">• 45% clics</span></div>
+          <div><strong>Facebook</strong> <span class="muted">• 30% clics</span></div>
+          <div><strong>WhatsApp</strong> <span class="muted">• 20% clics</span></div>
+          <div><strong>Directo</strong> <span class="muted">• 5% clics</span></div>
+        </div>
+      </div>
+
+      <div class="mini-card card center">
+        <h4 style="margin:0 0 6px">Acciones</h4>
+        <div class="actions" style="justify-content:center">
+          <button class="btn btn-primary" id="btnExportPNG">Exportar gráfico</button>
+          <button class="btn btn-ghost" id="btnClear">Reset datos</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    © 2025 La Casa del Pastel — Dashboard simulado
+  </footer>
+
+  <script>
+    // Simulación y renderización de métricas (frontend-only)
+    (function(){
+      // Utilities
+      function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+      function fmt(n){ return n.toLocaleString(); }
+      function daysArray(n){
+        const arr=[]; const today=new Date();
+        for(let i=n-1;i>=0;i--){
+          const d=new Date(today); d.setDate(today.getDate()-i);
+          arr.push(d);
+        }
+        return arr;
+      }
+
+      // Elements
+      const rangeSel = document.getElementById('range');
+      const btnRefresh = document.getElementById('btnRefresh');
+      const lastUpdate = document.getElementById('lastUpdate');
+      const k_visitas = document.getElementById('k_visitas');
+      const k_clics = document.getElementById('k_clics');
+      const k_pedidos = document.getElementById('k_pedidos');
+      const k_conv = document.getElementById('k_conv');
+      const k_visitas_diff = document.getElementById('k_visitas_diff');
+      const k_clics_diff = document.getElementById('k_clics_diff');
+      const k_pedidos_diff = document.getElementById('k_pedidos_diff');
+      const k_conv_diff = document.getElementById('k_conv_diff');
+      const dateFrom = document.getElementById('dateFrom');
+      const dateTo = document.getElementById('dateTo');
+
+      const lineCanvas = document.getElementById('lineChart');
+      const barCanvas = document.getElementById('barChart');
+      const eventsTableBody = document.querySelector('#eventsTable tbody');
+      const topProductsList = document.getElementById('topProducts');
+
+      const btnDownload = document.getElementById('btnDownload');
+      const btnExportPNG = document.getElementById('btnExportPNG');
+      const btnClear = document.getElementById('btnClear');
+
+      // Simple chart drawing (canvas)
+      function drawLineChart(canvas, labels, visitas, pedidos){
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width = canvas.clientWidth * devicePixelRatio;
+        const h = canvas.height = canvas.clientHeight * devicePixelRatio;
+        ctx.clearRect(0,0,w,h);
+
+        // margins
+        const m = {l:40*devicePixelRatio, r:20*devicePixelRatio, t:16*devicePixelRatio, b:30*devicePixelRatio};
+        const gw = w - m.l - m.r;
+        const gh = h - m.t - m.b;
+
+        const maxV = Math.max(...visitas) || 1;
+        const maxP = Math.max(...pedidos) || 1;
+        const maxAll = Math.max(maxV, maxP);
+        // scale
+        function x(i){ return m.l + (i/(labels.length-1 || 1))*gw; }
+        function yV(val){ return m.t + gh - (val/maxAll)*gh; }
+
+        // grid
+        ctx.strokeStyle = '#eee'; ctx.lineWidth = 1*devicePixelRatio;
+        for(let i=0;i<=4;i++){
+          const yy = m.t + (gh/4)*i;
+          ctx.beginPath(); ctx.moveTo(m.l, yy); ctx.lineTo(m.l+gw, yy); ctx.stroke();
+        }
+
+        // visitas (blue-ish)
+        ctx.beginPath();
+        ctx.lineWidth = 2.5*devicePixelRatio;
+        ctx.strokeStyle = 'rgba(214,90,63,0.95)'; // brand color
+        for(let i=0;i<visitas.length;i++){
+          const xi = x(i), yi=yV(visitas[i]);
+          if(i===0) ctx.moveTo(xi, yi); else ctx.lineTo(xi, yi);
+        }
+        ctx.stroke();
+
+        // pedidos (area under)
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(163,0,21,0.12)';
+        for(let i=0;i<pedidos.length;i++){
+          const xi=x(i), yi=yV(pedidos[i]);
+          if(i===0) ctx.moveTo(xi, yi); else ctx.lineTo(xi, yi);
+        }
+        // close shape to bottom
+        ctx.lineTo(m.l+gw, m.t+gh); ctx.lineTo(m.l, m.t+gh); ctx.closePath();
+        ctx.fill();
+
+        // points and labels small
+        ctx.fillStyle = '#fff';
+        ctx.strokeStyle = 'rgba(214,90,63,0.95)';
+        for(let i=0;i<visitas.length;i++){
+          const xi=x(i), yi=yV(visitas[i]);
+          ctx.beginPath(); ctx.arc(xi, yi, 3*devicePixelRatio, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        }
+
+        // X labels (sparse)
+        ctx.fillStyle = '#444'; ctx.font = `${11*devicePixelRatio}px sans-serif`; ctx.textAlign='center';
+        const step = Math.ceil(labels.length/6);
+        for(let i=0;i<labels.length;i+=step){
+          const xi=x(i); const txt=labels[i].toLocaleDateString();
+          ctx.fillText(txt, xi, h - 6*devicePixelRatio);
+        }
+      }
+
+      function drawBarChart(canvas, labels, values){
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width = canvas.clientWidth * devicePixelRatio;
+        const h = canvas.height = canvas.clientHeight * devicePixelRatio;
+        ctx.clearRect(0,0,w,h);
+
+        const m = {l:36*devicePixelRatio, r:20*devicePixelRatio, t:18*devicePixelRatio, b:36*devicePixelRatio};
+        const gw = w - m.l - m.r;
+        const gh = h - m.t - m.b;
+
+        const maxV = Math.max(...values,1);
+        const barW = gw / (labels.length*1.6);
+
+        labels.forEach((lbl,i)=>{
+          const x = m.l + i*(barW*1.4) + 6*devicePixelRatio;
+          const barH = (values[i]/maxV) * gh;
+          const y = m.t + (gh - barH);
+          ctx.fillStyle = ['#e76f51','#f4a261','#e9c46a','#2a9d8f'][i%4];
+          ctx.fillRect(x, y, barW, barH);
+          // label
+          ctx.fillStyle = '#333';
+          ctx.font = `${11*devicePixelRatio}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.fillText(labels[i], x+barW/2, h - 8*devicePixelRatio);
+        });
+      }
+
+      // generate simulated data
+      function genData(days){
+        const dates = daysArray(days);
+        const visitas = dates.map((d)=> rnd(120, 450));
+        // clicks correlated with visits
+        const clics = visitas.map(v => Math.max(5, Math.round(v * (Math.random()*0.12+0.04))));
+        // pedidos small fraction
+        const pedidos = visitas.map((v,i)=> Math.max(0, Math.round((clics[i] * (Math.random()*0.25 + 0.08)))));
+        // revenue = pedidos * average order
+        const ingresos = pedidos.map(p => Number((p * (rnd(200,550))).toFixed(2)));
+        return { dates, visitas, clics, pedidos, ingresos };
+      }
+
+      // top products simulated
+      const sampleProducts = [
+        'Pastel Chocolate 20cm','Red Velvet','Cheesecake Fresa','Caja Galletas 12pz',
+        'Cupcakes surtidos','Brownie gigante','Pie manzana','Tarta-frutas'
+      ];
+
+      // render UI with data
+      function renderAll(days){
+        const data = genData(days);
+        const labels = data.dates;
+        // KPIs
+        const totalVisitas = data.visitas.reduce((a,b)=>a+b,0);
+        const totalClics = data.clics.reduce((a,b)=>a+b,0);
+        const totalPedidos = data.pedidos.reduce((a,b)=>a+b,0);
+        const totalIngresos = data.ingresos.reduce((a,b)=>a+b,0);
+        const conv = totalVisitas ? ((totalPedidos/totalVisitas)*100) : 0;
+
+        k_visitas.textContent = fmt(totalVisitas);
+        k_clics.textContent = fmt(totalClics);
+        k_pedidos.textContent = fmt(totalPedidos);
+        k_conv.textContent = `${conv.toFixed(2)}%`;
+
+        // diffs (randomized for demo)
+        k_visitas_diff.textContent = `vs período anterior: ${ (rnd(-12,20)>0?'+':'') + rnd(-12,20) }%`;
+        k_clics_diff.textContent = `vs anterior: ${(rnd(-8,14)>0?'+':'') + rnd(-8,14)}%`;
+        k_pedidos_diff.textContent = `vs anterior: ${(rnd(-6,10)>0?'+':'') + rnd(-6,10)}%`;
+        k_conv_diff.textContent = `vs anterior: ${(rnd(-3,6)>0?'+':'') + rnd(-3,6)}%`;
+
+        lastUpdate.textContent = new Date().toLocaleString();
+
+        // draw charts
+        drawLineChart(lineCanvas, labels, data.visitas, data.pedidos);
+        drawBarChart(barCanvas, ['IG','FB','WA','Direct'], [rnd(100,400), rnd(60,260), rnd(30,180), rnd(10,90)]);
+
+        // events table (recent)
+        eventsTableBody.innerHTML = '';
+        for(let i=0;i<8;i++){
+          const d = new Date();
+          d.setDate(d.getDate() - rnd(0, days-1));
+          const ev = ['Visita','Clic','Pedido confirmado','Mensaje WhatsApp','Suscripción'][rnd(0,4)];
+          const det = ev==='Pedido confirmado' ? `Pedido #${rnd(100000,999999)}` : (ev==='Mensaje WhatsApp' ? 'Consulta horario' : '');
+          const val = ev==='Pedido confirmado' ? `$${rnd(180,720)}` : (ev==='Clic' ? 'Ir a producto' : '');
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${d.toLocaleString()}</td><td>${ev}</td><td>${det}</td><td>${val}</td>`;
+          eventsTableBody.appendChild(tr);
+        }
+
+        // top products
+        topProductsList.innerHTML = '';
+        // sort sample by random popularity
+        const shuffled = sampleProducts.map(p=>({p, s:rnd(20,120)})).sort((a,b)=>b.s-a.s);
+        shuffled.slice(0,5).forEach(x=>{
+          const li = document.createElement('li');
+          li.textContent = `${x.p} — ${x.s} pedidos`;
+          topProductsList.appendChild(li);
+        });
+
+        // store "data" for CSV export
+        window.__metrics_last_export = { labels: labels.map(d=>d.toISOString().slice(0,10)), visitas: data.visitas, clics: data.clics, pedidos: data.pedidos, ingresos: data.ingresos };
+      }
+
+      // download CSV
+      function downloadCSV(){
+        const d = window.__metrics_last_export;
+        if(!d){ alert('Genera datos antes de descargar'); return; }
+        let csv = 'date,visitas,clics,pedidos,ingresos\n';
+        for(let i=0;i<d.labels.length;i++){
+          csv += `${d.labels[i]},${d.visitas[i]},${d.clics[i]},${d.pedidos[i]},${d.ingresos[i]}\n`;
+        }
+        const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `metricas_${new Date().toISOString().slice(0,10)}.csv`; document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // Export charts as PNG (combine canvases)
+      function exportPNG(){
+        // create a single canvas, draw both charts stacked
+        const w = Math.max(lineCanvas.width, barCanvas.width);
+        const h = lineCanvas.height + barCanvas.height + 30*devicePixelRatio;
+        const out = document.createElement('canvas');
+        out.width = w; out.height = h;
+        const ctx = out.getContext('2d');
+        // white background
+        ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+        // draw line
+        ctx.drawImage(lineCanvas, 0, 0, w, lineCanvas.height);
+        // draw bar (below)
+        ctx.drawImage(barCanvas, 0, lineCanvas.height + 20*devicePixelRatio, w, barCanvas.height);
+        // download
+        const url = out.toDataURL('image/png');
+        const a = document.createElement('a'); a.href = url; a.download = `metricas_graficos_${new Date().toISOString().slice(0,10)}.png`; document.body.appendChild(a); a.click(); a.remove();
+      }
+
+      // initial render
+      function init(){
+        const days = Number(rangeSel.value || 30);
+        renderAll(days);
+        // set date inputs to range
+        const to = new Date(); const from = new Date(); from.setDate(to.getDate() - (days-1));
+        dateFrom.value = from.toISOString().slice(0,10); dateTo.value = to.toISOString().slice(0,10);
+      }
+
+      // events
+      btnRefresh.addEventListener('click', ()=>{ renderAll(Number(rangeSel.value)); });
+      btnDownload.addEventListener('click', downloadCSV);
+      btnExportPNG.addEventListener('click', exportPNG);
+      btnClear.addEventListener('click', ()=>{ if(confirm('Resetear datos simulados?')){ init(); }});
+
+      // date inputs influence: compute days between and re-render
+      [dateFrom, dateTo].forEach(inp=>{
+        inp.addEventListener('change', ()=>{
+          const from = new Date(dateFrom.value); const to = new Date(dateTo.value);
+          if(isNaN(from)||isNaN(to) || from>to){ alert('Rango inválido'); return; }
+          const diff = Math.ceil((to - from)/(1000*60*60*24)) + 1;
+          renderAll(diff);
+        });
+      });
+
+      // kickoff
+      init();
+      // refresh on resize for canvases (simple)
+      window.addEventListener('resize', ()=>{ renderAll(Number(rangeSel.value)); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Seguimiento de Pedido - La Casa del Pastel</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --red-700:#a30015;
+      --red-500:#d6001c;
+      --bg-card: #fff;
+      --muted: #666;
+      --radius: 12px;
+      --maxwidth:1000px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
+      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
+        url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') no-repeat center center/cover;
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 28px;
+      background: rgba(0,0,0,0.45);
+      color:white;
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .brand img{height:44px; border-radius:8px}
+    nav a{color:white; text-decoration:none; margin-left:14px}
+
+    .container{
+      max-width: var(--maxwidth);
+      margin:28px auto;
+      padding:18px;
+    }
+
+    .card{
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
+
+    h1{color:var(--red-500); margin:0 0 8px; font-family: 'Playfair Display', serif}
+
+    /* Layout */
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:18px;
+      margin-top:16px;
+    }
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr}
+    }
+
+    /* Order summary */
+    .order-meta{display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:12px}
+    .order-number{font-weight:800; color:var(--red-700)}
+    .order-status{padding:6px 10px; border-radius:8px; background: linear-gradient(90deg,var(--red-500),var(--red-700)); color:white; font-weight:800}
+
+    .items-list{display:flex; flex-direction:column; gap:12px}
+    .item{
+      display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; background:#fff7f7; border:1px solid rgba(214,0,28,0.05);
+    }
+    .item img{width:90px; height:70px; object-fit:cover; border-radius:8px; flex-shrink:0}
+    .item .info{flex:1}
+    .item .info .title{font-weight:800; color:var(--red-700)}
+    .item .info .meta{color:var(--muted); font-size:0.95rem}
+
+    .totals{margin-top:12px; font-weight:800; font-size:1.05rem; color:var(--red-700)}
+
+    /* Timeline */
+    .timeline{
+      display:flex; flex-direction:column; gap:14px; padding:12px;
+    }
+    .step{
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .step .bullet{
+      width:14px; height:14px; border-radius:50%; background:#eee; margin-top:4px; flex-shrink:0;
+      border:2px solid #f0f0f0;
+    }
+    .step.done .bullet{background:linear-gradient(90deg,var(--red-500),var(--red-700)); box-shadow:0 6px 16px rgba(163,0,21,0.18); border-color:transparent}
+    .step .content{flex:1}
+    .step .when{font-size:0.85rem; color:var(--muted)}
+
+    .progress{
+      height:10px; background:#f1f1f1; border-radius:999px; overflow:hidden; margin-top:8px;
+    }
+    .progress > i{display:block; height:100%; background:linear-gradient(90deg,var(--red-500),var(--red-700)); width:0%}
+
+    /* Actions */
+    .actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+    .btn{padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:700; text-decoration:none}
+    .btn-primary{background:linear-gradient(90deg,var(--red-500),var(--red-700)); color:white}
+    .btn-ghost{background:transparent; border:2px solid rgba(0,0,0,0.06); color:var(--red-700)}
+
+    /* Small helper */
+    .muted{color:var(--muted)}
+    .center{text-align:center}
+    .small{font-size:0.9rem}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='CasaPastel-small.png'">
+      <div style="font-weight:800">La Casa del Pastel</div>
+    </div>
+
+    <nav>
+      <a href="menu.html">Menú</a>
+      <a href="carritoCompra.html">Carrito</a>
+      <a href="index.html">Inicio</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="card" id="cardRoot">
+      <h1>Seguimiento de tu pedido</h1>
+      <div class="muted small" id="hint">Introduce tu número de pedido o utiliza el último pedido generado.</div>
+
+      <div style="margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+        <input id="orderInput" placeholder="Número de pedido (ej. 100345)" style="padding:10px; border-radius:8px; border:1px solid #e6e6e6; width:220px">
+        <button class="btn btn-ghost" id="btnLookup">Buscar pedido</button>
+
+        <div style="margin-left:auto; display:flex; gap:8px">
+          <button class="btn btn-ghost" id="btnCreateFromCart">Crear pedido desde carrito</button>
+          <a href="menu.html" class="btn btn-primary">Volver al menú</a>
+        </div>
+      </div>
+
+      <div class="layout" style="margin-top:18px">
+        <section class="card" id="leftColumn">
+          <!-- Order summary will render here -->
+          <div id="orderArea">
+            <p class="muted">No hay pedido seleccionado.</p>
+          </div>
+        </section>
+
+        <aside class="card" id="rightColumn">
+          <h3 style="margin:0 0 8px">Estado del pedido</h3>
+          <div id="timelineArea" class="timeline">
+            <p class="muted small center">Selecciona o crea un pedido para ver su estado.</p>
+          </div>
+
+          <div class="progress" aria-hidden="true">
+            <i id="progressBar" style="width:0%"></i>
+          </div>
+
+          <div class="actions" id="actionsArea" style="margin-top:12px">
+            <!-- Action buttons go here -->
+          </div>
+
+          <div style="margin-top:12px" id="etaArea"></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Estados posibles
+    const STATUS = ['Recibido', 'En preparación', 'En camino', 'Entregado'];
+
+    // Helper: generate order number
+    function generateOrderNumber(){
+      // 6 digit number starting at 100000
+      return (Math.floor(100000 + Math.random()*899999)).toString();
+    }
+
+    // Helper: read URL param
+    function getParam(name){
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    // Retrieve orders array from localStorage
+    function getOrders(){
+      return JSON.parse(localStorage.getItem('lcp_orders') || '[]');
+    }
+    function saveOrders(arr){
+      localStorage.setItem('lcp_orders', JSON.stringify(arr));
+    }
+
+    // Create order from cart (copies items and empties cart)
+    function createOrderFromCart(){
+      const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+      if(!cart || cart.length === 0){
+        alert('No hay artículos en el carrito para crear un pedido.');
+        return null;
+      }
+      const total = cart.reduce((s, p) => s + (Number(p.precio || p.price || 0) * (Number(p.cantidad) || 1)), 0);
+      const id = Date.now(); // unique id
+      const number = generateOrderNumber();
+      const now = new Date().toISOString();
+
+      const order = {
+        id,
+        number,
+        statusIndex: 0, // Recibido
+        statuses: STATUS,
+        items: cart.map(p => ({
+          titulo: p.titulo || p.nombre || 'Producto',
+          descripcion: p.descripcion || '',
+          cantidad: Number(p.cantidad) || 1,
+          precio: Number(p.precio) || 0,
+          imagen_url: p.imagen_url || p.img || ''
+        })),
+        total: Number(total.toFixed(2)),
+        timestamps: { created: now, history: { 'Recibido': now } },
+        customer: { method: 'web' }
+      };
+
+      // save
+      const orders = getOrders();
+      orders.push(order);
+      saveOrders(orders);
+
+      // clear cart (simulate order creation)
+      localStorage.removeItem('carrito');
+      // store last order id for convenience
+      localStorage.setItem('lcp_last_order', id);
+      alert(`Pedido creado — Número: ${number}`);
+      // redirect to same page with order param
+      window.location.href = `${location.pathname}?order=${id}`;
+      return order;
+    }
+
+    // Render order details
+    function renderOrder(order){
+      const orderArea = document.getElementById('orderArea');
+      orderArea.innerHTML = '';
+
+      const meta = document.createElement('div');
+      meta.className = 'order-meta';
+      meta.innerHTML = `<div>
+                          <div class="order-number">Pedido #${order.number}</div>
+                          <div class="muted small">Creado: ${new Date(order.timestamps.created).toLocaleString()}</div>
+                        </div>
+                        <div>
+                          <div class="order-status">${order.statusIndex <= STATUS.length-1 ? STATUS[order.statusIndex] : '—'}</div>
+                        </div>`;
+      orderArea.appendChild(meta);
+
+      // items
+      const itemsList = document.createElement('div');
+      itemsList.className = 'items-list';
+      order.items.forEach(it => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `<img src="${it.imagen_url || 'https://via.placeholder.com/150'}" alt="${it.titulo}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150'">
+                         <div class="info">
+                           <div class="title">${it.titulo}</div>
+                           <div class="meta">${it.descripcion || ''} • Cantidad: ${it.cantidad}</div>
+                         </div>
+                         <div style="font-weight:800; color:var(--red-700)">$${(it.precio * it.cantidad).toFixed(2)}</div>`;
+        itemsList.appendChild(div);
+      });
+      orderArea.appendChild(itemsList);
+
+      const totals = document.createElement('div');
+      totals.className = 'totals';
+      totals.textContent = `Total: $${order.total.toFixed(2)}`;
+      orderArea.appendChild(totals);
+
+      // share / contact
+      const share = document.createElement('div');
+      share.style.marginTop = '12px';
+      share.innerHTML = `
+        <div class="small muted">¿Necesitas ayuda con tu pedido?</div>
+        <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+          <a class="btn btn-ghost" href="tel:524491234567">📞 Llamar</a>
+          <a class="btn btn-primary" id="waShare" href="#" target="_blank">📲 Compartir por WhatsApp</a>
+          <button class="btn btn-ghost" id="printBtn">🖨 Imprimir</button>
+        </div>
+      `;
+      orderArea.appendChild(share);
+
+      document.getElementById('waShare').addEventListener('click', function(e){
+        e.preventDefault();
+        const phone = '524491234567'; // actualiza si hace falta
+        const msg = encodeURIComponent(`Hola, quiero información sobre mi pedido #${order.number}`);
+        this.href = `https://wa.me/${phone}?text=${msg}`;
+        window.open(this.href, '_blank');
+      });
+
+      document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+    }
+
+    // Render timeline & actions
+    function renderTimeline(order){
+      const timelineArea = document.getElementById('timelineArea');
+      timelineArea.innerHTML = '';
+      const currentIndex = order.statusIndex || 0;
+
+      order.statuses.forEach((s, i) => {
+        const step = document.createElement('div');
+        step.className = 'step' + (i <= currentIndex ? ' done' : '');
+        step.innerHTML = `<div class="bullet" aria-hidden="true"></div>
+                          <div class="content">
+                            <div style="font-weight:800">${s}</div>
+                            <div class="when">${order.timestamps.history && order.timestamps.history[s] ? new Date(order.timestamps.history[s]).toLocaleString() : (i===0 ? 'Registrado' : '')}</div>
+                          </div>`;
+        timelineArea.appendChild(step);
+      });
+
+      // progress bar
+      const pct = Math.round(((currentIndex) / (order.statuses.length - 1)) * 100);
+      document.getElementById('progressBar').style.width = pct + '%';
+
+      // actions: Update status button (for staff/testing) and contact options
+      const actionsArea = document.getElementById('actionsArea');
+      actionsArea.innerHTML = '';
+
+      // If not delivered, allow advancing status
+      if(currentIndex < order.statuses.length - 1){
+        const btnAdvance = document.createElement('button');
+        btnAdvance.className = 'btn btn-primary';
+        btnAdvance.textContent = 'Actualizar estado →';
+        btnAdvance.addEventListener('click', ()=> {
+          advanceStatus(order.id);
+        });
+        actionsArea.appendChild(btnAdvance);
+      } else {
+        const doneNote = document.createElement('div');
+        doneNote.className = 'muted small';
+        doneNote.textContent = 'Pedido entregado. Gracias por preferirnos.';
+        actionsArea.appendChild(doneNote);
+      }
+
+      // ETA area
+      const etaArea = document.getElementById('etaArea');
+      etaArea.innerHTML = '';
+      if(currentIndex < order.statuses.length - 1){
+        // estimate: each step 20-40 min from creation
+        const created = new Date(order.timestamps.created);
+        const minsPerStep = 25;
+        const remainingSteps = (order.statuses.length - 1) - currentIndex;
+        const eta = new Date(created.getTime() + ( (currentIndex + 1) * minsPerStep * 60000 ));
+        etaArea.innerHTML = `<div class="muted small">Estimación: próximo estado "${order.statuses[currentIndex+1]}" alrededor de <strong>${eta.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</strong>.</div>`;
+      } else {
+        etaArea.innerHTML = `<div class="muted small">Pedido entregado el ${new Date(order.timestamps.history['Entregado']).toLocaleString()}</div>`;
+      }
+    }
+
+    // advance status (update order in storage)
+    function advanceStatus(orderId){
+      const orders = getOrders();
+      const idx = orders.findIndex(o => o.id == orderId);
+      if(idx === -1) return;
+      let order = orders[idx];
+      if(order.statusIndex < order.statuses.length - 1){
+        order.statusIndex += 1;
+        const now = new Date().toISOString();
+        const nextStatus = order.statuses[order.statusIndex];
+        order.timestamps.history = order.timestamps.history || {};
+        order.timestamps.history[nextStatus] = now;
+        orders[idx] = order;
+        saveOrders(orders);
+        // re-render
+        renderOrder(order);
+        renderTimeline(order);
+      }
+    }
+
+    // Find order by id or number or last
+    function findOrderByParam(){
+      const param = getParam('order');
+      let orders = getOrders();
+      if(param){
+        const o = orders.find(x => x.id == param || x.number === param);
+        if(o) return o;
+      }
+      // try input number
+      const inputVal = document.getElementById('orderInput').value.trim();
+      if(inputVal){
+        const o = orders.find(x => x.number === inputVal || x.id == inputVal);
+        if(o) return o;
+      }
+      // fallback: last order
+      const lastId = localStorage.getItem('lcp_last_order');
+      if(lastId){
+        return orders.find(x => x.id == lastId) || null;
+      }
+      return null;
+    }
+
+    // UI: lookup handler
+    document.getElementById('btnLookup').addEventListener('click', ()=>{
+      const order = findOrderByParam();
+      if(!order){
+        alert('Pedido no encontrado. Verifica el número o crea uno desde el carrito.');
+        return;
+      }
+      renderOrder(order);
+      renderTimeline(order);
+      // scroll into view
+      document.getElementById('leftColumn').scrollIntoView({behavior:'smooth'});
+    });
+
+    // Create from cart
+    document.getElementById('btnCreateFromCart').addEventListener('click', ()=>{
+      createOrderFromCart();
+    });
+
+    // On load: if ?order param present, render it
+    window.addEventListener('load', ()=>{
+      const param = getParam('order');
+      const orders = getOrders();
+      let current = null;
+      if(param){
+        current = orders.find(x => x.id == param || x.number === param);
+      } else {
+        const lastId = localStorage.getItem('lcp_last_order');
+        current = orders.find(x => x.id == lastId);
+      }
+
+      if(current){
+        renderOrder(current);
+        renderTimeline(current);
+        // show number in input for convenience
+        document.getElementById('orderInput').value = current.number;
+      } else {
+        // nothing yet - if there is a cart, enable create button
+        const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+        if(!cart || cart.length === 0){
+          document.getElementById('btnCreateFromCart').disabled = true;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

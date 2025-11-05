@@ -267,6 +267,8 @@ nav a {
   color: #666;
   font-size: 0.95em;
   line-height: 1.4;
+  /* Espacio añadido para los botones */
+  margin-bottom: 15px; 
 }
 
 .select-btn {
@@ -277,12 +279,41 @@ nav a {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 10px;
+  /* Quitado margin-top */
+  /* Añadido flex: 1 para que ocupe espacio */
+  flex: 1; 
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9em;
 }
 
 .select-btn:hover {
-  background-color: #2a5d32;
+  background-color: #4a7a9f; /* Tono más oscuro */
 }
+
+/* === NUEVOS ESTILOS PARA ACCIONES === */
+.product-actions {
+  display: flex;
+  gap: 10px;
+  align-items: stretch; /* Botones de la misma altura */
+}
+
+.btn-add-cart {
+  background-color: #28a745; /* Verde de 'detalle_postre.php' */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2em; /* Agranda el emoji */
+  line-height: 1; /* Centra el emoji */
+  transition: background-color 0.3s;
+}
+.btn-add-cart:hover {
+  background-color: #218838; /* Verde oscuro */
+}
+/* === FIN DE NUEVOS ESTILOS === */
+
 
 .see-more {
   text-align: center;
@@ -364,6 +395,52 @@ let todosLosPostres = [];
 let categoriasUnicas = [];
 let categoriaActual = 'todos';
 
+// === NUEVA FUNCIÓN PARA AÑADIR AL CARRITO ===
+// Lógica adaptada de 'detalle_postre.php'
+function agregarAlCarrito(productoId) {
+  // 1. Encontrar el producto en la lista global
+  const producto = todosLosPostres.find(p => p.id == productoId);
+  if (!producto) {
+    console.error("Producto no encontrado:", productoId);
+    alert("Error: No se pudo encontrar el producto.");
+    return;
+  }
+
+  // 2. Crear el objeto para el carrito (usando el precio de lista del menú)
+  // Nota: Usamos producto.precio, no el precio con descuento de la otra página.
+  const productoParaCarrito = {
+    id: producto.id,
+    titulo: producto.titulo,
+    precio: parseFloat(producto.precio), // Usamos el precio del menú
+    descripcion: producto.descripcion,
+    imagen_url: producto.imagen_url,
+    cantidad: 1,
+    stock: parseInt(producto.stock || 10) // Asumimos un stock de 10 si no se define
+  };
+
+  // 3. Lógica de localStorage (copiada de detalle_postre.php)
+  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  const indexExistente = carrito.findIndex(p => p.id === productoParaCarrito.id);
+
+  if (indexExistente !== -1) {
+    // Producto ya existe, solo incrementar cantidad
+    const existente = carrito[indexExistente];
+    if (existente.cantidad + 1 > existente.stock) {
+      alert(`Lo sentimos, solo hay ${existente.stock} unidades disponibles.`);
+      return;
+    }
+    carrito[indexExistente].cantidad += 1;
+  } else {
+    // Producto nuevo, añadir al carrito
+    carrito.push(productoParaCarrito);
+  }
+
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+  alert("¡Producto añadido al carrito!");
+}
+// === FIN DE LA NUEVA FUNCIÓN ===
+
+
 function aplicarFiltros(postres) {
   const precioMin = parseFloat(document.getElementById("precio-min").value) || 0;
   const precioMax = parseFloat(document.getElementById("precio-max").value) || Infinity;
@@ -381,6 +458,7 @@ function renderizarProductos(productos) {
   contenedor.innerHTML = "";
   const filtrados = aplicarFiltros(productos);
   filtrados.forEach(p => {
+    // === PLANTILLA HTML MODIFICADA ===
     contenedor.innerHTML += `
       <div class="product-card">
         <img src="${p.imagen_url}" alt="${p.titulo}">
@@ -392,16 +470,23 @@ function renderizarProductos(productos) {
             <strong>Tamaño:</strong> ${p.tamanio.toUpperCase()}
           </p>
           <p class="product-description">${p.descripcion}</p>
-          <div class="actions">
-            <!-- NUEVO: botón que lleva al detalle -->
+          
+          <!-- Contenedor de acciones añadido -->
+          <div class="product-actions">
             <button class="select-btn" 
                     onclick="window.location='detalle_postre.php?id=${p.id}'">
               Ver detalle
             </button>
+            <!-- Icono de carrito añadido -->
+            <button class="btn-add-cart" onclick="agregarAlCarrito(${p.id})" title="Añadir al carrito">
+              🛒
+            </button>
           </div>
+
         </div>
       </div>
     `;
+    // === FIN DE PLANTILLA MODIFICADA ===
   });
 }
 

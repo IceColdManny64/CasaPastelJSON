@@ -3,21 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Panel de Administración</title>
+  <!-- FUENTES AÑADIDAS -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
                 <a href="index.html">Salir</a>
   <style>
+    /* === ESTILOS DE BODY ACTUALIZADOS === */
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Open Sans', Arial, sans-serif;
       margin: 0;
-      background-color: #eba952cf;
-      color: #fff;
+      /* Fondo de las otras páginas */
+      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
+        url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333; /* Color de texto por defecto para tarjetas blancas */
     }
 
+    /* === ESTILOS DE HEADER ACTUALIZADOS === */
     header {
-      background-color: #e77d20;
+      background: rgba(0,0,0,0.45); /* Fondo semi-transparente */
+      backdrop-filter: blur(4px); /* Efecto blur */
       color: #fff;
       padding: 20px;
       text-align: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      position: sticky; /* Sticky como en las otras páginas */
+      top: 0;
+      z-index: 10;
+    }
+    
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      margin: 0;
     }
 
     .botones {
@@ -28,36 +44,97 @@
       flex-wrap: wrap;
     }
 
+    /* === ESTILOS DE BOTONES ACTUALIZADOS === */
     .botones button {
       padding: 15px 30px;
       font-size: 16px;
       border: none;
       border-radius: 10px;
-      background-color: #D32F2F;
+      /* Gradiente de las otras páginas */
+      background: linear-gradient(90deg,#d6001c,#a30015);
       color: #fff;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: filter 0.2s;
     }
 
     .botones button:hover {
-      background-color: #B71C1C;
+      filter: brightness(0.9);
     }
 
+    /* === ESTILOS DE CONTENIDO ACTUALIZADOS === */
     #contenido {
-      max-width: 1100px;
-      margin: auto;
-      margin-top: 40px;
-      background-color: #fff8f3;
+      max-width: 1200px; /* Ancho consistente */
+      margin: 28px auto; /* Margen consistente */
+      background-color: #ffffff; /* Fondo de tarjeta blanco */
       color: #333;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
+    
+    /* Estilos para el contenido de métricas inyectado */
+    #contenido .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    #contenido .kpi {
+      background: #fdf3f3;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #f4bebe;
+    }
+    #contenido .kpi .value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #b33f4f;
+    }
+    #contenido .kpi .label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    #contenido .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+     @media (max-width: 768px) {
+       #contenido .charts {
+         grid-template-columns: 1fr;
+       }
+     }
+    #contenido .chart-wrap,
+    #contenido .mini-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    #contenido canvas {
+      width: 100%;
+      /* height: 200px; */ /* Dejamos que el script de métricas defina la altura */
+      background: #f9f9f9;
+      border: 1px dashed #ccc;
+      display: block;
+    }
+    /* Estilos de metricas.html adaptados */
+    #contenido .table { margin-top:12px; width:100%; border-collapse:collapse; font-size:0.95rem; }
+    #contenido .table th, #contenido .table td { padding:10px 8px; border-bottom:1px solid #eee; text-align:left }
+    #contenido .table th { background: #faf5f4; font-weight:700; color: #b33f4f }
+    #contenido .btn { padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700; text-decoration: none;}
+    #contenido .btn-primary { background: linear-gradient(90deg,#d6001c,#a30015); color:white }
+    #contenido .btn-ghost { background:transparent; border:1px solid rgba(0,0,0,0.06); color:#b33f4f }
+    #contenido .muted { color:#666; }
 
+
+    /* === ESTILOS DE TÍTULO ACTUALIZADOS === */
     .titulo-contenido {
+      font-family: 'Playfair Display', serif; /* Fuente de título */
       font-size: 24px;
       margin-bottom: 20px;
-      color: #b33f4f;
+      color: #b33f4f; /* Mantenemos el rojo del panel */
     }
 
     table {
@@ -71,7 +148,8 @@
       padding: 12px;
       text-align: left;
     }
-
+    
+    /* Mantenemos el tema de tabla del panel */
     th {
       background-color: #f4bebe;
       color: #333;
@@ -99,6 +177,88 @@
       background-color: #C62828;
       color: white;
     }
+    
+    /* === INICIO: NUEVOS ESTILOS PARA GESTIÓN DE PEDIDOS === */
+    #contenido .admin-layout {
+      display: grid;
+      grid-template-columns: 400px 1fr; /* Lista a la izquierda, detalle a la derecha */
+      gap: 20px;
+    }
+    @media (max-width: 900px) {
+      #contenido .admin-layout { grid-template-columns: 1fr; }
+    }
+
+    #contenido .pedidos-lista-cont {
+      background: #fdf3f3;
+      border-radius: 8px;
+      padding: 10px;
+      max-height: 70vh;
+      overflow-y: auto;
+      border: 1px solid #f4bebe;
+    }
+    
+    #contenido .pedido-card-mini {
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-left 0.2s;
+    }
+    #contenido .pedido-card-mini:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    #contenido .pedido-card-mini.active {
+      border-left: 4px solid #d6001c;
+      box-shadow: 0 4px 12px rgba(214,0,28,0.1);
+    }
+    
+    #contenido .pedido-meta { display: flex; justify-content: space-between; font-size: 0.9rem; align-items: center;}
+    #contenido .pedido-status { font-weight: bold; padding: 2px 6px; border-radius: 4px; color: white; font-size: 0.8rem;}
+    
+    /* Clases de estado (deben coincidir con el JS) */
+    #contenido .status-recibido { background-color: #a30015; }
+    #contenido .status-en-preparacion { background-color: #f4a261; color: #333; }
+    #contenido .status-en-camino { background-color: #2a9d8f; }
+    #contenido .status-entregado { background-color: #28a745; }
+    
+    #contenido .admin-timeline { display: flex; flex-direction: column; gap: 14px; padding: 12px; }
+    #contenido .admin-timeline .step { display: flex; gap: 12px; align-items: flex-start; }
+    #contenido .admin-timeline .step .bullet { width: 14px; height: 14px; border-radius: 50%; background: #eee; margin-top: 4px; flex-shrink: 0; border: 2px solid #f0f0f0; }
+    #contenido .admin-timeline .step.done .bullet { background: linear-gradient(90deg,#d6001c,#a30015); box-shadow: 0 6px 16px rgba(163,0,21,0.18); border-color: transparent; }
+    #contenido .admin-timeline .step .when { font-size: 0.85rem; color: #666; }
+
+    #contenido .admin-status-controls {
+      margin-top: 20px;
+      padding: 20px;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+      border-radius: 8px;
+    }
+    #contenido .admin-status-controls label { font-weight: bold; display: block; margin-bottom: 10px; font-size: 1.1em; color: #b33f4f; }
+    #contenido .admin-status-controls .btn-update {
+      padding: 10px 15px;
+      margin: 0 5px 5px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      background: #6c757d;
+      color: white;
+    }
+    #contenido .admin-status-controls .btn-update.active {
+      background: #28a745; /* Verde para el estado actual */
+    }
+    #contenido .admin-status-controls .btn-update:not(.active):hover {
+      filter: brightness(0.9);
+    }
+    #contenido .admin-status-controls .btn-update:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    /* === FIN: NUEVOS ESTILOS === */
+
 
     /* Modal (se mantiene para uso futuro) */
     #modalEditar {
@@ -146,11 +306,12 @@
   max-height: 80vh;            /* Limita altura */
   overflow-y: auto;            /* Scroll si hay exceso */
   box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', sans-serif; /* Mantenemos fuente legible para modal */
 }
 
 /* Título centrado */
 .modal-contenido h2 {
+  font-family: 'Playfair Display', serif; /* Título de modal */
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 1.8em;
@@ -226,14 +387,576 @@
   <button onclick="mostrarProductos()">Gestión de Productos</button>
   <button onclick="mostrarFormularioAgregarPostre()">Agregar Postre</button>
   <button onclick="mostrarUsuarios()">Gestión de Usuarios</button>
-
+  <button onclick="mostrarMetricas()">Ver Métricas</button>
+  <!-- NUEVO BOTÓN -->
+  <button onclick="mostrarSeguimiento()">Gestión de Pedidos</button>
 </div>
 
 <div id="contenido">
-  <p class="titulo-contenido">Selecciona una opción para comenzar</p>
+  <p classtitulo-contenido">Selecciona una opción para comenzar</p>
 </div>
 
 <script>
+  // =================================================================
+  // --- "Base de datos" simulada de pedidos ---
+  // =================================================================
+  let pedidosSimulados = [
+    {
+      id: 923153,
+      cliente: "Ana García",
+      telefono: "4491234567",
+      total: 23.98,
+      estadoActual: "Recibido",
+      items: [
+        { titulo: "Gelatina de frutas", cantidad: 2, precio: 11.99 }
+      ],
+      historial: [
+        { estado: "Recibido", fecha: "2025-11-04T10:05:58" }
+      ],
+      notas: "Cliente nuevo, posible alergia a nueces."
+    },
+    {
+      id: 923152,
+      cliente: "Carlos Mendoza",
+      telefono: "4498765432",
+      total: 150.00,
+      estadoActual: "En preparación",
+      items: [
+        { titulo: "Pastel de Chocolate", cantidad: 1, precio: 150.00 }
+      ],
+      historial: [
+        { estado: "Recibido", fecha: "2025-11-04T09:30:12" },
+        { estado: "En preparación", fecha: "2025-11-04T09:45:00" }
+      ],
+      notas: "Pasará a recoger a las 3pm."
+    },
+    {
+      id: 923150,
+      cliente: "Sofía Reyes",
+      telefono: "4491112222",
+      total: 95.50,
+      estadoActual: "En camino",
+      items: [
+        { titulo: "Cheesecake Fresa", cantidad: 1, precio: 60.00 },
+        { titulo: "Caja Galletas 12pz", cantidad: 1, precio: 35.50 }
+      ],
+      historial: [
+        { estado: "Recibido", fecha: "2025-11-03T18:15:00" },
+        { estado: "En preparación", fecha: "2025-11-03T18:30:00" },
+        { estado: "En camino", fecha: "2025-11-03T19:00:00" }
+      ],
+      notas: "Entregar en Av. Madero #123"
+    }
+  ];
+  
+  const adminEstados = ['Recibido', 'En preparación', 'En camino', 'Entregado'];
+  let adminPedidoSeleccionado = null;
+
+
+  // =================================================================
+  // --- INICIO: LÓGICA DE MÉTRICAS (copiada de metricas.html) ---
+  // =================================================================
+  
+  // Utilities
+  function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function fmt(n){ return n.toLocaleString(); }
+  function daysArray(n){
+    const arr=[]; const today=new Date();
+    for(let i=n-1;i>=0;i--){
+      const d=new Date(today); d.setDate(today.getDate()-i);
+      arr.push(d);
+    }
+    return arr;
+  }
+  // top products simulated
+  const sampleProducts = [
+    'Pastel Chocolate 20cm','Red Velvet','Cheesecake Fresa','Caja Galletas 12pz',
+    'Cupcakes surtidos','Brownie gigante','Pie manzana','Tarta-frutas'
+  ];
+
+  // Simple chart drawing (canvas)
+  function drawLineChart(canvas, labels, visitas, pedidos){
+    if (!canvas) return; // Añadido safety check
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
+    const h = canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
+    ctx.clearRect(0,0,w,h);
+
+    // margins
+    const m = {l:40*(window.devicePixelRatio || 1), r:20*(window.devicePixelRatio || 1), t:16*(window.devicePixelRatio || 1), b:30*(window.devicePixelRatio || 1)};
+    const gw = w - m.l - m.r;
+    const gh = h - m.t - m.b;
+
+    const maxV = Math.max(...visitas) || 1;
+    const maxP = Math.max(...pedidos) || 1;
+    const maxAll = Math.max(maxV, maxP);
+    // scale
+    function x(i){ return m.l + (i/(labels.length-1 || 1))*gw; }
+    function yV(val){ return m.t + gh - (val/maxAll)*gh; }
+
+    // grid
+    ctx.strokeStyle = '#eee'; ctx.lineWidth = 1*(window.devicePixelRatio || 1);
+    for(let i=0;i<=4;i++){
+      const yy = m.t + (gh/4)*i;
+      ctx.beginPath(); ctx.moveTo(m.l, yy); ctx.lineTo(m.l+gw, yy); ctx.stroke();
+    }
+
+    // visitas (brand color)
+    ctx.beginPath();
+    ctx.lineWidth = 2.5*(window.devicePixelRatio || 1);
+    ctx.strokeStyle = 'rgba(214,90,63,0.95)'; // brand color
+    for(let i=0;i<visitas.length;i++){
+      const xi = x(i), yi=yV(visitas[i]);
+      if(i===0) ctx.moveTo(xi, yi); else ctx.lineTo(xi, yi);
+    }
+    ctx.stroke();
+
+    // pedidos (area under)
+    ctx.beginPath();
+    ctx.fillStyle = 'rgba(163,0,21,0.12)';
+    for(let i=0;i<pedidos.length;i++){
+      const xi=x(i), yi=yV(pedidos[i]);
+      if(i===0) ctx.moveTo(xi, yi); else ctx.lineTo(xi, yi);
+    }
+    // close shape to bottom
+    ctx.lineTo(m.l+gw, m.t+gh); ctx.lineTo(m.l, m.t+gh); ctx.closePath();
+    ctx.fill();
+
+    // points and labels small
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = 'rgba(214,90,63,0.95)';
+    for(let i=0;i<visitas.length;i++){
+      const xi=x(i), yi=yV(visitas[i]);
+      ctx.beginPath(); ctx.arc(xi, yi, 3*(window.devicePixelRatio || 1), 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+
+    // X labels (sparse)
+    ctx.fillStyle = '#444'; ctx.font = `${11*(window.devicePixelRatio || 1)}px sans-serif`; ctx.textAlign='center';
+    const step = Math.ceil(labels.length/6);
+    for(let i=0;i<labels.length;i+=step){
+      const xi=x(i); const txt=labels[i].toLocaleDateString();
+      ctx.fillText(txt, xi, h - 6*(window.devicePixelRatio || 1));
+    }
+  }
+
+  function drawBarChart(canvas, labels, values){
+    if (!canvas) return; // Añadido safety check
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
+    const h = canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
+    ctx.clearRect(0,0,w,h);
+
+    const m = {l:36*(window.devicePixelRatio || 1), r:20*(window.devicePixelRatio || 1), t:18*(window.devicePixelRatio || 1), b:36*(window.devicePixelRatio || 1)};
+    const gw = w - m.l - m.r;
+    const gh = h - m.t - m.b;
+
+    const maxV = Math.max(...values,1);
+    const barW = gw / (labels.length*1.6);
+
+    labels.forEach((lbl,i)=>{
+      const x = m.l + i*(barW*1.4) + 6*(window.devicePixelRatio || 1);
+      const barH = (values[i]/maxV) * gh;
+      const y = m.t + (gh - barH);
+      ctx.fillStyle = ['#e76f51','#f4a261','#e9c46a','#2a9d8f'][i%4];
+      ctx.fillRect(x, y, barW, barH);
+      // label
+      ctx.fillStyle = '#333';
+      ctx.font = `${11*(window.devicePixelRatio || 1)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(labels[i], x+barW/2, h - 8*(window.devicePixelRatio || 1));
+    });
+  }
+
+  // generate simulated data
+  function genData(days){
+    const dates = daysArray(days);
+    const visitas = dates.map((d)=> rnd(120, 450));
+    // clicks correlated with visits
+    const clics = visitas.map(v => Math.max(5, Math.round(v * (Math.random()*0.12+0.04))));
+    // pedidos small fraction
+    const pedidos = visitas.map((v,i)=> Math.max(0, Math.round((clics[i] * (Math.random()*0.25 + 0.08)))));
+    // revenue = pedidos * average order
+    const ingresos = pedidos.map(p => Number((p * (rnd(200,550))).toFixed(2)));
+    return { dates, visitas, clics, pedidos, ingresos };
+  }
+  
+  // render UI with data
+  function renderAllMetrics(days){
+    // ADAPTACIÓN: Obtenemos elementos del DOM (que están en #contenido)
+    const k_visitas = document.getElementById('k_visitas');
+    if (!k_visitas) { 
+      // console.warn("renderAllMetrics: Elementos de métricas no encontrados."); 
+      return; 
+    }
+    const k_clics = document.getElementById('k_clics');
+    const k_pedidos = document.getElementById('k_pedidos');
+    const k_conv = document.getElementById('k_conv');
+    const k_visitas_diff = document.getElementById('k_visitas_diff');
+    const k_clics_diff = document.getElementById('k_clics_diff');
+    const k_pedidos_diff = document.getElementById('k_pedidos_diff');
+    const k_conv_diff = document.getElementById('k_conv_diff');
+    const lastUpdate = document.getElementById('lastUpdate');
+    const lineCanvas = document.getElementById('lineChart');
+    const barCanvas = document.getElementById('barChart');
+    const eventsTableBody = document.querySelector('#eventsTable tbody');
+    const topProductsList = document.getElementById('topProducts');
+
+    
+    const data = genData(days);
+    const labels = data.dates;
+    // KPIs
+    const totalVisitas = data.visitas.reduce((a,b)=>a+b,0);
+    const totalClics = data.clics.reduce((a,b)=>a+b,0);
+    const totalPedidos = data.pedidos.reduce((a,b)=>a+b,0);
+    const totalIngresos = data.ingresos.reduce((a,b)=>a+b,0);
+    const conv = totalVisitas ? ((totalPedidos/totalVisitas)*100) : 0;
+
+    k_visitas.textContent = fmt(totalVisitas);
+    k_clics.textContent = fmt(totalClics);
+    k_pedidos.textContent = fmt(totalPedidos);
+    k_conv.textContent = `${conv.toFixed(2)}%`;
+
+    // diffs (randomized for demo)
+    k_visitas_diff.textContent = `vs período anterior: ${ (rnd(-12,20)>0?'+':'') + rnd(-12,20) }%`;
+    k_clics_diff.textContent = `vs anterior: ${(rnd(-8,14)>0?'+':'') + rnd(-8,14)}%`;
+    k_pedidos_diff.textContent = `vs anterior: ${(rnd(-6,10)>0?'+':'') + rnd(-6,10)}%`;
+    k_conv_diff.textContent = `vs anterior: ${(rnd(-3,6)>0?'+':'') + rnd(-3,6)}%`;
+
+    lastUpdate.textContent = new Date().toLocaleString();
+
+    // draw charts
+    if (lineCanvas) {
+      drawLineChart(lineCanvas, labels, data.visitas, data.pedidos);
+    }
+    if (barCanvas) {
+      drawBarChart(barCanvas, ['IG','FB','WA','Direct'], [rnd(100,400), rnd(60,260), rnd(30,180), rnd(10,90)]);
+    }
+
+    // events table (recent)
+    if (eventsTableBody) {
+      eventsTableBody.innerHTML = '';
+      for(let i=0;i<8;i++){
+        const d = new Date();
+        d.setDate(d.getDate() - rnd(0, days-1));
+        const ev = ['Visita','Clic','Pedido confirmado','Mensaje WhatsApp','Suscripción'][rnd(0,4)];
+        const det = ev==='Pedido confirmado' ? `Pedido #${rnd(100000,999999)}` : (ev==='Mensaje WhatsApp' ? 'Consulta horario' : '');
+        const val = ev==='Pedido confirmado' ? `$${rnd(180,720)}` : (ev==='Clic' ? 'Ir a producto' : '');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${d.toLocaleString()}</td><td>${ev}</td><td>${det}</td><td>${val}</td>`;
+        eventsTableBody.appendChild(tr);
+      }
+    }
+
+    // top products
+    if (topProductsList) {
+      topProductsList.innerHTML = '';
+      // sort sample by random popularity
+      const shuffled = sampleProducts.map(p=>({p, s:rnd(20,120)})).sort((a,b)=>b.s-a.s);
+      shuffled.slice(0,5).forEach(x=>{
+        const li = document.createElement('li');
+        li.textContent = `${x.p} — ${x.s} pedidos`;
+        topProductsList.appendChild(li);
+      });
+    }
+
+    // store "data" for CSV export
+    window.__metrics_last_export = { labels: labels.map(d=>d.toISOString().slice(0,10)), visitas: data.visitas, clics: data.clics, pedidos: data.pedidos, ingresos: data.ingresos };
+  }
+
+  // download CSV
+  function downloadCSVMetrics(){
+    const d = window.__metrics_last_export;
+    if(!d){ return; }
+    let csv = 'date,visitas,clics,pedidos,ingresos\n';
+    for(let i=0;i<d.labels.length;i++){
+      csv += `${d.labels[i]},${d.visitas[i]},${d.clics[i]},${d.pedidos[i]},${d.ingresos[i]}\n`;
+    }
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `metricas_${new Date().toISOString().slice(0,10)}.csv`; document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // Export charts as PNG (combine canvases)
+  function exportPNGMetrics(){
+    const lineCanvas = document.getElementById('lineChart');
+    const barCanvas = document.getElementById('barChart');
+    if (!lineCanvas || !barCanvas) {
+        return;
+    }
+    // create a single canvas, draw both charts stacked
+    const w = Math.max(lineCanvas.width, barCanvas.width);
+    const h = lineCanvas.height + barCanvas.height + 30*(window.devicePixelRatio || 1);
+    const out = document.createElement('canvas');
+    out.width = w; out.height = h;
+    const ctx = out.getContext('2d');
+    // white background
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+    // draw line
+    ctx.drawImage(lineCanvas, 0, 0, w, lineCanvas.height);
+    // draw bar (below)
+    ctx.drawImage(barCanvas, 0, lineCanvas.height + 20*(window.devicePixelRatio || 1), w, barCanvas.height);
+    // download
+    const url = out.toDataURL('image/png');
+    const a = document.createElement('a'); a.href = url; a.download = `metricas_graficos_${new Date().toISOString().slice(0,10)}.png`; document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  // initial render
+  function initMetrics(){
+    // ADAPTACIÓN: Obtenemos elementos y asignamos listeners
+    const rangeSel = document.getElementById('range');
+    const btnRefresh = document.getElementById('btnRefresh');
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnExportPNG = document.getElementById('btnExportPNG');
+    const btnClear = document.getElementById('btnClear');
+
+    if(!rangeSel || !btnRefresh) {
+      // console.warn("initMetrics: No se pudieron encontrar los botones de métricas para asignar listeners.");
+      return;
+    }
+    
+    const days = Number(rangeSel.value || 30);
+    renderAllMetrics(days);
+    // set date inputs to range
+    const to = new Date(); const from = new Date(); from.setDate(to.getDate() - (days-1));
+    if (dateFrom) dateFrom.value = from.toISOString().slice(0,10);
+    if (dateTo) dateTo.value = to.toISOString().slice(0,10);
+
+    // Asignamos eventos usando .onclick para evitar duplicados
+    btnRefresh.onclick = ()=>{ renderAllMetrics(Number(rangeSel.value)); };
+    btnDownload.onclick = downloadCSVMetrics;
+    btnExportPNG.onclick = exportPNGMetrics;
+    btnClear.onclick = ()=>{ initMetrics(); };
+
+    // date inputs influence: compute days between and re-render
+    [dateFrom, dateTo].forEach(inp=>{
+      if (inp) {
+        inp.onchange = ()=>{
+          const from = new Date(dateFrom.value); const to = new Date(dateTo.value);
+          if(isNaN(from)||isNaN(to) || from>to){ return; }
+          const diff = Math.ceil((to - from)/(1000*60*60*24)) + 1;
+          renderAllMetrics(diff);
+        };
+      }
+    });
+  }
+
+  // =================================================================
+  // --- FIN: LÓGICA DE MÉTRICAS ---
+  // =================================================================
+
+
+  // =================================================================
+  // --- INICIO: NUEVA LÓGICA DE GESTIÓN DE PEDIDOS ---
+  // =================================================================
+
+  function mostrarSeguimiento() {
+    adminPedidoSeleccionado = null; // Resetea la selección
+    document.getElementById("contenido").innerHTML = `
+      <p class="titulo-contenido">Gestión de Pedidos</p>
+      
+      <!-- Controles Superiores -->
+      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <input type="text" id="admin-buscar-pedido" placeholder="Buscar por ID o cliente..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+        <button id="admin-btn-generar" class="btn btn-primary" style="background: #28a745;">Generar Pedido Falso</button>
+      </div>
+      
+      <!-- Layout de Admin -->
+      <div class="admin-layout">
+        <!-- Columna Izquierda: Lista de Pedidos -->
+        <div class="pedidos-lista-cont" id="admin-pedidos-lista">
+          <!-- Los pedidos se renderizarán aquí -->
+        </div>
+        
+        <!-- Columna Derecha: Detalle del Pedido -->
+        <div class="pedidos-detalle-cont" id="admin-pedido-detalle">
+          <p class="muted">Selecciona un pedido de la lista para ver los detalles y administrarlo.</p>
+        </div>
+      </div>
+    `;
+    
+    // Inmediatamente después de inyectar el HTML, inicializa los listeners
+    initSeguimiento();
+  }
+
+  function initSeguimiento() {
+    // Asignar listeners a los controles principales
+    document.getElementById('admin-buscar-pedido').addEventListener('input', (e) => {
+      renderListaPedidos(e.target.value);
+    });
+    
+    document.getElementById('admin-btn-generar').addEventListener('click', () => {
+      // Genera un nuevo pedido simulado
+      const nuevoId = Math.floor(923160 + Math.random() * 100);
+      const clientes = ["Miguel Lopez", "Lucia Fernandez", "Javier Torres"];
+      const items = [
+        { titulo: "Red Velvet", cantidad: 1, precio: 180.00 },
+        { titulo: "Cupcakes Surtidos", cantidad: 2, precio: 25.00 }
+      ];
+      
+      const nuevoPedido = {
+        id: nuevoId,
+        cliente: clientes[Math.floor(Math.random() * clientes.length)],
+        telefono: "449" + Math.floor(1000000 + Math.random() * 9000000),
+        total: 230.00,
+        estadoActual: "Recibido",
+        items: items,
+        historial: [
+          { estado: "Recibido", fecha: new Date().toISOString() }
+        ],
+        notas: "Pedido generado automáticamente."
+      };
+      
+      pedidosSimulados.unshift(nuevoPedido); // Añade al inicio de la lista
+      renderListaPedidos(document.getElementById('admin-buscar-pedido').value);
+    });
+    
+    // Listener para la lista (delegación de eventos)
+    document.getElementById('admin-pedidos-lista').addEventListener('click', (e) => {
+      const card = e.target.closest('.pedido-card-mini');
+      if (card) {
+        const pedidoId = card.dataset.id;
+        adminPedidoSeleccionado = pedidoId;
+        renderDetallePedido(pedidoId);
+        
+        // Manejar clase 'active'
+        document.querySelectorAll('.pedido-card-mini').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      }
+    });
+
+    // Renderizar la lista inicial
+    renderListaPedidos();
+  }
+  
+  function renderListaPedidos(filtro = '') {
+    const cont = document.getElementById('admin-pedidos-lista');
+    if (!cont) return;
+    
+    const filtroLower = filtro.toLowerCase();
+    const pedidosFiltrados = pedidosSimulados.filter(p => 
+      p.id.toString().includes(filtroLower) || 
+      p.cliente.toLowerCase().includes(filtroLower)
+    );
+    
+    if (pedidosFiltrados.length === 0) {
+      cont.innerHTML = '<p class="muted" style="padding: 10px;">No se encontraron pedidos.</p>';
+      return;
+    }
+    
+    cont.innerHTML = pedidosFiltrados.map(p => {
+      const estadoClase = 'status-' + p.estadoActual.toLowerCase().replace(' ', '-');
+      return `
+        <div class="pedido-card-mini ${p.id == adminPedidoSeleccionado ? 'active' : ''}" data-id="${p.id}">
+          <strong>Pedido #${p.id}</strong>
+          <div class="pedido-meta" style="margin-top: 5px;">
+            <span>${p.cliente}</span>
+            <span class="pedido-status ${estadoClase}">${p.estadoActual}</span>
+          </div>
+          <div class="pedido-meta" style="margin-top: 5px;">
+            <span>Total:</span>
+            <strong>$${p.total.toFixed(2)}</strong>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  function renderDetallePedido(pedidoId) {
+    const cont = document.getElementById('admin-pedido-detalle');
+    const pedido = pedidosSimulados.find(p => p.id == pedidoId);
+    
+    if (!pedido) {
+      cont.innerHTML = '<p class="muted">Error: No se encontró el pedido.</p>';
+      return;
+    }
+
+    // 1. Renderizar Items
+    const itemsHtml = pedido.items.map(item => `
+      <li style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span>(${item.cantidad}x) ${item.titulo}</span>
+        <strong>$${(item.cantidad * item.precio).toFixed(2)}</strong>
+      </li>
+    `).join('');
+
+    // 2. Renderizar Timeline (similar al del cliente)
+    const timelineHtml = adminEstados.map(estado => {
+      const historialEstado = pedido.historial.find(h => h.estado === estado);
+      const esDone = !!historialEstado;
+      
+      return `
+        <div class="step ${esDone ? 'done' : ''}">
+          <div class="bullet"></div>
+          <div class="content">
+            <div style="font-weight:800">${estado}</div>
+            ${esDone ? `<div class="when">${new Date(historialEstado.fecha).toLocaleString()}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    // 3. Renderizar Controles de Admin
+    const estadoActualIndex = adminEstados.indexOf(pedido.estadoActual);
+    const controlesHtml = adminEstados.map((estado, index) => {
+      const esActual = (estado === pedido.estadoActual);
+      // Solo se puede avanzar o estar en el estado actual. No se puede retroceder.
+      const deshabilitado = (index < estadoActualIndex || esActual); 
+      
+      return `<button 
+                class="btn-update ${esActual ? 'active' : ''}" 
+                data-estado="${estado}"
+                ${deshabilitado ? 'disabled' : ''}
+                onclick="actualizarEstadoPedido('${pedido.id}', '${estado}')">
+                ${estado}
+              </button>`;
+    }).join('');
+
+    // 4. HTML Final
+    cont.innerHTML = `
+      <h3>Detalle Pedido #${pedido.id}</h3>
+      <div style="background: #fff7f7; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+        <strong>Cliente:</strong> ${pedido.cliente} (${pedido.telefono})<br>
+        <strong>Notas:</strong> <span class="muted">${pedido.notas || 'Ninguna'}</span>
+      </div>
+      
+      <strong>Items:</strong>
+      <ul style="list-style: none; padding: 5px 0 15px 0;">${itemsHtml}</ul>
+      
+      <strong>Timeline:</strong>
+      <div class="admin-timeline">${timelineHtml}</div>
+      
+      <!-- Controles de Admin -->
+      <div class="admin-status-controls">
+        <label>Actualizar Estado del Pedido:</label>
+        <div>${controlesHtml}</div>
+      </div>
+    `;
+  }
+  
+  function actualizarEstadoPedido(pedidoId, nuevoEstado) {
+    const pedidoIndex = pedidosSimulados.findIndex(p => p.id == pedidoId);
+    if (pedidoIndex === -1) return;
+    
+    // "Actualiza la base de datos"
+    pedidosSimulados[pedidoIndex].estadoActual = nuevoEstado;
+    // Añade al historial
+    pedidosSimulados[pedidoIndex].historial.push({
+      estado: nuevoEstado,
+      fecha: new Date().toISOString()
+    });
+    
+    // Volver a renderizar todo
+    renderListaPedidos(document.getElementById('admin-buscar-pedido').value);
+    renderDetallePedido(pedidoId);
+  }
+
+  // =================================================================
+  // --- FIN: NUEVA LÓGICA DE GESTIÓN DE PEDIDOS ---
+  // =================================================================
+
+
   function mostrarProductos() {
     document.getElementById("contenido").innerHTML = `
       <p class="titulo-contenido">Gestión de Productos</p>
@@ -283,7 +1006,7 @@
     `;
   }
 
-  // Mostrar la tabla de usuarios
+  // --- FUNCIÓN DE USUARIOS RESTAURADA ---
   function mostrarUsuarios() {
     fetch('listar_usuarios.php')
       .then(res => res.json())
@@ -315,7 +1038,49 @@
       });
   }
 
-  // Eliminar usuario
+  // --- FUNCIÓN DE MÉTRICAS (SIMULADA) ---
+  function mostrarMetricas() {
+    const targetDiv = document.getElementById('contenido');
+    targetDiv.innerHTML = `<p class="titulo-contenido">Cargando Métricas...</p>`;
+
+    fetch('metricas.html')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('No se pudo cargar metricas.html (Error ' + response.status + ')');
+        }
+        return response.text();
+      })
+      .then(text => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        
+        // Extraer el contenido principal de metricas.html
+        const metricsContent = doc.querySelector('main.container');
+        
+        if (metricsContent) {
+          // Inyectar el HTML de las métricas, pero con el título del panel
+          targetDiv.innerHTML = `
+            <p class="titulo-contenido">Panel de Métricas</p>
+            ${metricsContent.innerHTML}
+          `;
+          
+          // --- ¡NUEVO! ---
+          // Llamamos a la función de inicialización DESPUÉS de inyectar el HTML
+          initMetrics();
+          
+          // console.log("Panel de métricas cargado y scripts inicializados.");
+        } else {
+          targetDiv.innerHTML = '<p class="titulo-contenido">Error</p><p>No se encontró el contenido principal en metricas.html.</p>';
+        }
+      })
+      .catch(error => {
+        console.error('Error al cargar métricas:', error);
+        targetDiv.innerHTML = `<p class="titulo-contenido">Error</alerta><p>No se pudo cargar el panel de métricas. ${error.message}</p>`;
+      });
+  }
+
+
+  // --- FUNCIÓN ELIMINAR USUARIO RESTAURADA ---
   function eliminarUsuario(id) {
     if (!confirm('¿Eliminar este usuario?')) return;
     const fd = new FormData();
@@ -328,7 +1093,7 @@
       });
   }
 
-  // Abrir modal y cargar datos
+  // --- FUNCIÓN ABRIR MODAL RESTAURADA ---
   function abrirModalUsuario(id) {
     fetch(`listar_usuario_individual.php?id=${id}`)
       .then(res => res.json())
@@ -345,20 +1110,35 @@
     document.getElementById('modalEditarUsuario').style.display = 'none';
   }
 
-  // Enviar edición
+  // --- LISTENER DE EDICIÓN RESTAURADO ---
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('formEditarUsuario').addEventListener('submit', e => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      fetch('editar_usuario.php', { method: 'POST', body: fd })
-        .then(res => res.json())
-        .then(resp => {
-          alert(resp.msg);
-          cerrarModalUsuario();
-          mostrarUsuarios();
+    // Asegurarse de que el formulario existe antes de añadir el listener
+    const formEditarUsuario = document.getElementById('formEditarUsuario');
+    if (formEditarUsuario) {
+        formEditarUsuario.addEventListener('submit', e => {
+          e.preventDefault();
+          const fd = new FormData(e.target);
+          fetch('editar_usuario.php', { method: 'POST', body: fd })
+            .then(res => res.json())
+            .then(resp => {
+              alert(resp.msg);
+              cerrarModalUsuario();
+              mostrarUsuarios();
+            });
         });
-    });
+    }
   });
+  
+  // Funciones dummy para los modales de postres (para que no den error)
+  function cerrarModal() {
+      const modal = document.getElementById('modalEditar');
+      if (modal) modal.style.display = 'none';
+  }
+  // Añadido un script dummy que podría estar faltando
+  if (typeof administrarDashboard === 'undefined') {
+     // console.log("Cargando script dummy administradorDashboard.js");
+  }
+
 </script>
 <!-- Modal para editar postre -->
 <!-- Modal mejorado -->
@@ -427,8 +1207,8 @@
   </div>
 </div>
 
-
-<script src="administradorDashboard.js"></script>
+<!-- SCRIPT RESTAURADO -->
+<script src="administradorDashboard.js"></script> 
 
 </body>
 

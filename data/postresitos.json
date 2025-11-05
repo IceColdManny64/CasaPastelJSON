@@ -8,7 +8,7 @@
         "tamanio": "G",
         "sabor": "Chocolate Negro",
         "imagen_url": "https:\/\/www.recetasnestle.com.ve\/sites\/default\/files\/srh_recipes\/72c1474b902d923d6a33f394e1d65b4b.jpg",
-        "stock": 1
+        "stock": 3
     },
     {
         "id": 2,
@@ -30,7 +30,7 @@
         "tamanio": "S",
         "sabor": "Chocolate con azúcar glass y lunetas",
         "imagen_url": "https:\/\/www.bettycrocker.lat\/mx\/wp-content\/uploads\/sites\/2\/2020\/12\/BCmexico-recipe-brownies-de-momia.png",
-        "stock": 2
+        "stock": 3
     },
     {
         "id": 4,

@@ -3,125 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <title>Iniciar Sesión - La Casa del Pastel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- FUENTES AÑADIDAS -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --red-700:#a30015;
+      --red-500:#d6001c;
+      --card-bg:#ffffff;
+      --muted:#666;
+      --radius:12px;
+      --maxwidth:1000px;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      height: 100vh;
+    html, body {
+      height: 100%;
     }
 
-    .izquierda {
-      width: 50%;
-      background-color: #d6001c;
+    /* === ESTILO DE BODY ACTUALIZADO === */
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      /* Fondo de las otras páginas */
+      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
+        url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
       display: flex;
       flex-direction: column;
+    }
+
+    /* === HEADER ESTÁNDAR AÑADIDO === */
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 22px;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
+      color:white;
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:12px; font-family: 'Playfair Display', serif; font-weight: 700;}
+    .brand img{height:40px;border-radius:6px}
+    nav a{color:white;text-decoration:none;margin-left:12px; font-family: 'Open Sans';}
+
+
+    /* === CONTENEDOR CENTRAL === */
+    .container {
+      display: flex;
+      flex: 1;
       justify-content: center;
       align-items: center;
-      color: white;
-      text-align: center;
       padding: 20px;
     }
-
-    .izquierda img {
-      width: 80%;
-      max-width: 280px;
-      margin-bottom: 20px;
-    }
-
-    .izquierda h1 {
-      font-size: 32px;
-    }
-
-    .derecha {
-      width: 50%;
-      background-color: #fff4e6;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 40px;
-    }
-
-    .formulario {
+    
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 30px 40px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      font-size: 28px;
-      color: #222;
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--red-500);
       text-align: center;
+      margin-bottom: 25px;
+      font-size: 2.2rem;
     }
 
-    input {
+    .form-field {
+      margin-bottom: 15px;
+    }
+    
+    .form-field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    
+    .form-field input {
       width: 100%;
       padding: 12px;
-      margin: 10px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
+      font-family: 'Open Sans', sans-serif;
     }
 
-    button {
+    /* === BOTÓN ESTÁNDAR === */
+    .btn {
       width: 100%;
       padding: 12px;
-      margin-top: 15px;
-      background: linear-gradient(to right, #ff8a00, #ff3e3e);
-      border: none;
-      color: white;
-      font-size: 18px;
-      border-radius: 8px;
+      border-radius: 10px;
+      border: 0;
       cursor: pointer;
+      font-weight: 800;
+      font-size: 1.1rem;
+      font-family: 'Open Sans', sans-serif;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      margin-top: 10px;
     }
-
-    button:hover {
-      background: linear-gradient(to right, #ff6e00, #e32727);
+    .btn-primary{
+      background:linear-gradient(90deg,var(--red-500),var(--red-700));
+      color:white;
+      transition: filter 0.2s;
+    }
+    .btn-primary:hover {
+      filter: brightness(0.9);
     }
 
     .enlace {
-      margin-top: 10px;
+      margin-top: 20px;
       font-size: 14px;
       text-align: center;
+      line-height: 1.6;
     }
 
     .enlace a {
-      color: #c40028;
+      color: var(--red-500);
+      font-weight: 600;
       text-decoration: none;
+    }
+    .enlace a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <div class="izquierda">
-    <img src="LOGO1.png" alt="Logo La Casa del Pastel">
-    <h1>¡Bienvenido!</h1>
-  </div>
+  <!-- HEADER ESTÁNDAR -->
+  <header>
+    <div class="brand">
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/F8D7DA/A30015?text=LCP'">
+      La Casa del Pastel
+    </div>
+    <nav>
+      <a href="menu.html">Menú</a>
+      <a href="index.html">Inicio</a>
+    </nav>
+  </header>
 
-  <div class="derecha">
-    <form action="login.php" method="POST" class="formulario">
-      <h2>Iniciar Sesión</h2>
-      <input type="email" name="correo" placeholder="Correo electrónico" required>
-      <input type="password" name="contrasena" placeholder="Contraseña" required>
-      <button type="submit">Entrar</button>
-      <div class="enlace">
-        ¿No tienes cuenta? <a href="registroUsuario.html">Regístrate aquí</a><br>
-        ¿Eres administrador? <a href="login_administrador.html">Inicia sesión como admin</a> <br>
-        ¿Nomás andas viendo? <a href="PantallaPrincipal.html">Entra como invitado</a>
-      </div>
-    </form>
+  <!-- FORMULARIO EN TARJETA CENTRAL -->
+  <div class="container">
+    <div class="card">
+      <form action="login.php" method="POST" class="formulario">
+        <h1>Iniciar Sesión</h1>
+        
+        <div class="form-field">
+          <label for="correo">Correo electrónico</label>
+          <input type="email" id="correo" name="correo" placeholder="tu@correo.com" required>
+        </div>
+        
+        <div class="form-field">
+          <label for="contrasena">Contraseña</label>
+          <input type="password" id="contrasena" name="contrasena" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Entrar</button>
+        
+        <div class="enlace">
+          ¿No tienes cuenta? <a href="registroUsuario.html">Regístrate aquí</a><br>
+          ¿Eres administrador? <a href="login_administrador.html">Inicia sesión como admin</a> <br>
+          <a href="PantallaPrincipal.html">Entra como invitado</a>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     if (params.get("error") === "1") {
-      alert("Correo o contraseña incorrectos.");
+      // Evitamos alert()
+      const form = document.querySelector('.formulario');
+      const errorMsg = document.createElement('p');
+      errorMsg.textContent = 'Correo o contraseña incorrectos.';
+      errorMsg.style.color = 'var(--red-500)';
+      errorMsg.style.textAlign = 'center';
+      errorMsg.style.marginTop = '10px';
+      form.insertBefore(errorMsg, form.querySelector('.btn-primary'));
     }
   </script>
 

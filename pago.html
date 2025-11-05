@@ -98,7 +98,7 @@
     input, select, textarea{padding:10px; border-radius:8px; border:1px solid #e6e6e6; font-size:0.95rem}
     textarea{min-height:80px}
 
-    .btn{padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:800}
+    .btn{padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:800; text-decoration: none;}
     .btn-primary{background:linear-gradient(90deg,var(--red-500),var(--red-700)); color:white}
     .btn-ghost{background:transparent; border:2px solid rgba(0,0,0,0.06); color:var(--red-700)}
 
@@ -127,7 +127,7 @@
   <div class="container">
     <div class="card">
       <h1>Pago y Confirmación</h1>
-      <p class="muted">Revisa tu pedido y completa los datos de pago. Al confirmar, se creará el pedido y serás redirigido a la pantalla de seguimiento.</p>
+      <p class="muted">Revisa tu pedido y completa los datos de pago. Al confirmar, serás redirigido a la pantalla de seguimiento.</p>
 
       <div class="layout">
         <!-- LEFT: formulario de pago -->
@@ -159,6 +159,7 @@
           </div>
 
           <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <!-- BOTÓN MODIFICADO -->
             <button id="btnPay" class="btn btn-primary">Pagar y Generar pedido</button>
             <a href="carritoCompra.html" class="btn btn-ghost">Volver al carrito</a>
           </div>
@@ -177,6 +178,7 @@
     </div>
   </div>
 
+  <!-- SCRIPT MODIFICADO -->
   <script>
     // helpers
     function loadCart(){
@@ -210,12 +212,13 @@
 
           const body = document.createElement('div');
           body.className = 'item-body';
+          // Se ha quitado onchange="" del input y se ha puesto readonly
           body.innerHTML = `<div class="item-title">${escapeHtml(p.titulo || p.nombre || 'Producto')}</div>
                             <div class="item-desc">${escapeHtml(p.descripcion || '')}</div>
                             <div class="item-price">Precio unitario: $${price.toFixed(2)}</div>
                             <div class="qty-row"><label style="font-weight:700; color:var(--red-700)">Cant:</label>
                               <input type="number" min="1" value="${qty}" style="width:70px; padding:6px; border-radius:6px; border:1px solid #e6e6e6"
-                                onchange="updateQtyFromSummary(${index}, this.value)">
+                                readonly>
                               <span style="margin-left:10px; color:var(--muted)">Stock: ${p.stock ?? '—'}</span>
                             </div>`;
 
@@ -232,76 +235,16 @@
       document.getElementById('summaryTotal').textContent = `Total: $${total.toFixed(2)}`;
     }
 
-    // actualizar cantidad desde la vista de pago (se persiste en carrito y se re-renderiza)
-    function updateQtyFromSummary(index, nuevaCantidad){
-      nuevaCantidad = parseInt(nuevaCantidad);
-      if(isNaN(nuevaCantidad) || nuevaCantidad < 1){ alert('La cantidad debe ser al menos 1'); renderSummary(); return; }
-      let cart = loadCart();
-      if(!cart[index]){ renderSummary(); return; }
-      const disponible = cart[index].stock ?? Infinity;
-      if(nuevaCantidad > disponible){ alert(`Solo hay ${disponible} unidades disponibles.`); renderSummary(); return; }
-      cart[index].cantidad = nuevaCantidad;
-      localStorage.setItem('carrito', JSON.stringify(cart));
-      renderSummary();
-    }
+    // --- SE HAN ELIMINADO LAS FUNCIONES COMPLEJAS ---
+    //- updateQtyFromSummary
+    //- generateOrderNumber
+    //- createOrderFromCartAndRedirect
 
-    function generateOrderNumber(){ return (Math.floor(100000 + Math.random()*899999)).toString(); }
-
-    function createOrderFromCartAndRedirect(){
-      const cart = loadCart();
-      if(!cart || cart.length === 0){ alert('No hay artículos en el carrito.'); return; }
-
-      let total = 0;
-      const items = cart.map(p=>{
-        const cantidad = Number(p.cantidad) || Number(p.qty) || 1;
-        const precio = Number(p.precio ?? p.price ?? 0);
-        total += precio * cantidad;
-        return {
-          titulo: p.titulo || p.nombre || 'Producto',
-          descripcion: p.descripcion || '',
-          cantidad: cantidad,
-          precio: precio,
-          imagen_url: p.imagen_url || p.img || ''
-        };
-      });
-
-      const id = Date.now();
-      const number = generateOrderNumber();
-      const now = new Date().toISOString();
-
-      const order = {
-        id,
-        number,
-        statusIndex: 0,
-        statuses: ['Recibido','En preparación','En camino','Entregado'],
-        items,
-        total: Number(total.toFixed(2)),
-        timestamps: { created: now, history: { 'Recibido': now } },
-        customer: {
-          name: document.getElementById('payerName').value.trim() || '',
-          phone: document.getElementById('payerPhone').value.trim() || '',
-          method: document.getElementById('payMethod').value,
-          note: document.getElementById('payerNote').value.trim() || ''
-        }
-      };
-
-      const orders = JSON.parse(localStorage.getItem('lcp_orders') || '[]');
-      orders.push(order);
-      localStorage.setItem('lcp_orders', JSON.stringify(orders));
-      localStorage.setItem('lcp_last_order', id);
-
-      localStorage.removeItem('carrito');
-
-      window.location.href = `seguimiento.html?order=${id}`;
-    }
-
+    // --- LISTENER MODIFICADO ---
     document.getElementById('btnPay').addEventListener('click', function(){
-      const name = document.getElementById('payerName').value.trim();
-      const phone = document.getElementById('payerPhone').value.trim();
-      if(!name || !phone){
-        if(!confirm('No has puesto nombre o teléfono. ¿Deseas continuar sin ellos?')) return;
-      }
-      createOrderFromCartAndRedirect();
+      // Sin validación, sin guardar. Solo redirige.
+      console.log("Simulando pago y redirigiendo a seguimiento.html");
+      window.location.href = 'seguimiento.html';
     });
 
     // render on load
@@ -309,3 +252,4 @@
   </script>
 </body>
 </html>
+

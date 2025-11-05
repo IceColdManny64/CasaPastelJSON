@@ -3,87 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <title>Login Administrador - La Casa del Pastel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- FUENTES AÑADIDAS -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --red-700:#a30015;
+      --red-500:#d6001c;
+      --card-bg:#ffffff;
+      --muted:#666;
+      --radius:12px;
+      --maxwidth:1000px;
+    }
+
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
+    html, body {
+      height: 100%;
+    }
+
+    /* === ESTILO DE BODY ACTUALIZADO === */
     body {
-      display: flex;
-      height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #ee2b2b;
-    }
-
-    .left {
-      flex: 1;
-      background-image: url('https://s1.ppllstatics.com/diariovasco/www/multimedia/201909/09/media/cortadas/postres-sin-azucar-kPaE-RHqLy3xgNxM4BJcU7OrSbTL-624x385@Diario%20Vasco.jpg');
+      font-family: 'Open Sans', Arial, sans-serif;
+      /* Fondo de las otras páginas */
+      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
+        url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
+      color: #333;
+      display: flex;
+      flex-direction: column;
     }
 
-    .right {
-      flex: 1;
+    /* === HEADER ESTÁNDAR AÑADIDO === */
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 22px;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
+      color:white;
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:12px; font-family: 'Playfair Display', serif; font-weight: 700;}
+    .brand img{height:40px;border-radius:6px}
+    nav a{color:white;text-decoration:none;margin-left:12px; font-family: 'Open Sans';}
+
+
+    /* === CONTENEDOR CENTRAL === */
+    .container {
       display: flex;
+      flex: 1;
       justify-content: center;
       align-items: center;
-      background-color: #f57c00;
+      padding: 20px;
     }
-
-    .login-container {
+    
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 30px 40px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
       width: 100%;
-      max-width: 350px;
-      background-color: #fff3e0;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      max-width: 450px;
     }
 
-    .login-container h2 {
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--red-500);
       text-align: center;
       margin-bottom: 25px;
-      color: #b33f4f;
+      font-size: 2.2rem;
     }
 
-    .login-container input {
+    .form-field {
+      margin-bottom: 15px;
+    }
+    
+    .form-field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    
+    .form-field input {
       width: 100%;
       padding: 12px;
-      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
-      background-color: #fff;
+      font-family: 'Open Sans', sans-serif;
     }
 
-    .login-container button {
+    /* === BOTÓN ESTÁNDAR === */
+    .btn {
       width: 100%;
       padding: 12px;
-      background: linear-gradient(to right, #ff7043, #e53935);
-      color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      border: 0;
       cursor: pointer;
+      font-weight: 800;
+      font-size: 1.1rem;
+      font-family: 'Open Sans', sans-serif;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .btn-primary{
+      background:linear-gradient(90deg,var(--red-500),var(--red-700));
+      color:white;
+      transition: filter 0.2s;
+    }
+    .btn-primary:hover {
+      filter: brightness(0.9);
+    }
+    
+    .enlace {
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: center;
+      line-height: 1.6;
     }
 
-    .login-container button:hover {
-      background: linear-gradient(to right, #e64a19, #c62828);
+    .enlace a {
+      color: var(--red-500);
+      font-weight: 600;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="left"></div>
+  <!-- HEADER ESTÁNDAR -->
+  <header>
+    <div class="brand">
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/F8D7DA/A30015?text=LCP'">
+      La Casa del Pastel
+    </div>
+    <nav>
+      <a href="index.html">Volver al inicio</a>
+    </nav>
+  </header>
 
-  <div class="right">
-    <div class="login-container">
-      <h2>Login Administrador</h2>
-      <form action="login_administrador.php" method="POST">
-        <input type="text" name="usuario" placeholder="Usuario" required>
-        <input type="password" name="contrasena" placeholder="Contraseña" required>
-        <button type="submit">Iniciar Sesión</button>
+  <!-- FORMULARIO EN TARJETA CENTRAL -->
+  <div class="container">
+    <div class="card">
+      <form action="login_administrador.php" method="POST" class="formulario">
+        <h1>Login Administrador</h1>
+        
+        <div class="form-field">
+          <label for="usuario">Usuario</label>
+          <input type="text" id="usuario" name="usuario" placeholder="admin" required>
+        </div>
+        
+        <div class="form-field">
+          <label for="contrasena">Contraseña</label>
+          <input type="password" id="contrasena" name="contrasena" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+        
+        <div class="enlace">
+          <a href="panel.html">Entra como invitado</a> <br>
+          <a href="login.html">Volver al login de cliente</a>
+        </div>
       </form>
     </div>
   </div>
