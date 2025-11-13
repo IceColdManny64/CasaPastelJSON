@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pantalla Principal</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <!-- Fuente para el banner de cookies y footer -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -34,7 +36,7 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-        url('https://www.hersheyland.mx/content/dam/Hersheyland_Mexico/es_mx/recipes/recipe-images/grocery-abril/pastel.jpg') no-repeat center center/cover;
+        url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center/cover;
       z-index: -1;
     }
 
@@ -126,7 +128,7 @@
     }
 
     .hero {
-      flex: 1;
+      flex: 1; /* Esto empuja el footer hacia abajo */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -140,12 +142,14 @@
       font-size: 3em;
       color: white;
       margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
     .hero p {
       font-size: 1.5em;
       color: white;
       margin-bottom: 40px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     }
 
     .btn {
@@ -157,11 +161,100 @@
       border-radius: 5px;
       cursor: pointer;
       text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s, background-color 0.2s;
     }
 
     .btn:hover {
       background-color: #e76f51;
+      transform: translateY(-2px);
     }
+
+    /* --- INICIO: NUEVOS ESTILOS LEGALES --- */
+
+    /* --- COOKIE BANNER --- */
+    #cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(20, 20, 20, 0.95);
+      color: white;
+      padding: 20px;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+      /* Oculto inicialmente */
+      transform: translateY(100%); 
+      transition: transform 0.5s ease-in-out;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    
+    /* Clase para mostrar el banner */
+    #cookie-banner.show {
+      transform: translateY(0);
+    }
+
+    #cookie-banner p {
+      font-family: 'Open Sans', sans-serif; /* Fuente legible */
+      font-size: 0.9rem;
+      margin: 0;
+      max-width: 800px;
+    }
+
+    #cookie-banner a {
+      color: #f4a261; /* Color naranja del botón */
+      text-decoration: underline;
+    }
+
+    .btn-accept-cookies {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .btn-accept-cookies:hover { background-color: #218838; }
+
+    /* --- FOOTER LEGAL --- */
+    footer.legal-footer {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ccc;
+      padding: 25px;
+      text-align: center;
+      font-size: 0.8em;
+      font-family: 'Open Sans', sans-serif;
+      z-index: 2;
+      width: 100%;
+    }
+    
+    footer.legal-footer a {
+      color: #f4a261;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    
+    footer.legal-footer a:hover { text-decoration: underline; }
+    
+    footer.legal-footer p {
+      margin: 0;
+      padding: 5px 0;
+    }
+    
+    footer.legal-footer .credits {
+      margin-top: 10px;
+      opacity: 0.7;
+    }
+    /* --- FIN: NUEVOS ESTILOS LEGALES --- */
+
   </style>
 </head>
 
@@ -184,7 +277,7 @@
         <div class="submenu-content">
           <a href="infraestructura.html">Justificación de Recursos</a>
           <a href="ind.html">Plataformas abiertas/cerradas</a>
-                    <a href="status.html">Estado de servicio/recursos</a>
+          <a href="status.html">Estado de servicio/recursos</a>
         </div>
       </div>
 
@@ -204,6 +297,50 @@
     <p>¡Ofertas de Temporada!</p>
     <a href="menu.html" class="btn">Comprar ahora</a>
   </div>
+
+  <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
+  <footer class="legal-footer">
+    <p>
+      <a href="legales.html#terminos">Términos y Condiciones</a> | 
+      <a href="legales.html#privacidad">Aviso de Privacidad</a> | 
+      <a href="legales.html#devoluciones">Políticas de Devolución</a>
+    </p>
+    <p class="credits">
+      Créditos de imagen: Todas las fotografías utilizadas en este sitio (incluyendo el fondo) fueron obtenidas de <a href="https://pixabay.com" target="_blank">Pixabay</a> bajo licencia de uso libre.
+    </p>
+    <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
+  </footer>
+  <!-- FIN: PIE DE PÁGINA -->
+
+  <!-- INICIO: BANNER DE COOKIES -->
+  <div id="cookie-banner">
+    <p>
+      <!-- MODIFICADO: Se quitó "(Simulado)" -->
+      🍪 <strong>Uso de Cookies:</strong> Usamos cookies técnicas para recordar tu carrito y preferencias. Al continuar navegando, aceptas nuestra <a href="legales.html#cookies">Política de Cookies</a>.
+    </p>
+    <button class="btn-accept-cookies" onclick="aceptarCookies()">Aceptar</button>
+  </div>
+  <!-- FIN: BANNER DE COOKIES -->
+
+  <script>
+    // Lógica simple para el banner de cookies
+    document.addEventListener("DOMContentLoaded", function() {
+      // Revisar si ya aceptó cookies antes
+      if (!localStorage.getItem("cookiesAceptadas")) {
+        // Si no, mostrar el banner con una pequeña demora
+        setTimeout(() => {
+          document.getElementById("cookie-banner").classList.add("show");
+        }, 1000);
+      }
+    });
+
+    function aceptarCookies() {
+      // Guardar preferencia para que no vuelva a salir
+      localStorage.setItem("cookiesAceptadas", "true");
+      // Ocultar banner
+      document.getElementById("cookie-banner").classList.remove("show");
+    }
+  </script>
 
 </body>
 </html>

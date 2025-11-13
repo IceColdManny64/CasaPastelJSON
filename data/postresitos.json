@@ -7,7 +7,7 @@
         "categoria": "Pasteles y roscas",
         "tamanio": "G",
         "sabor": "Chocolate Negro",
-        "imagen_url": "https:\/\/www.recetasnestle.com.ve\/sites\/default\/files\/srh_recipes\/72c1474b902d923d6a33f394e1d65b4b.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2016/11/22/18/52/cake-1850011_1280.jpg",
         "stock": 3
     },
     {
@@ -18,7 +18,7 @@
         "categoria": "Galletas",
         "tamanio": "M",
         "sabor": "Chocolate",
-        "imagen_url": "https:\/\/sarasellos.com\/wp-content\/uploads\/2024\/06\/Galletas-New-York-con-oreos3.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2015/05/07/15/08/cookie-756601_1280.jpg",
         "stock": 10
     },
     {
@@ -29,7 +29,7 @@
         "categoria": "Brownies",
         "tamanio": "S",
         "sabor": "Chocolate con azúcar glass y lunetas",
-        "imagen_url": "https:\/\/www.bettycrocker.lat\/mx\/wp-content\/uploads\/sites\/2\/2020\/12\/BCmexico-recipe-brownies-de-momia.png",
+        "imagen_url": "https://cdn.pixabay.com/photo/2018/04/24/20/12/dessert-3347905_1280.jpg",
         "stock": 3
     },
     {
@@ -40,7 +40,7 @@
         "categoria": "Pies",
         "tamanio": "XL",
         "sabor": "Queso y fresa",
-        "imagen_url": "https:\/\/www.olyesspastelerias.com\/web\/images\/pay-y-flanes\/pays\/pay-de-queso-fresa-5.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2018/11/05/03/03/strawberry-tart-3795363_1280.jpg",
         "stock": 2
     },
     {
@@ -51,7 +51,7 @@
         "categoria": "Postres de frutas",
         "tamanio": "P",
         "sabor": "Durazno, manzana, naranja, fresa, kiwi",
-        "imagen_url": "https:\/\/www.recetasnestle.com.ec\/sites\/default\/files\/srh_recipes\/65654717b2dffc651a16a8809c87acb8.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2019/07/26/20/30/jelly-4365579_1280.jpg",
         "stock": 13
     },
     {
@@ -62,7 +62,7 @@
         "categoria": "Flanes y pudines",
         "tamanio": "P",
         "sabor": "Chocolate",
-        "imagen_url": "https:\/\/cdn.elcocinerocasero.com\/imagen\/receta\/1200\/2023-07-13-12-34-07\/flan-de-chocolate.jpeg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2015/09/21/04/15/cake-949352_1280.jpg",
         "stock": 19
     },
     {
@@ -73,7 +73,7 @@
         "categoria": "Chocolates y caramelos",
         "tamanio": "P",
         "sabor": "Chocolate",
-        "imagen_url": "https:\/\/www.clarin.com\/img\/2020\/08\/05\/gSkfpC0jq_720x0__1.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2016/05/07/16/23/cookies-1377582_1280.jpg",
         "stock": 4
     },
     {
@@ -84,7 +84,7 @@
         "categoria": "Cupcakes",
         "tamanio": "M",
         "sabor": "arcoiris y vainilla",
-        "imagen_url": "https:\/\/editorialtelevisa.brightspotcdn.com\/dims4\/default\/581c97f\/2147483647\/strip\/true\/crop\/672x672+70+0\/resize\/1000x1000!\/quality\/90\/?url=https%3A%2F%2Fk2-prod-editorial-televisa.s3.us-east-1.amazonaws.com%2Fbrightspot%2F5d%2F22%2F7b517e1242d78f28df597461df79%2Fcupcakes-de-unicornio-receta-facil-y-rapida.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2025/02/07/14/22/cupcake-9390170_1280.jpg",
         "stock": 12
     },
     {
@@ -95,7 +95,7 @@
         "categoria": "Postres fritos",
         "tamanio": "G",
         "sabor": "Mermelada, crema pastelera, durazno, cajeta, choco",
-        "imagen_url": "https:\/\/i.pinimg.com\/736x\/9e\/fa\/9d\/9efa9db7d423fc8d970b660aaa9e8923.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2017/03/30/15/46/churros-2188869_1280.jpg",
         "stock": 20
     },
     {
@@ -106,7 +106,7 @@
         "categoria": "Panaderia",
         "tamanio": "M",
         "sabor": "Pan salado",
-        "imagen_url": "https:\/\/cdn.milenio.com\/uploads\/media\/2022\/12\/24\/cuernitos-cena-navidad-ano-infaltables.jpg",
+        "imagen_url": "https://cdn.pixabay.com/photo/2025/02/27/07/40/croissant-9434564_1280.jpg",
         "stock": 34
     }
 ]
