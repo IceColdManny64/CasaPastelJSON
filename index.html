@@ -255,6 +255,84 @@
       .offers-grid { gap:18px; }
       .benefit img, .offer-card img { width:100%; height:220px; }
     }
+
+    /* --- COOKIE MODAL --- */
+    #cookie-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 2000; /* Z-index alto para estar sobre todo */
+      display: none;
+      /* Oculto por defecto */
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    #cookie-overlay.show {
+      display: flex;
+      /* Se muestra con JS */
+    }
+
+    #cookie-modal {
+      background: white;
+      color: #333;
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      /* Animación de entrada */
+      transform: scale(0.9);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    #cookie-overlay.show #cookie-modal {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #cookie-modal h2 {
+      font-family: 'Playfair Display', serif;
+      color: #a30015;
+      /* Rojo corporativo */
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    #cookie-modal p {
+      font-size: 0.95rem;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    #cookie-modal a {
+      color: #a30015;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .btn-accept-cookies {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .btn-accept-cookies:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 
@@ -358,9 +436,32 @@
     </footer>
   </div>
 
-  
-
   <a href="PantallaPrincipal.html" class="sticky">Haz tu pedido</a>
+
+  <!-- INICIO: MODAL DE COOKIES -->
+  <div id="cookie-overlay">
+    <div id="cookie-modal">
+      <h2>🍪 Tu Privacidad es Importante</h2>
+      <p>
+        Usamos cookies técnicas y almacenamiento local para funciones esenciales como el carrito de compras. Al continuar navegando, aceptas nuestra <a href="legales.html#cookies" target="_blank">Política de Cookies</a>.
+      </p>
+      <button class="btn-accept-cookies" onclick="aceptarCookies()">Entendido</button>
+    </div>
+  </div>
+  <!-- FIN: MODAL DE COOKIES -->
+
+  <script>
+    // Lógica para el modal de cookies (Limpia y funcional)
+    document.addEventListener("DOMContentLoaded", function() {
+      // Muestra el modal siempre al cargar la página.
+      document.getElementById("cookie-overlay").classList.add("show");
+    });
+
+    function aceptarCookies() {
+      // Solo oculta el modal para esta visita actual.
+      document.getElementById("cookie-overlay").classList.remove("show");
+    }
+  </script>
 
 </body>
 </html>

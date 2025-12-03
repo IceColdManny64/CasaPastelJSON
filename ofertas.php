@@ -1,11 +1,13 @@
 <?php
-// Incluir la lógica que prepara $ofertas
+// Incluir la lógica que prepara $ofertas (ahora segura contra errores)
 include 'ofertas_logic.php';
 ?><!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Ofertas Especiales - La Casa del Pastel</title>
+  <!-- Fuente Open Sans para textos del modal -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 <style>
         * {
             margin: 0;
@@ -314,6 +316,41 @@ include 'ofertas_logic.php';
             20% { background-color: rgba(244, 162, 97, 0.3); }
             100% { background-color: transparent; }
         }
+
+        /* --- MODAL PERSONALIZADO (CSS) --- */
+        .custom-modal-overlay {
+          position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+          background: rgba(0,0,0,0.6); z-index: 3000;
+          display: none; justify-content: center; align-items: center;
+          backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s ease;
+        }
+        .custom-modal-overlay.open { display: flex; opacity: 1; }
+        
+        .custom-modal-box {
+          background: white; padding: 30px; border-radius: 15px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+          max-width: 420px; width: 90%; text-align: center;
+          font-family: 'Open Sans', sans-serif;
+          transform: translateY(20px); transition: transform 0.3s ease;
+        }
+        .custom-modal-overlay.open .custom-modal-box { transform: translateY(0); }
+        
+        .custom-modal-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+        
+        .custom-modal-title { 
+          font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; 
+          color: #a30015; font-family: 'Playfair Display', serif; 
+        }
+        
+        .custom-modal-msg { font-size: 1rem; margin-bottom: 25px; color: #555; line-height: 1.5; }
+        
+        .custom-btn-modal {
+          padding: 12px 24px; border: none; border-radius: 8px;
+          font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
+          background: linear-gradient(135deg, #a30015, #d6001c); color: white;
+          box-shadow: 0 4px 10px rgba(214,0,28,0.3);
+        }
+        .custom-btn-modal:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(214,0,28,0.4); }
     </style>
 </head>
 <body>
@@ -346,7 +383,7 @@ include 'ofertas_logic.php';
 
     <div class="offer-cards">
       <?php if (empty($ofertas)): ?>
-        <p>No hay ofertas disponibles en este momento.</p>
+        <p style="text-align:center; font-size:1.2em; color:white; background:rgba(0,0,0,0.5); padding:20px; border-radius:10px;">No hay ofertas disponibles en este momento.</p>
       <?php else: ?>
         <?php foreach ($ofertas as $o): ?>
           <div class="offer-card">
@@ -362,9 +399,10 @@ include 'ofertas_logic.php';
                 <span class="new-price">$<?= number_format($o['new_price'],2) ?></span>
               </div>
               <div class="offer-actions">
-<button class="details-btn"
-        onclick="window.location='detalle_postre.php?id=<?= $o['id'] ?>'">
-  Ver más
+                <button class="details-btn"
+                        onclick="window.location='detalle_postre.php?id=<?= $o['id'] ?>'">
+                  Ver más
+                </button>
               </div>
             </div>
           </div>
@@ -372,6 +410,43 @@ include 'ofertas_logic.php';
       <?php endif; ?>
     </div>
   </div>
+
+  <!-- MODAL PERSONALIZADO (HTML - Estructura base) -->
+  <div id="custom-modal-overlay" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+      <span id="custom-modal-icon" class="custom-modal-icon"></span>
+      <div id="custom-modal-title" class="custom-modal-title"></div>
+      <div id="custom-modal-msg" class="custom-modal-msg"></div>
+      <button class="custom-btn-modal" onclick="closeModal()">Aceptar</button>
+    </div>
+  </div>
+
+  <script>
+    // --- FUNCIONES DEL MODAL ---
+    function showModal(message, title = "Aviso", icon = "ℹ️") {
+      const overlay = document.getElementById('custom-modal-overlay');
+      const msgElement = document.getElementById('custom-modal-msg');
+      const titleElement = document.getElementById('custom-modal-title');
+      const iconElement = document.getElementById('custom-modal-icon');
+      
+      msgElement.innerHTML = message;
+      titleElement.textContent = title;
+      iconElement.textContent = icon;
+      
+      overlay.style.display = 'flex';
+      // Forzar reflow
+      void overlay.offsetWidth; 
+      overlay.classList.add('open');
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById('custom-modal-overlay');
+      overlay.classList.remove('open');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 300);
+    }
+  </script>
 
 </body>
 </html>

@@ -26,10 +26,9 @@
       height: 100%;
     }
 
-    /* === ESTILO DE BODY ACTUALIZADO === */
+    /* === ESTILO DE BODY === */
     body {
       font-family: 'Open Sans', Arial, sans-serif;
-      /* Fondo de las otras páginas */
       background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
         url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center fixed;
       background-size: cover;
@@ -38,7 +37,7 @@
       flex-direction: column;
     }
 
-    /* === HEADER ESTÁNDAR AÑADIDO === */
+    /* === HEADER === */
     header{
       display:flex;
       justify-content:space-between;
@@ -140,6 +139,41 @@
     .enlace a:hover {
       text-decoration: underline;
     }
+
+    /* === ESTILOS DEL MODAL PERSONALIZADO (Reemplazo de Alert) === */
+    .custom-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 3000;
+      display: none; justify-content: center; align-items: center;
+      backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s ease;
+    }
+    .custom-modal-overlay.open { display: flex; opacity: 1; }
+    
+    .custom-modal-box {
+      background: white; padding: 30px; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      max-width: 420px; width: 90%; text-align: center;
+      font-family: 'Open Sans', sans-serif;
+      transform: translateY(20px); transition: transform 0.3s ease;
+    }
+    .custom-modal-overlay.open .custom-modal-box { transform: translateY(0); }
+    
+    .custom-modal-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+    
+    .custom-modal-title { 
+      font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; 
+      color: var(--red-700); font-family: 'Playfair Display', serif; 
+    }
+    
+    .custom-modal-msg { font-size: 1rem; margin-bottom: 25px; color: #555; line-height: 1.5; }
+    
+    .custom-btn-modal {
+      padding: 12px 24px; border: none; border-radius: 8px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
+      background: linear-gradient(135deg, var(--red-500), var(--red-700)); color: white;
+      box-shadow: 0 4px 10px rgba(214,0,28,0.3);
+    }
+    .custom-btn-modal:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(214,0,28,0.4); }
   </style>
 </head>
 <body>
@@ -159,6 +193,7 @@
   <!-- FORMULARIO EN TARJETA CENTRAL -->
   <div class="container">
     <div class="card">
+      <!-- Se asume que login.php redirige a esta misma página con ?error=1 si falla -->
       <form action="login.php" method="POST" class="formulario">
         <h1>Iniciar Sesión</h1>
         
@@ -183,18 +218,54 @@
     </div>
   </div>
 
+  <!-- MODAL PERSONALIZADO (Reemplazo de alertas nativas) -->
+  <div id="custom-modal-overlay" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+      <span id="custom-modal-icon" class="custom-modal-icon">⚠️</span>
+      <div id="custom-modal-title" class="custom-modal-title">Atención</div>
+      <div id="custom-modal-msg" class="custom-modal-msg"></div>
+      <button class="custom-btn-modal" onclick="closeModal()">Entendido</button>
+    </div>
+  </div>
+
   <script>
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("error") === "1") {
-      // Evitamos alert()
-      const form = document.querySelector('.formulario');
-      const errorMsg = document.createElement('p');
-      errorMsg.textContent = 'Correo o contraseña incorrectos.';
-      errorMsg.style.color = 'var(--red-500)';
-      errorMsg.style.textAlign = 'center';
-      errorMsg.style.marginTop = '10px';
-      form.insertBefore(errorMsg, form.querySelector('.btn-primary'));
+    // Función para mostrar el modal personalizado
+    function showModal(message, title = "Atención", icon = "⚠️") {
+      const overlay = document.getElementById('custom-modal-overlay');
+      const msgElement = document.getElementById('custom-modal-msg');
+      const titleElement = document.getElementById('custom-modal-title');
+      const iconElement = document.getElementById('custom-modal-icon');
+      
+      msgElement.textContent = message;
+      titleElement.textContent = title;
+      iconElement.textContent = icon;
+      
+      overlay.style.display = 'flex';
+      // Forzar reflow para que la animación CSS funcione
+      void overlay.offsetWidth; 
+      overlay.classList.add('open');
     }
+
+    function closeModal() {
+      const overlay = document.getElementById('custom-modal-overlay');
+      overlay.classList.remove('open');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 300);
+    }
+
+    // Detectar error en la URL al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      
+      // Si hay un parámetro 'error', mostramos el modal en lugar del alert nativo
+      if (params.has('error')) {
+        showModal("Correo o contraseña incorrectos. Por favor verifique sus credenciales.", "Error de Acceso", "❌");
+        
+        // Limpiamos la URL para que el error no persista al refrescar
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
   </script>
 
 </body>

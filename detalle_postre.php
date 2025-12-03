@@ -28,9 +28,12 @@ $new_price = round($old_price * 0.8, 2);
   <meta charset="UTF-8">
   <title><?= htmlspecialchars($postre['titulo']) ?> – Detalle | La Casa del Pastel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <!-- Fuente Open Sans para textos del modal -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Playfair Display', serif; background:#f9f9f9; color:#333; }
+    body { font-family:'Playfair Display', serif; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center/cover; color:#333; }
     header { display:flex; align-items:center; justify-content:space-between;
              padding:20px 60px; background:rgba(0, 0, 0, 1); position:fixed; width:100%; top:0; z-index:10; }
     .logo { display:flex; align-items:center; color:white; font-size:1.5em; }
@@ -59,6 +62,41 @@ $new_price = round($old_price * 0.8, 2);
     .btn-cart:hover { background:#218838; }
     .btn-back { background:#ccc; color:#333; }
     .btn-back:hover { background:#bbb; }
+
+    /* --- MODAL PERSONALIZADO (CSS) --- */
+    .custom-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 3000;
+      display: none; justify-content: center; align-items: center;
+      backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s ease;
+    }
+    .custom-modal-overlay.open { display: flex; opacity: 1; }
+    
+    .custom-modal-box {
+      background: white; padding: 30px; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      max-width: 420px; width: 90%; text-align: center;
+      font-family: 'Open Sans', sans-serif;
+      transform: translateY(20px); transition: transform 0.3s ease;
+    }
+    .custom-modal-overlay.open .custom-modal-box { transform: translateY(0); }
+    
+    .custom-modal-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+    
+    .custom-modal-title { 
+      font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; 
+      color: #a30015; font-family: 'Playfair Display', serif; 
+    }
+    
+    .custom-modal-msg { font-size: 1rem; margin-bottom: 25px; color: #555; line-height: 1.5; }
+    
+    .custom-btn-modal {
+      padding: 12px 24px; border: none; border-radius: 8px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
+      background: linear-gradient(135deg, #a30015, #d6001c); color: white;
+      box-shadow: 0 4px 10px rgba(214,0,28,0.3);
+    }
+    .custom-btn-modal:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(214,0,28,0.4); }
   </style>
 </head>
 <body>
@@ -77,7 +115,7 @@ $new_price = round($old_price * 0.8, 2);
       <a href="contacto.html">Contacto</a>
     </nav>
     <div class="icons">
-                  <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
+            <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
             <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
             <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
             <a href="carritoCompra.html">🛒</a>
@@ -106,7 +144,43 @@ $new_price = round($old_price * 0.8, 2);
     </div>
   </div>
 
+  <!-- MODAL PERSONALIZADO (HTML) -->
+  <div id="custom-modal-overlay" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+      <span id="custom-modal-icon" class="custom-modal-icon"></span>
+      <div id="custom-modal-title" class="custom-modal-title"></div>
+      <div id="custom-modal-msg" class="custom-modal-msg"></div>
+      <button class="custom-btn-modal" onclick="closeModal()">Aceptar</button>
+    </div>
+  </div>
+
 <script>
+// --- FUNCIONES DEL MODAL ---
+function showModal(message, title = "Aviso", icon = "ℹ️") {
+  const overlay = document.getElementById('custom-modal-overlay');
+  const msgElement = document.getElementById('custom-modal-msg');
+  const titleElement = document.getElementById('custom-modal-title');
+  const iconElement = document.getElementById('custom-modal-icon');
+  
+  msgElement.innerHTML = message; // Permite HTML simple
+  titleElement.textContent = title;
+  iconElement.textContent = icon;
+  
+  overlay.style.display = 'flex';
+  // Forzar reflow para animación
+  void overlay.offsetWidth; 
+  overlay.classList.add('open');
+}
+
+function closeModal() {
+  const overlay = document.getElementById('custom-modal-overlay');
+  overlay.classList.remove('open');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+  }, 300);
+}
+
+// --- LOGICA DEL CARRITO ---
 document.querySelector(".btn-cart").addEventListener("click", function () {
   const producto = {
     id: <?= $postre['id'] ?>,
@@ -124,7 +198,8 @@ document.querySelector(".btn-cart").addEventListener("click", function () {
   if (indexExistente !== -1) {
     const existente = carrito[indexExistente];
     if (existente.cantidad + 1 > existente.stock) {
-      alert(`Solo hay ${existente.stock} unidades disponibles.`);
+      // REEMPLAZO: Alert nativo por modal
+      showModal(`Solo hay <strong>${existente.stock}</strong> unidades disponibles en inventario.`, "Stock Limitado", "⚠️");
       return;
     }
     carrito[indexExistente].cantidad += 1;
@@ -133,9 +208,10 @@ document.querySelector(".btn-cart").addEventListener("click", function () {
   }
 
   localStorage.setItem("carrito", JSON.stringify(carrito));
-  alert("Producto añadido al carrito.");
+  // REEMPLAZO: Alert nativo por modal de éxito
+  showModal("El producto se ha añadido correctamente a tu carrito.", "¡Añadido!", "✅");
 });
 </script>
 
 </body>
-</html>
+</html>s

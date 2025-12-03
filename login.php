@@ -16,5 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    echo "<script>alert('Correo o contraseña incorrectos'); window.history.back();</script>";
+    // --- CAMBIO CLAVE AQUÍ ---
+    // En lugar de imprimir un script con alert(), redirigimos con un parámetro de error.
+    header("Location: login.html?error=1");
+    exit;
 }
+?>

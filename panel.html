@@ -5,28 +5,30 @@
   <title>Panel de Administración</title>
   <!-- FUENTES AÑADIDAS -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
-                <a href="index.html">Salir</a>
+  <!-- Chart.js para las métricas -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <a href="index.html" style="position:fixed; top:20px; right:20px; color:white; text-decoration:none; z-index:20; font-weight:bold; text-shadow:0 1px 3px rgba(0,0,0,0.5);">Salir</a>
+  
   <style>
-    /* === ESTILOS DE BODY ACTUALIZADOS === */
+    /* === ESTILOS GENERALES (INTACTOS) === */
     body {
       font-family: 'Open Sans', Arial, sans-serif;
       margin: 0;
-      /* Fondo de las otras páginas */
       background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
         url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #333; /* Color de texto por defecto para tarjetas blancas */
+      color: #333;
     }
 
-    /* === ESTILOS DE HEADER ACTUALIZADOS === */
     header {
-      background: rgba(0,0,0,0.45); /* Fondo semi-transparente */
-      backdrop-filter: blur(4px); /* Efecto blur */
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
       color: #fff;
       padding: 20px;
       text-align: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      position: sticky; /* Sticky como en las otras páginas */
+      position: sticky;
       top: 0;
       z-index: 10;
     }
@@ -44,13 +46,11 @@
       flex-wrap: wrap;
     }
 
-    /* === ESTILOS DE BOTONES ACTUALIZADOS === */
     .botones button {
       padding: 15px 30px;
       font-size: 16px;
       border: none;
       border-radius: 10px;
-      /* Gradiente de las otras páginas */
       background: linear-gradient(90deg,#d6001c,#a30015);
       color: #fff;
       cursor: pointer;
@@ -62,318 +62,155 @@
       filter: brightness(0.9);
     }
 
-    /* === ESTILOS DE CONTENIDO ACTUALIZADOS === */
     #contenido {
-      max-width: 1200px; /* Ancho consistente */
-      margin: 28px auto; /* Margen consistente */
-      background-color: #ffffff; /* Fondo de tarjeta blanco */
+      max-width: 1200px;
+      margin: 28px auto;
+      background-color: #ffffff;
       color: #333;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      min-height: 400px;
     }
-    
-    /* Estilos para el contenido de métricas inyectado */
-    #contenido .kpis {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    #contenido .kpi {
-      background: #fdf3f3;
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #f4bebe;
-    }
-    #contenido .kpi .value {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #b33f4f;
-    }
-    #contenido .kpi .label {
-      font-size: 0.9rem;
-      color: #666;
-    }
-    #contenido .charts {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-     @media (max-width: 768px) {
-       #contenido .charts {
-         grid-template-columns: 1fr;
-       }
-     }
-    #contenido .chart-wrap,
-    #contenido .mini-card {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 8px;
-    }
-    #contenido canvas {
-      width: 100%;
-      /* height: 200px; */ /* Dejamos que el script de métricas defina la altura */
-      background: #f9f9f9;
-      border: 1px dashed #ccc;
-      display: block;
-    }
-    /* Estilos de metricas.html adaptados */
-    #contenido .table { margin-top:12px; width:100%; border-collapse:collapse; font-size:0.95rem; }
-    #contenido .table th, #contenido .table td { padding:10px 8px; border-bottom:1px solid #eee; text-align:left }
-    #contenido .table th { background: #faf5f4; font-weight:700; color: #b33f4f }
-    #contenido .btn { padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700; text-decoration: none;}
-    #contenido .btn-primary { background: linear-gradient(90deg,#d6001c,#a30015); color:white }
-    #contenido .btn-ghost { background:transparent; border:1px solid rgba(0,0,0,0.06); color:#b33f4f }
-    #contenido .muted { color:#666; }
 
-
-    /* === ESTILOS DE TÍTULO ACTUALIZADOS === */
     .titulo-contenido {
-      font-family: 'Playfair Display', serif; /* Fuente de título */
+      font-family: 'Playfair Display', serif;
       font-size: 24px;
       margin-bottom: 20px;
-      color: #b33f4f; /* Mantenemos el rojo del panel */
+      color: #b33f4f;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: left;
-    }
-    
-    /* Mantenemos el tema de tabla del panel */
-    th {
-      background-color: #f4bebe;
-      color: #333;
-    }
-
-    tr:nth-child(even) {
-      background-color: #fdf3f3;
-    }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    th { background-color: #f4bebe; color: #333; }
+    tr:nth-child(even) { background-color: #fdf3f3; }
 
     .acciones button {
-      padding: 6px 12px;
-      margin: 0 5px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.9em;
+      padding: 6px 12px; margin: 0 5px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em;
     }
+    .btn-editar { background-color: #FFA000; color: white; }
+    .btn-eliminar { background-color: #C62828; color: white; }
 
-    .btn-editar {
-      background-color: #FFA000;
-      color: white;
+    /* Estilos Gestión Pedidos (RESTAURADOS) */
+    .admin-layout { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+    @media (max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
+    .pedidos-lista-cont { background: #fff5f5; border-radius: 8px; padding: 15px; max-height: 700px; overflow-y: auto; border: 1px solid #ffdada; }
+    .pedido-card-mini { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; border-left: 4px solid transparent; }
+    .pedido-card-mini:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .pedido-card-mini.active { border-left-color: #d6001c; background: #fffbfb; box-shadow: 0 4px 15px rgba(214,0,28,0.1); }
+    .pedido-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold; color: #333; }
+    .pedido-meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: #666; }
+    .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; color: white; font-weight: bold; }
+    .bg-recibido { background-color: #a30015; }
+    .bg-proceso { background-color: #f4a261; }
+    .bg-camino { background-color: #2a9d8f; }
+    .bg-entregado { background-color: #28a745; }
+    .pedido-detalle { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+    .timeline-step { display: flex; margin-bottom: 15px; }
+    .timeline-bullet { width: 12px; height: 12px; border-radius: 50%; background: #ddd; margin-right: 10px; margin-top: 5px; }
+    .timeline-step.active .timeline-bullet { background: #d6001c; box-shadow: 0 0 0 3px rgba(214,0,28,0.2); }
+
+    /* Estilos Métricas */
+    .kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 12px; }
+    @media (max-width:920px){ .kpis{grid-template-columns: repeat(2,1fr)} }
+    .kpi { background: linear-gradient(90deg, rgba(214,0,28,0.06), rgba(214,0,28,0.02)); border-radius: 12px; padding: 12px; }
+    .kpi .value { font-size: 1.4rem; font-weight: 800; color: #a30015; }
+    .kpi .label { color: #666; font-size: 0.9rem; }
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+    .chart-wrap { padding: 12px; border-radius: 10px; background: #fff; border: 1px solid #eee; height: 300px; }
+
+    /* Formularios Edición */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+    .modal-contenido { background: #ffffff; color: #333; border-radius: 12px; padding: 30px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); font-family: 'Open Sans', sans-serif; }
+    .modal-contenido h2 { font-family: 'Playfair Display', serif; color: #b33f4f; text-align: center; margin-top: 0; }
+    .modal-contenido label { display: block; margin-top: 15px; font-weight: bold; }
+    .modal-contenido input, .modal-contenido textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; }
+    .modal-botones { margin-top: 25px; text-align: center; display: flex; justify-content: center; gap: 10px; }
+
+    /* === ESTILOS MODAL NOTIFICACIÓN (NUEVO DISEÑO ACORDE A IMAGEN) === */
+    .custom-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 3000; /* Z-index superior para evitar que otros modales lo tapen */
+      display: none; justify-content: center; align-items: center;
+      backdrop-filter: blur(2px); opacity: 0; transition: opacity 0.3s ease;
     }
+    .custom-modal-overlay.open { display: flex; opacity: 1; }
+    
+    .custom-modal-box {
+      background: white; 
+      padding: 35px 30px; 
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 380px; 
+      width: 90%; 
+      text-align: center;
+      transform: translateY(20px); 
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .custom-modal-overlay.open .custom-modal-box { transform: translateY(0); }
 
-    .btn-eliminar {
-      background-color: #C62828;
-      color: white;
+    /* Icono X o Check */
+    .custom-modal-icon { 
+      font-size: 4rem; 
+      margin-bottom: 10px; 
+      display: block;
+      line-height: 1;
     }
     
-    /* === INICIO: NUEVOS ESTILOS PARA GESTIÓN DE PEDIDOS === */
-    #contenido .admin-layout {
-      display: grid;
-      grid-template-columns: 400px 1fr; /* Lista a la izquierda, detalle a la derecha */
-      gap: 20px;
+    /* Título Serif Rojo Oscuro */
+    .custom-modal-title { 
+      font-size: 1.8rem; 
+      font-weight: 700; 
+      margin-bottom: 10px; 
+      color: #9e0e23; /* Rojo oscuro similar al de la imagen */
+      font-family: 'Playfair Display', serif; 
     }
-    @media (max-width: 900px) {
-      #contenido .admin-layout { grid-template-columns: 1fr; }
+    
+    /* Texto gris */
+    .custom-modal-msg { 
+      font-size: 1rem; 
+      margin-bottom: 25px; 
+      color: #666; 
+      line-height: 1.5; 
+      font-family: 'Open Sans', sans-serif;
     }
-
-    #contenido .pedidos-lista-cont {
-      background: #fdf3f3;
+    
+    /* Botonera */
+    .custom-modal-actions { 
+      display: flex; 
+      justify-content: center; 
+      gap: 15px; 
+    }
+    
+    /* Botón Rojo Redondeado (Estilo Entendido/Aceptar) */
+    .custom-btn {
+      padding: 12px 35px; 
+      border: none; 
       border-radius: 8px;
-      padding: 10px;
-      max-height: 70vh;
-      overflow-y: auto;
-      border: 1px solid #f4bebe;
+      font-weight: 700; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+      font-size: 1rem;
+      font-family: 'Open Sans', sans-serif;
+      width: 100%; /* Para botones de acción única como "Entendido" */
     }
     
-    #contenido .pedido-card-mini {
-      background: #fff;
-      border: 1px solid #f0f0f0;
-      border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: box-shadow 0.2s, border-left 0.2s;
+    .btn-modal-confirm { 
+      background-color: #c90d2d; /* Rojo fuerte similar a la imagen */
+      color: white; 
+      box-shadow: 0 4px 10px rgba(201, 13, 45, 0.3);
     }
-    #contenido .pedido-card-mini:hover {
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    #contenido .pedido-card-mini.active {
-      border-left: 4px solid #d6001c;
-      box-shadow: 0 4px 12px rgba(214,0,28,0.1);
+    .btn-modal-confirm:hover { 
+      background-color: #a30015; 
+      transform: translateY(-2px);
     }
     
-    #contenido .pedido-meta { display: flex; justify-content: space-between; font-size: 0.9rem; align-items: center;}
-    #contenido .pedido-status { font-weight: bold; padding: 2px 6px; border-radius: 4px; color: white; font-size: 0.8rem;}
-    
-    /* Clases de estado (deben coincidir con el JS) */
-    #contenido .status-recibido { background-color: #a30015; }
-    #contenido .status-en-preparacion { background-color: #f4a261; color: #333; }
-    #contenido .status-en-camino { background-color: #2a9d8f; }
-    #contenido .status-entregado { background-color: #28a745; }
-    
-    #contenido .admin-timeline { display: flex; flex-direction: column; gap: 14px; padding: 12px; }
-    #contenido .admin-timeline .step { display: flex; gap: 12px; align-items: flex-start; }
-    #contenido .admin-timeline .step .bullet { width: 14px; height: 14px; border-radius: 50%; background: #eee; margin-top: 4px; flex-shrink: 0; border: 2px solid #f0f0f0; }
-    #contenido .admin-timeline .step.done .bullet { background: linear-gradient(90deg,#d6001c,#a30015); box-shadow: 0 6px 16px rgba(163,0,21,0.18); border-color: transparent; }
-    #contenido .admin-timeline .step .when { font-size: 0.85rem; color: #666; }
-
-    #contenido .admin-status-controls {
-      margin-top: 20px;
-      padding: 20px;
-      border-top: 1px solid #eee;
-      background: #fafafa;
-      border-radius: 8px;
+    .btn-modal-cancel { 
+      background-color: #f0f0f0; 
+      color: #555; 
     }
-    #contenido .admin-status-controls label { font-weight: bold; display: block; margin-bottom: 10px; font-size: 1.1em; color: #b33f4f; }
-    #contenido .admin-status-controls .btn-update {
-      padding: 10px 15px;
-      margin: 0 5px 5px 0;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      background: #6c757d;
-      color: white;
-    }
-    #contenido .admin-status-controls .btn-update.active {
-      background: #28a745; /* Verde para el estado actual */
-    }
-    #contenido .admin-status-controls .btn-update:not(.active):hover {
-      filter: brightness(0.9);
-    }
-    #contenido .admin-status-controls .btn-update:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    /* === FIN: NUEVOS ESTILOS === */
-
-
-    /* Modal (se mantiene para uso futuro) */
-    #modalEditar {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-      /* Overlay */
-  #modalEditar {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-/* Modal overlay */
-#modalEditar {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-/* Modal content */
-.modal-contenido {
-  background: #ffffff;
-  color: #333333;
-  border-radius: 12px;
-  padding: 20px 30px;
-  max-width: 500px;
-  width: 90%;
-  max-height: 80vh;            /* Limita altura */
-  overflow-y: auto;            /* Scroll si hay exceso */
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  font-family: 'Segoe UI', sans-serif; /* Mantenemos fuente legible para modal */
-}
-
-/* Título centrado */
-.modal-contenido h2 {
-  font-family: 'Playfair Display', serif; /* Título de modal */
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  color: #b33f4f;
-  text-align: center;
-}
-
-/* Etiquetas y campos con más espacio */
-.modal-contenido label {
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 6px;
-  font-weight: bold;
-}
-.modal-contenido input,
-.modal-contenido textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1em;
-  font-family: inherit;
-  margin-bottom: 10px;       /* espacio extra */
-}
-.modal-contenido textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-/* Botones siempre visibles al fondo */
-.modal-contenido .modal-botones {
-  position: sticky;
-  bottom: 0;
-  background: #fff;
-  padding-top: 15px;
-  text-align: center;
-  margin-top: 10px;
-  border-top: 1px solid #eee;
-}
-.modal-contenido .modal-botones button {
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.modal-contenido .modal-botones button[type="submit"] {
-  background-color: #28a745;
-  color: white;
-}
-.modal-contenido .modal-botones button[type="submit"]:hover {
-  background-color: #218838;
-}
-.modal-contenido .modal-botones button[type="button"] {
-  background-color: #ccc;
-  color: #333;
-}
-.modal-contenido .modal-botones button[type="button"]:hover {
-  background-color: #bbb;
-}
+    .btn-modal-cancel:hover { background-color: #e0e0e0; }
 
   </style>
 </head>
@@ -388,829 +225,469 @@
   <button onclick="mostrarFormularioAgregarPostre()">Agregar Postre</button>
   <button onclick="mostrarUsuarios()">Gestión de Usuarios</button>
   <button onclick="mostrarMetricas()">Ver Métricas</button>
-  <!-- NUEVO BOTÓN -->
   <button onclick="mostrarSeguimiento()">Gestión de Pedidos</button>
 </div>
 
 <div id="contenido">
-  <p classtitulo-contenido">Selecciona una opción para comenzar</p>
+  <p class="titulo-contenido" style="text-align:center;">Selecciona una opción para comenzar</p>
+</div>
+
+<!-- ========================================== -->
+<!-- MODALES DE EDICIÓN (Formularios) -->
+<!-- ========================================== -->
+<div id="modalEditar" class="modal-overlay">
+  <div class="modal-contenido">
+    <h2>Editar Receta</h2>
+    <form id="formEditarPostre">
+      <input type="hidden" id="editar_id" name="id">
+      <label>Título</label><input type="text" id="editar_titulo" name="titulo" required>
+      <label>Descripción</label><textarea id="editar_descripcion" name="descripcion" rows="3" required></textarea>
+      <label>Precio</label><input type="number" step="0.01" id="editar_precio" name="precio" required>
+      <label>Categoría</label><input type="text" id="editar_categoria" name="categoria">
+      <label>Tamaño</label><input type="text" id="editar_tamanio" name="tamanio">
+      <label>Sabor</label><input type="text" id="editar_sabor" name="sabor">
+      <label>URL Imagen</label><input type="text" id="editar_imagen_url" name="imagen_url">
+      <label>Stock</label><input type="number" id="editar_stock" name="stock">
+      <div class="modal-botones">
+        <button type="submit" class="btn-editar">Guardar</button>
+        <button type="button" class="btn-eliminar" onclick="cerrarModalesEdicion()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="modalEditarUsuario" class="modal-overlay">
+  <div class="modal-contenido">
+    <h2>Editar Usuario</h2>
+    <form id="formEditarUsuario">
+      <input type="hidden" id="usuario_id" name="id">
+      <label>Correo</label><input type="email" id="usuario_correo" name="correo" required>
+      <label>Contraseña</label><input type="text" id="usuario_pass" name="pass" required>
+      <div class="modal-botones">
+        <button type="submit" class="btn-editar">Guardar</button>
+        <button type="button" class="btn-eliminar" onclick="cerrarModalesEdicion()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DE NOTIFICACIÓN (Nuevo Diseño) -->
+<!-- ========================================== -->
+<div id="custom-modal-overlay" class="custom-modal-overlay">
+  <div class="custom-modal-box">
+    <div id="custom-modal-icon" class="custom-modal-icon"></div>
+    <div id="custom-modal-title" class="custom-modal-title"></div>
+    <div id="custom-modal-msg" class="custom-modal-msg"></div>
+    <div id="custom-modal-actions" class="custom-modal-actions"></div>
+  </div>
 </div>
 
 <script>
-  // =================================================================
-  // --- "Base de datos" simulada de pedidos ---
-  // =================================================================
-  let pedidosSimulados = [
-    {
-      id: 923153,
-      cliente: "Ana García",
-      telefono: "4491234567",
-      total: 23.98,
-      estadoActual: "Recibido",
-      items: [
-        { titulo: "Gelatina de frutas", cantidad: 2, precio: 11.99 }
-      ],
-      historial: [
-        { estado: "Recibido", fecha: "2025-11-04T10:05:58" }
-      ],
-      notas: "Cliente nuevo, posible alergia a nueces."
-    },
-    {
-      id: 923152,
-      cliente: "Carlos Mendoza",
-      telefono: "4498765432",
-      total: 150.00,
-      estadoActual: "En preparación",
-      items: [
-        { titulo: "Pastel de Chocolate", cantidad: 1, precio: 150.00 }
-      ],
-      historial: [
-        { estado: "Recibido", fecha: "2025-11-04T09:30:12" },
-        { estado: "En preparación", fecha: "2025-11-04T09:45:00" }
-      ],
-      notas: "Pasará a recoger a las 3pm."
-    },
-    {
-      id: 923150,
-      cliente: "Sofía Reyes",
-      telefono: "4491112222",
-      total: 95.50,
-      estadoActual: "En camino",
-      items: [
-        { titulo: "Cheesecake Fresa", cantidad: 1, precio: 60.00 },
-        { titulo: "Caja Galletas 12pz", cantidad: 1, precio: 35.50 }
-      ],
-      historial: [
-        { estado: "Recibido", fecha: "2025-11-03T18:15:00" },
-        { estado: "En preparación", fecha: "2025-11-03T18:30:00" },
-        { estado: "En camino", fecha: "2025-11-03T19:00:00" }
-      ],
-      notas: "Entregar en Av. Madero #123"
-    }
-  ];
-  
-  const adminEstados = ['Recibido', 'En preparación', 'En camino', 'Entregado'];
-  let adminPedidoSeleccionado = null;
+  // =========================================
+  // 1. SISTEMA DE MODALES PERSONALIZADOS
+  // =========================================
+  // Función principal para mostrar mensajes (Alerta, Éxito, Error)
+  function showModal(message, title = "Aviso", icon = "ℹ️", isError = false) {
+    return new Promise(resolve => {
+      const overlay = document.getElementById('custom-modal-overlay');
+      const titleEl = document.getElementById('custom-modal-title');
+      const msgEl = document.getElementById('custom-modal-msg');
+      const iconEl = document.getElementById('custom-modal-icon');
+      const actions = document.getElementById('custom-modal-actions');
 
+      overlay.style.display = 'flex';
+      void overlay.offsetWidth; // Trigger reflow
+      overlay.classList.add('open');
 
-  // =================================================================
-  // --- INICIO: LÓGICA DE MÉTRICAS (copiada de metricas.html) ---
-  // =================================================================
-  
-  // Utilities
-  function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-  function fmt(n){ return n.toLocaleString(); }
-  function daysArray(n){
-    const arr=[]; const today=new Date();
-    for(let i=n-1;i>=0;i--){
-      const d=new Date(today); d.setDate(today.getDate()-i);
-      arr.push(d);
-    }
-    return arr;
-  }
-  // top products simulated
-  const sampleProducts = [
-    'Pastel Chocolate 20cm','Red Velvet','Cheesecake Fresa','Caja Galletas 12pz',
-    'Cupcakes surtidos','Brownie gigante','Pie manzana','Tarta-frutas'
-  ];
-
-  // Simple chart drawing (canvas)
-  function drawLineChart(canvas, labels, visitas, pedidos){
-    if (!canvas) return; // Añadido safety check
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
-    const h = canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
-    ctx.clearRect(0,0,w,h);
-
-    // margins
-    const m = {l:40*(window.devicePixelRatio || 1), r:20*(window.devicePixelRatio || 1), t:16*(window.devicePixelRatio || 1), b:30*(window.devicePixelRatio || 1)};
-    const gw = w - m.l - m.r;
-    const gh = h - m.t - m.b;
-
-    const maxV = Math.max(...visitas) || 1;
-    const maxP = Math.max(...pedidos) || 1;
-    const maxAll = Math.max(maxV, maxP);
-    // scale
-    function x(i){ return m.l + (i/(labels.length-1 || 1))*gw; }
-    function yV(val){ return m.t + gh - (val/maxAll)*gh; }
-
-    // grid
-    ctx.strokeStyle = '#eee'; ctx.lineWidth = 1*(window.devicePixelRatio || 1);
-    for(let i=0;i<=4;i++){
-      const yy = m.t + (gh/4)*i;
-      ctx.beginPath(); ctx.moveTo(m.l, yy); ctx.lineTo(m.l+gw, yy); ctx.stroke();
-    }
-
-    // visitas (brand color)
-    ctx.beginPath();
-    ctx.lineWidth = 2.5*(window.devicePixelRatio || 1);
-    ctx.strokeStyle = 'rgba(214,90,63,0.95)'; // brand color
-    for(let i=0;i<visitas.length;i++){
-      const xi = x(i), yi=yV(visitas[i]);
-      if(i===0) ctx.moveTo(xi, yi); else ctx.lineTo(xi, yi);
-    }
-    ctx.stroke();
-
-    // pedidos (area under)
-    ctx.beginPath();
-    ctx.fillStyle = 'rgba(163,0,21,0.12)';
-    for(let i=0;i<pedidos.length;i++){
-      const xi=x(i), yi=yV(pedidos[i]);
-      if(i===0) ctx.moveTo(xi, yi); else ctx.lineTo(xi, yi);
-    }
-    // close shape to bottom
-    ctx.lineTo(m.l+gw, m.t+gh); ctx.lineTo(m.l, m.t+gh); ctx.closePath();
-    ctx.fill();
-
-    // points and labels small
-    ctx.fillStyle = '#fff';
-    ctx.strokeStyle = 'rgba(214,90,63,0.95)';
-    for(let i=0;i<visitas.length;i++){
-      const xi=x(i), yi=yV(visitas[i]);
-      ctx.beginPath(); ctx.arc(xi, yi, 3*(window.devicePixelRatio || 1), 0, Math.PI*2); ctx.fill(); ctx.stroke();
-    }
-
-    // X labels (sparse)
-    ctx.fillStyle = '#444'; ctx.font = `${11*(window.devicePixelRatio || 1)}px sans-serif`; ctx.textAlign='center';
-    const step = Math.ceil(labels.length/6);
-    for(let i=0;i<labels.length;i+=step){
-      const xi=x(i); const txt=labels[i].toLocaleDateString();
-      ctx.fillText(txt, xi, h - 6*(window.devicePixelRatio || 1));
-    }
-  }
-
-  function drawBarChart(canvas, labels, values){
-    if (!canvas) return; // Añadido safety check
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
-    const h = canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
-    ctx.clearRect(0,0,w,h);
-
-    const m = {l:36*(window.devicePixelRatio || 1), r:20*(window.devicePixelRatio || 1), t:18*(window.devicePixelRatio || 1), b:36*(window.devicePixelRatio || 1)};
-    const gw = w - m.l - m.r;
-    const gh = h - m.t - m.b;
-
-    const maxV = Math.max(...values,1);
-    const barW = gw / (labels.length*1.6);
-
-    labels.forEach((lbl,i)=>{
-      const x = m.l + i*(barW*1.4) + 6*(window.devicePixelRatio || 1);
-      const barH = (values[i]/maxV) * gh;
-      const y = m.t + (gh - barH);
-      ctx.fillStyle = ['#e76f51','#f4a261','#e9c46a','#2a9d8f'][i%4];
-      ctx.fillRect(x, y, barW, barH);
-      // label
-      ctx.fillStyle = '#333';
-      ctx.font = `${11*(window.devicePixelRatio || 1)}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.fillText(labels[i], x+barW/2, h - 8*(window.devicePixelRatio || 1));
-    });
-  }
-
-  // generate simulated data
-  function genData(days){
-    const dates = daysArray(days);
-    const visitas = dates.map((d)=> rnd(120, 450));
-    // clicks correlated with visits
-    const clics = visitas.map(v => Math.max(5, Math.round(v * (Math.random()*0.12+0.04))));
-    // pedidos small fraction
-    const pedidos = visitas.map((v,i)=> Math.max(0, Math.round((clics[i] * (Math.random()*0.25 + 0.08)))));
-    // revenue = pedidos * average order
-    const ingresos = pedidos.map(p => Number((p * (rnd(200,550))).toFixed(2)));
-    return { dates, visitas, clics, pedidos, ingresos };
-  }
-  
-  // render UI with data
-  function renderAllMetrics(days){
-    // ADAPTACIÓN: Obtenemos elementos del DOM (que están en #contenido)
-    const k_visitas = document.getElementById('k_visitas');
-    if (!k_visitas) { 
-      // console.warn("renderAllMetrics: Elementos de métricas no encontrados."); 
-      return; 
-    }
-    const k_clics = document.getElementById('k_clics');
-    const k_pedidos = document.getElementById('k_pedidos');
-    const k_conv = document.getElementById('k_conv');
-    const k_visitas_diff = document.getElementById('k_visitas_diff');
-    const k_clics_diff = document.getElementById('k_clics_diff');
-    const k_pedidos_diff = document.getElementById('k_pedidos_diff');
-    const k_conv_diff = document.getElementById('k_conv_diff');
-    const lastUpdate = document.getElementById('lastUpdate');
-    const lineCanvas = document.getElementById('lineChart');
-    const barCanvas = document.getElementById('barChart');
-    const eventsTableBody = document.querySelector('#eventsTable tbody');
-    const topProductsList = document.getElementById('topProducts');
-
-    
-    const data = genData(days);
-    const labels = data.dates;
-    // KPIs
-    const totalVisitas = data.visitas.reduce((a,b)=>a+b,0);
-    const totalClics = data.clics.reduce((a,b)=>a+b,0);
-    const totalPedidos = data.pedidos.reduce((a,b)=>a+b,0);
-    const totalIngresos = data.ingresos.reduce((a,b)=>a+b,0);
-    const conv = totalVisitas ? ((totalPedidos/totalVisitas)*100) : 0;
-
-    k_visitas.textContent = fmt(totalVisitas);
-    k_clics.textContent = fmt(totalClics);
-    k_pedidos.textContent = fmt(totalPedidos);
-    k_conv.textContent = `${conv.toFixed(2)}%`;
-
-    // diffs (randomized for demo)
-    k_visitas_diff.textContent = `vs período anterior: ${ (rnd(-12,20)>0?'+':'') + rnd(-12,20) }%`;
-    k_clics_diff.textContent = `vs anterior: ${(rnd(-8,14)>0?'+':'') + rnd(-8,14)}%`;
-    k_pedidos_diff.textContent = `vs anterior: ${(rnd(-6,10)>0?'+':'') + rnd(-6,10)}%`;
-    k_conv_diff.textContent = `vs anterior: ${(rnd(-3,6)>0?'+':'') + rnd(-3,6)}%`;
-
-    lastUpdate.textContent = new Date().toLocaleString();
-
-    // draw charts
-    if (lineCanvas) {
-      drawLineChart(lineCanvas, labels, data.visitas, data.pedidos);
-    }
-    if (barCanvas) {
-      drawBarChart(barCanvas, ['IG','FB','WA','Direct'], [rnd(100,400), rnd(60,260), rnd(30,180), rnd(10,90)]);
-    }
-
-    // events table (recent)
-    if (eventsTableBody) {
-      eventsTableBody.innerHTML = '';
-      for(let i=0;i<8;i++){
-        const d = new Date();
-        d.setDate(d.getDate() - rnd(0, days-1));
-        const ev = ['Visita','Clic','Pedido confirmado','Mensaje WhatsApp','Suscripción'][rnd(0,4)];
-        const det = ev==='Pedido confirmado' ? `Pedido #${rnd(100000,999999)}` : (ev==='Mensaje WhatsApp' ? 'Consulta horario' : '');
-        const val = ev==='Pedido confirmado' ? `$${rnd(180,720)}` : (ev==='Clic' ? 'Ir a producto' : '');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${d.toLocaleString()}</td><td>${ev}</td><td>${det}</td><td>${val}</td>`;
-        eventsTableBody.appendChild(tr);
+      // Estilos según error o éxito (emulando la imagen)
+      if (isError) {
+        iconEl.innerHTML = '❌'; 
+        iconEl.style.color = '#ff4d6d'; // Rosa/Rojo suave para la X
+        titleEl.style.color = '#a30015'; // Rojo oscuro para el título
+        titleEl.textContent = title || "Error";
+      } else {
+        iconEl.innerHTML = '✅';
+        iconEl.style.color = '#2e7d32'; // Verde para éxito
+        titleEl.style.color = '#2e7d32';
+        titleEl.textContent = title || "Éxito";
       }
-    }
-
-    // top products
-    if (topProductsList) {
-      topProductsList.innerHTML = '';
-      // sort sample by random popularity
-      const shuffled = sampleProducts.map(p=>({p, s:rnd(20,120)})).sort((a,b)=>b.s-a.s);
-      shuffled.slice(0,5).forEach(x=>{
-        const li = document.createElement('li');
-        li.textContent = `${x.p} — ${x.s} pedidos`;
-        topProductsList.appendChild(li);
-      });
-    }
-
-    // store "data" for CSV export
-    window.__metrics_last_export = { labels: labels.map(d=>d.toISOString().slice(0,10)), visitas: data.visitas, clics: data.clics, pedidos: data.pedidos, ingresos: data.ingresos };
-  }
-
-  // download CSV
-  function downloadCSVMetrics(){
-    const d = window.__metrics_last_export;
-    if(!d){ return; }
-    let csv = 'date,visitas,clics,pedidos,ingresos\n';
-    for(let i=0;i<d.labels.length;i++){
-      csv += `${d.labels[i]},${d.visitas[i]},${d.clics[i]},${d.pedidos[i]},${d.ingresos[i]}\n`;
-    }
-    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `metricas_${new Date().toISOString().slice(0,10)}.csv`; document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  // Export charts as PNG (combine canvases)
-  function exportPNGMetrics(){
-    const lineCanvas = document.getElementById('lineChart');
-    const barCanvas = document.getElementById('barChart');
-    if (!lineCanvas || !barCanvas) {
-        return;
-    }
-    // create a single canvas, draw both charts stacked
-    const w = Math.max(lineCanvas.width, barCanvas.width);
-    const h = lineCanvas.height + barCanvas.height + 30*(window.devicePixelRatio || 1);
-    const out = document.createElement('canvas');
-    out.width = w; out.height = h;
-    const ctx = out.getContext('2d');
-    // white background
-    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
-    // draw line
-    ctx.drawImage(lineCanvas, 0, 0, w, lineCanvas.height);
-    // draw bar (below)
-    ctx.drawImage(barCanvas, 0, lineCanvas.height + 20*(window.devicePixelRatio || 1), w, barCanvas.height);
-    // download
-    const url = out.toDataURL('image/png');
-    const a = document.createElement('a'); a.href = url; a.download = `metricas_graficos_${new Date().toISOString().slice(0,10)}.png`; document.body.appendChild(a); a.click(); a.remove();
-  }
-
-  // initial render
-  function initMetrics(){
-    // ADAPTACIÓN: Obtenemos elementos y asignamos listeners
-    const rangeSel = document.getElementById('range');
-    const btnRefresh = document.getElementById('btnRefresh');
-    const dateFrom = document.getElementById('dateFrom');
-    const dateTo = document.getElementById('dateTo');
-    const btnDownload = document.getElementById('btnDownload');
-    const btnExportPNG = document.getElementById('btnExportPNG');
-    const btnClear = document.getElementById('btnClear');
-
-    if(!rangeSel || !btnRefresh) {
-      // console.warn("initMetrics: No se pudieron encontrar los botones de métricas para asignar listeners.");
-      return;
-    }
-    
-    const days = Number(rangeSel.value || 30);
-    renderAllMetrics(days);
-    // set date inputs to range
-    const to = new Date(); const from = new Date(); from.setDate(to.getDate() - (days-1));
-    if (dateFrom) dateFrom.value = from.toISOString().slice(0,10);
-    if (dateTo) dateTo.value = to.toISOString().slice(0,10);
-
-    // Asignamos eventos usando .onclick para evitar duplicados
-    btnRefresh.onclick = ()=>{ renderAllMetrics(Number(rangeSel.value)); };
-    btnDownload.onclick = downloadCSVMetrics;
-    btnExportPNG.onclick = exportPNGMetrics;
-    btnClear.onclick = ()=>{ initMetrics(); };
-
-    // date inputs influence: compute days between and re-render
-    [dateFrom, dateTo].forEach(inp=>{
-      if (inp) {
-        inp.onchange = ()=>{
-          const from = new Date(dateFrom.value); const to = new Date(dateTo.value);
-          if(isNaN(from)||isNaN(to) || from>to){ return; }
-          const diff = Math.ceil((to - from)/(1000*60*60*24)) + 1;
-          renderAllMetrics(diff);
-        };
-      }
-    });
-  }
-
-  // =================================================================
-  // --- FIN: LÓGICA DE MÉTRICAS ---
-  // =================================================================
-
-
-  // =================================================================
-  // --- INICIO: NUEVA LÓGICA DE GESTIÓN DE PEDIDOS ---
-  // =================================================================
-
-  function mostrarSeguimiento() {
-    adminPedidoSeleccionado = null; // Resetea la selección
-    document.getElementById("contenido").innerHTML = `
-      <p class="titulo-contenido">Gestión de Pedidos</p>
       
-      <!-- Controles Superiores -->
-      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <input type="text" id="admin-buscar-pedido" placeholder="Buscar por ID o cliente..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-        <button id="admin-btn-generar" class="btn btn-primary" style="background: #28a745;">Generar Pedido Falso</button>
-      </div>
-      
-      <!-- Layout de Admin -->
-      <div class="admin-layout">
-        <!-- Columna Izquierda: Lista de Pedidos -->
-        <div class="pedidos-lista-cont" id="admin-pedidos-lista">
-          <!-- Los pedidos se renderizarán aquí -->
-        </div>
-        
-        <!-- Columna Derecha: Detalle del Pedido -->
-        <div class="pedidos-detalle-cont" id="admin-pedido-detalle">
-          <p class="muted">Selecciona un pedido de la lista para ver los detalles y administrarlo.</p>
-        </div>
-      </div>
-    `;
-    
-    // Inmediatamente después de inyectar el HTML, inicializa los listeners
-    initSeguimiento();
-  }
+      msgEl.innerHTML = message;
 
-  function initSeguimiento() {
-    // Asignar listeners a los controles principales
-    document.getElementById('admin-buscar-pedido').addEventListener('input', (e) => {
-      renderListaPedidos(e.target.value);
-    });
-    
-    document.getElementById('admin-btn-generar').addEventListener('click', () => {
-      // Genera un nuevo pedido simulado
-      const nuevoId = Math.floor(923160 + Math.random() * 100);
-      const clientes = ["Miguel Lopez", "Lucia Fernandez", "Javier Torres"];
-      const items = [
-        { titulo: "Red Velvet", cantidad: 1, precio: 180.00 },
-        { titulo: "Cupcakes Surtidos", cantidad: 2, precio: 25.00 }
-      ];
+      actions.innerHTML = `<button class="custom-btn btn-modal-confirm" id="btn-modal-ok">Entendido</button>`;
       
-      const nuevoPedido = {
-        id: nuevoId,
-        cliente: clientes[Math.floor(Math.random() * clientes.length)],
-        telefono: "449" + Math.floor(1000000 + Math.random() * 9000000),
-        total: 230.00,
-        estadoActual: "Recibido",
-        items: items,
-        historial: [
-          { estado: "Recibido", fecha: new Date().toISOString() }
-        ],
-        notas: "Pedido generado automáticamente."
+      document.getElementById('btn-modal-ok').onclick = () => {
+        overlay.classList.remove('open');
+        setTimeout(() => { overlay.style.display = 'none'; resolve(); }, 300);
       };
-      
-      pedidosSimulados.unshift(nuevoPedido); // Añade al inicio de la lista
-      renderListaPedidos(document.getElementById('admin-buscar-pedido').value);
     });
+  }
+
+  // Función para confirmaciones (Eliminar, Cancelar, etc.)
+  function showConfirmation(message, title = "Confirmación") {
+    return new Promise(resolve => {
+      const overlay = document.getElementById('custom-modal-overlay');
+      const titleEl = document.getElementById('custom-modal-title');
+      const msgEl = document.getElementById('custom-modal-msg');
+      const iconEl = document.getElementById('custom-modal-icon');
+      const actions = document.getElementById('custom-modal-actions');
+
+      overlay.style.display = 'flex';
+      void overlay.offsetWidth;
+      overlay.classList.add('open');
+
+      iconEl.innerHTML = '❓';
+      iconEl.style.color = '#a30015';
+      titleEl.style.color = '#a30015';
+      titleEl.textContent = title;
+      msgEl.innerHTML = message;
+
+      actions.innerHTML = `
+        <button class="custom-btn btn-modal-cancel" id="btn-modal-no">Cancelar</button>
+        <button class="custom-btn btn-modal-confirm" id="btn-modal-yes" style="width:auto;">Sí, continuar</button>
+      `; // Botón 'Sí, continuar' más pequeño en confirmación
+
+      document.getElementById('btn-modal-yes').onclick = () => {
+        overlay.classList.remove('open');
+        setTimeout(() => { overlay.style.display = 'none'; resolve(true); }, 300);
+      };
+      document.getElementById('btn-modal-no').onclick = () => {
+        overlay.classList.remove('open');
+        setTimeout(() => { overlay.style.display = 'none'; resolve(false); }, 300);
+      };
+    });
+  }
+
+  function cerrarModalesEdicion() {
+    document.getElementById('modalEditar').style.display = 'none';
+    document.getElementById('modalEditarUsuario').style.display = 'none';
+  }
+
+  // =========================================
+  // 2. GESTIÓN DE PEDIDOS (Restaurada - Estática)
+  // =========================================
+  function mostrarSeguimiento() {
+    const html = `
+      <p class="titulo-contenido">Gestión de Pedidos</p>
+      <div style="margin-bottom:15px;">
+        <input type="text" placeholder="Buscar por ID o cliente..." style="width:100%; max-width:400px; padding:10px; border:1px solid #ccc; border-radius:6px;">
+      </div>
+      
+      <div class="admin-layout">
+        <!-- Columna Izquierda: Lista (Placeholders Fijos) -->
+        <div class="pedidos-lista-cont">
+          <div class="pedido-card-mini active" onclick="cargarDetallePedido(923153)">
+            <div class="pedido-header"><span>Pedido #923153</span> <span class="status-badge bg-recibido">Recibido</span></div>
+            <div class="pedido-meta"><span>Ana García</span> <span>$23.98</span></div>
+          </div>
+          <div class="pedido-card-mini" onclick="cargarDetallePedido(923152)">
+            <div class="pedido-header"><span>Pedido #923152</span> <span class="status-badge bg-proceso">En preparación</span></div>
+            <div class="pedido-meta"><span>Carlos Mendoza</span> <span>$150.00</span></div>
+          </div>
+          <div class="pedido-card-mini" onclick="cargarDetallePedido(923150)">
+            <div class="pedido-header"><span>Pedido #923150</span> <span class="status-badge bg-camino">En camino</span></div>
+            <div class="pedido-meta"><span>Sofía Reyes</span> <span>$95.50</span></div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Detalle -->
+        <div class="pedidos-detalle-cont" id="detallePedidoArea">
+          <!-- Cargar el primero por defecto -->
+          ${getDetalleHTML(923153)}
+        </div>
+      </div>
+    `;
+    document.getElementById('contenido').innerHTML = html;
+  }
+
+  // Datos simulados fijos (sin generador)
+  const pedidosData = {
+    923153: { id: 923153, cliente: "Ana García", tel: "4491234567", status: "Recibido", items: [{n:"Gelatina de frutas", p:11.99, q:2}], total: 23.98 },
+    923152: { id: 923152, cliente: "Carlos Mendoza", tel: "4498765432", status: "En preparación", items: [{n:"Pastel de Chocolate", p:150.00, q:1}], total: 150.00 },
+    923150: { id: 923150, cliente: "Sofía Reyes", tel: "4491112222", status: "En camino", items: [{n:"Cheesecake Fresa", p:60.00, q:1}, {n:"Caja Galletas", p:35.50, q:1}], total: 95.50 }
+  };
+
+  function cargarDetallePedido(id) {
+    document.getElementById('detallePedidoArea').innerHTML = getDetalleHTML(id);
+    document.querySelectorAll('.pedido-card-mini').forEach(el => el.classList.remove('active'));
+  }
+
+  function getDetalleHTML(id) {
+    const p = pedidosData[id];
+    if(!p) return '';
+    let itemsHtml = p.items.map(i => `<li>(${i.q}x) ${i.n} - <strong>$${(i.p * i.q).toFixed(2)}</strong></li>`).join('');
+    return `
+      <div class="pedido-detalle">
+        <h3 style="margin-top:0; color:#b33f4f;">Detalle Pedido #${p.id}</h3>
+        <p><strong>Cliente:</strong> ${p.cliente} <br><small style="color:#666">${p.tel}</small></p>
+        <div style="background:#f9f9f9; padding:10px; border-radius:6px; margin:15px 0;">
+          <ul style="margin:0; padding-left:20px;">${itemsHtml}</ul>
+          <p style="text-align:right; margin:5px 0 0; font-weight:bold;">Total: $${p.total.toFixed(2)}</p>
+        </div>
+        <h4>Estado Actual: <span class="status-badge bg-recibido">${p.status}</span></h4>
+        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
+          <button class="btn-editar" onclick="simularActualizacion()">Avanzar Estado</button>
+          <button class="btn-eliminar" onclick="simularCancelacion()">Cancelar Pedido</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function simularActualizacion() {
+    showModal("El estado del pedido ha sido actualizado (Simulación).", "Actualizado", "✅");
+  }
+  
+  function simularCancelacion() {
+    showConfirmation("¿Seguro que deseas cancelar este pedido?").then(yes => {
+      if(yes) showModal("Pedido cancelado (Simulación).", "Cancelado", "ℹ️", true);
+    });
+  }
+
+  // =========================================
+  // 3. MÉTRICAS (Reparadas y Locales)
+  // =========================================
+  function mostrarMetricas() {
+    // Generar datos aleatorios para que siempre se vea vivo
+    const visitas = Math.floor(Math.random() * 5000) + 3000;
+    const pedidos = Math.floor(visitas * 0.08);
+    const conversion = ((pedidos/visitas)*100).toFixed(2);
     
-    // Listener para la lista (delegación de eventos)
-    document.getElementById('admin-pedidos-lista').addEventListener('click', (e) => {
-      const card = e.target.closest('.pedido-card-mini');
-      if (card) {
-        const pedidoId = card.dataset.id;
-        adminPedidoSeleccionado = pedidoId;
-        renderDetallePedido(pedidoId);
-        
-        // Manejar clase 'active'
-        document.querySelectorAll('.pedido-card-mini').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
+    let html = `
+      <p class="titulo-contenido">Panel de Métricas</p>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Visitas (30d)</div><div class="value">${visitas.toLocaleString()}</div></div>
+        <div class="kpi"><div class="label">Pedidos</div><div class="value">${pedidos}</div></div>
+        <div class="kpi"><div class="label">Tasa Conversión</div><div class="value">${conversion}%</div></div>
+        <div class="kpi"><div class="label">Ingresos Aprox.</div><div class="value">$${(pedidos * 120).toLocaleString()}</div></div>
+      </div>
+      
+      <div class="charts">
+        <div class="chart-wrap">
+          <canvas id="chartVisitas" height="250"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chartCanales" height="250"></canvas>
+        </div>
+      </div>
+    `;
+    document.getElementById('contenido').innerHTML = html;
+
+    // Renderizar gráficos con Chart.js
+    setTimeout(() => {
+      // Destruir instancias previas si existen (para evitar errores de canvas en reuso)
+      if(window.myChart1) window.myChart1.destroy();
+      if(window.myChart2) window.myChart2.destroy();
+
+      const ctx1 = document.getElementById('chartVisitas');
+      if(ctx1) {
+        window.myChart1 = new Chart(ctx1, {
+          type: 'line',
+          data: {
+            labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+            datasets: [{
+              label: 'Visitas',
+              data: [1200, 1900, 1500, 2200],
+              borderColor: '#d6001c',
+              backgroundColor: 'rgba(214,0,28,0.1)',
+              tension: 0.3, fill: true
+            }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: { y: { beginAtZero: true } }
+          }
+        });
       }
-    });
 
-    // Renderizar la lista inicial
-    renderListaPedidos();
-  }
-  
-  function renderListaPedidos(filtro = '') {
-    const cont = document.getElementById('admin-pedidos-lista');
-    if (!cont) return;
-    
-    const filtroLower = filtro.toLowerCase();
-    const pedidosFiltrados = pedidosSimulados.filter(p => 
-      p.id.toString().includes(filtroLower) || 
-      p.cliente.toLowerCase().includes(filtroLower)
-    );
-    
-    if (pedidosFiltrados.length === 0) {
-      cont.innerHTML = '<p class="muted" style="padding: 10px;">No se encontraron pedidos.</p>';
-      return;
-    }
-    
-    cont.innerHTML = pedidosFiltrados.map(p => {
-      const estadoClase = 'status-' + p.estadoActual.toLowerCase().replace(' ', '-');
-      return `
-        <div class="pedido-card-mini ${p.id == adminPedidoSeleccionado ? 'active' : ''}" data-id="${p.id}">
-          <strong>Pedido #${p.id}</strong>
-          <div class="pedido-meta" style="margin-top: 5px;">
-            <span>${p.cliente}</span>
-            <span class="pedido-status ${estadoClase}">${p.estadoActual}</span>
-          </div>
-          <div class="pedido-meta" style="margin-top: 5px;">
-            <span>Total:</span>
-            <strong>$${p.total.toFixed(2)}</strong>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-  
-  function renderDetallePedido(pedidoId) {
-    const cont = document.getElementById('admin-pedido-detalle');
-    const pedido = pedidosSimulados.find(p => p.id == pedidoId);
-    
-    if (!pedido) {
-      cont.innerHTML = '<p class="muted">Error: No se encontró el pedido.</p>';
-      return;
-    }
-
-    // 1. Renderizar Items
-    const itemsHtml = pedido.items.map(item => `
-      <li style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-        <span>(${item.cantidad}x) ${item.titulo}</span>
-        <strong>$${(item.cantidad * item.precio).toFixed(2)}</strong>
-      </li>
-    `).join('');
-
-    // 2. Renderizar Timeline (similar al del cliente)
-    const timelineHtml = adminEstados.map(estado => {
-      const historialEstado = pedido.historial.find(h => h.estado === estado);
-      const esDone = !!historialEstado;
-      
-      return `
-        <div class="step ${esDone ? 'done' : ''}">
-          <div class="bullet"></div>
-          <div class="content">
-            <div style="font-weight:800">${estado}</div>
-            ${esDone ? `<div class="when">${new Date(historialEstado.fecha).toLocaleString()}</div>` : ''}
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    // 3. Renderizar Controles de Admin
-    const estadoActualIndex = adminEstados.indexOf(pedido.estadoActual);
-    const controlesHtml = adminEstados.map((estado, index) => {
-      const esActual = (estado === pedido.estadoActual);
-      // Solo se puede avanzar o estar en el estado actual. No se puede retroceder.
-      const deshabilitado = (index < estadoActualIndex || esActual); 
-      
-      return `<button 
-                class="btn-update ${esActual ? 'active' : ''}" 
-                data-estado="${estado}"
-                ${deshabilitado ? 'disabled' : ''}
-                onclick="actualizarEstadoPedido('${pedido.id}', '${estado}')">
-                ${estado}
-              </button>`;
-    }).join('');
-
-    // 4. HTML Final
-    cont.innerHTML = `
-      <h3>Detalle Pedido #${pedido.id}</h3>
-      <div style="background: #fff7f7; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
-        <strong>Cliente:</strong> ${pedido.cliente} (${pedido.telefono})<br>
-        <strong>Notas:</strong> <span class="muted">${pedido.notas || 'Ninguna'}</span>
-      </div>
-      
-      <strong>Items:</strong>
-      <ul style="list-style: none; padding: 5px 0 15px 0;">${itemsHtml}</ul>
-      
-      <strong>Timeline:</strong>
-      <div class="admin-timeline">${timelineHtml}</div>
-      
-      <!-- Controles de Admin -->
-      <div class="admin-status-controls">
-        <label>Actualizar Estado del Pedido:</label>
-        <div>${controlesHtml}</div>
-      </div>
-    `;
-  }
-  
-  function actualizarEstadoPedido(pedidoId, nuevoEstado) {
-    const pedidoIndex = pedidosSimulados.findIndex(p => p.id == pedidoId);
-    if (pedidoIndex === -1) return;
-    
-    // "Actualiza la base de datos"
-    pedidosSimulados[pedidoIndex].estadoActual = nuevoEstado;
-    // Añade al historial
-    pedidosSimulados[pedidoIndex].historial.push({
-      estado: nuevoEstado,
-      fecha: new Date().toISOString()
-    });
-    
-    // Volver a renderizar todo
-    renderListaPedidos(document.getElementById('admin-buscar-pedido').value);
-    renderDetallePedido(pedidoId);
+      const ctx2 = document.getElementById('chartCanales');
+      if(ctx2) {
+        window.myChart2 = new Chart(ctx2, {
+          type: 'doughnut',
+          data: {
+            labels: ['Instagram', 'Facebook', 'Directo', 'Google'],
+            datasets: [{
+              data: [45, 30, 15, 10],
+              backgroundColor: ['#E1306C', '#4267B2', '#d6001c', '#F4B400']
+            }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+          }
+        });
+      }
+    }, 100);
   }
 
-  // =================================================================
-  // --- FIN: NUEVA LÓGICA DE GESTIÓN DE PEDIDOS ---
-  // =================================================================
-
-
+  // =========================================
+  // 4. GESTIÓN DE PRODUCTOS Y USUARIOS (Backend Real)
+  // =========================================
   function mostrarProductos() {
-    document.getElementById("contenido").innerHTML = `
-      <p class="titulo-contenido">Gestión de Productos</p>
-      <table>
-        <tr>
-          <th>ID</th>
-          <th>Título</th>
-          <th>Precio</th>
-          <th>Acciones</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>Pastel de Chocolate</td>
-          <td>$150.00</td>
-          <td class="acciones">
-            <button class="btn-editar">Editar</button>
-            <button class="btn-eliminar">Eliminar</button>
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Gelatina de Frutas</td>
-          <td>$90.00</td>
-          <td class="acciones">
-            <button class="btn-editar">Editar</button>
-            <button class="btn-eliminar">Eliminar</button>
-          </td>
-        </tr>
-      </table>
-    `;
+    fetch('listar_postres.php')
+      .then(res => res.json())
+      .then(data => {
+        let html = `<p class="titulo-contenido">Gestión de Productos</p>
+          <table>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Precio</th>
+              <th>Categoría</th>
+              <th>Tamaño</th>
+              <th>Sabor</th>
+              <th>Imagen</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>`;
+        data.forEach(p => {
+          html += `
+            <tr>
+              <td>${p.id}</td>
+              <td>${p.titulo}</td>
+              <td>$${p.precio}</td>
+              <td>${p.categoria || 'N/A'}</td>
+              <td>${p.tamanio || 'N/A'}</td>
+              <td>${p.sabor || 'N/A'}</td>
+              <td>${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.titulo}" style="max-width:60px; max-height:40px; border-radius:3px;">` : '—'}</td>
+              <td>${p.stock}</td>
+              <td class="acciones">
+                <button class="btn-editar" onclick="abrirModalEditar(${p.id})">Editar</button>
+                <button class="btn-eliminar" onclick="eliminarPostre(${p.id})">Eliminar</button>
+              </td>
+            </tr>`;
+        });
+        html += `</table>`;
+        document.getElementById("contenido").innerHTML = html;
+      })
+      .catch(err => showModal("Error al cargar productos: " + err, "Error de Red", "❌", true));
   }
 
   function mostrarFormularioAgregarPostre() {
     document.getElementById("contenido").innerHTML = `
       <p class="titulo-contenido">Agregar Postre Nuevo</p>
-      <form>
-        <label>Título</label><input type="text"><br><br>
-        <label>Descripción</label><textarea></textarea><br><br>
-        <label>Precio</label><input type="number"><br><br>
-        <label>Categoría</label><input type="text"><br><br>
-        <label>Tamaño</label><input type="text"><br><br>
-        <label>Sabor</label><input type="text"><br><br>
-        <label>Imagen URL</label><input type="text"><br><br>
-        <label>Stock</label><input type="number"><br><br>
-        <button type="submit">Agregar</button>
+      <form id="formAgregarLocal" style="max-width:500px; margin:auto;">
+        <label>Título</label><input type="text" name="titulo" required>
+        <label>Descripción</label><textarea name="descripcion" rows="3" required></textarea>
+        <label>Precio</label><input type="number" step="0.01" name="precio" required>
+        <label>Categoría</label><input type="text" name="categoria">
+        <label>Tamaño</label><input type="text" name="tamanio"> <!-- RESTAURADO -->
+        <label>Sabor</label><input type="text" name="sabor"> <!-- RESTAURADO -->
+        <label>URL Imagen</label><input type="text" name="imagen_url">
+        <label>Stock</label><input type="number" name="stock">
+        <br><br><button type="submit" class="btn-editar" style="width:100%">Agregar</button>
       </form>
     `;
+    document.getElementById('formAgregarLocal').addEventListener('submit', async e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      try {
+        const res = await fetch('crear_postre.php', { method: 'POST', body: fd });
+        const msg = await res.text();
+        // Avisos reemplazados por modales
+        await showModal(msg, "Resultado", "✅");
+        mostrarProductos();
+      } catch(err) { showModal(err, "Error de Red", "❌", true); }
+    });
   }
 
-  // --- FUNCIÓN DE USUARIOS RESTAURADA ---
+  async function eliminarPostre(id) {
+    // Confirmación reemplazada por modal
+    if(await showConfirmation("¿Está seguro de que desea eliminar este postre permanentemente? Esta acción no se puede deshacer.")) {
+      const fd = new FormData(); fd.append('id', id);
+      const res = await fetch('eliminar_postre.php', { method: 'POST', body: fd });
+      const msg = await res.text();
+      // Avisos reemplazados por modales
+      await showModal(msg, "Aviso", "ℹ️");
+      mostrarProductos();
+    }
+  }
+
+  function abrirModalEditar(id) {
+    fetch(`listar_postre_individual.php?id=${id}`).then(r=>r.json()).then(p=>{
+      if(p.error){ showModal(p.error, "Error de Carga", "❌", true); return; }
+      document.getElementById('editar_id').value = p.id;
+      document.getElementById('editar_titulo').value = p.titulo;
+      document.getElementById('editar_descripcion').value = p.descripcion;
+      document.getElementById('editar_precio').value = p.precio;
+      document.getElementById('editar_categoria').value = p.categoria;
+      document.getElementById('editar_tamanio').value = p.tamanio;
+      document.getElementById('editar_sabor').value = p.sabor;
+      document.getElementById('editar_imagen_url').value = p.imagen_url;
+      document.getElementById('editar_stock').value = p.stock;
+      document.getElementById('modalEditar').style.display = 'flex';
+    });
+  }
+
   function mostrarUsuarios() {
-    fetch('listar_usuarios.php')
-      .then(res => res.json())
-      .then(data => {
-        let html = `<p class="titulo-contenido">Gestión de Usuarios</p>`;
-        if (!data.length) {
-          html += '<p>No hay usuarios registrados.</p>';
-        } else {
-          html += `
-            <table>
-              <tr>
-                <th>ID</th><th>Correo</th><th>Contraseña</th><th>Acciones</th>
-              </tr>`;
-          data.forEach(u => {
-            html += `
-              <tr>
-                <td>${u.id}</td>
-                <td>${u.correo}</td>
-                <td>${u.pass}</td>
-                <td class="acciones">
-                  <button class="btn-editar" onclick="abrirModalUsuario(${u.id})">Editar</button>
-                  <button class="btn-eliminar" onclick="eliminarUsuario(${u.id})">Eliminar</button>
-                </td>
-              </tr>`;
-          });
-          html += `</table>`;
-        }
-        document.getElementById('contenido').innerHTML = html;
+    fetch('listar_usuarios.php').then(r=>r.json()).then(data=>{
+      let html = `<p class="titulo-contenido">Gestión de Usuarios</p>
+        <table><tr><th>ID</th><th>Correo</th><th>Acciones</th></tr>`;
+      data.forEach(u => {
+        html += `<tr><td>${u.id}</td><td>${u.correo}</td>
+          <td class="acciones">
+            <button class="btn-editar" onclick="abrirModalUsuario(${u.id})">Editar</button>
+            <button class="btn-eliminar" onclick="eliminarUsuario(${u.id})">Eliminar</button>
+          </td></tr>`;
       });
+      html += `</table>`;
+      document.getElementById('contenido').innerHTML = html;
+    });
   }
 
-  // --- FUNCIÓN DE MÉTRICAS (SIMULADA) ---
-  function mostrarMetricas() {
-    const targetDiv = document.getElementById('contenido');
-    targetDiv.innerHTML = `<p class="titulo-contenido">Cargando Métricas...</p>`;
-
-    fetch('metricas.html')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('No se pudo cargar metricas.html (Error ' + response.status + ')');
-        }
-        return response.text();
-      })
-      .then(text => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'text/html');
-        
-        // Extraer el contenido principal de metricas.html
-        const metricsContent = doc.querySelector('main.container');
-        
-        if (metricsContent) {
-          // Inyectar el HTML de las métricas, pero con el título del panel
-          targetDiv.innerHTML = `
-            <p class="titulo-contenido">Panel de Métricas</p>
-            ${metricsContent.innerHTML}
-          `;
-          
-          // --- ¡NUEVO! ---
-          // Llamamos a la función de inicialización DESPUÉS de inyectar el HTML
-          initMetrics();
-          
-          // console.log("Panel de métricas cargado y scripts inicializados.");
-        } else {
-          targetDiv.innerHTML = '<p class="titulo-contenido">Error</p><p>No se encontró el contenido principal en metricas.html.</p>';
-        }
-      })
-      .catch(error => {
-        console.error('Error al cargar métricas:', error);
-        targetDiv.innerHTML = `<p class="titulo-contenido">Error</alerta><p>No se pudo cargar el panel de métricas. ${error.message}</p>`;
+  async function eliminarUsuario(id) {
+    // Confirmación reemplazada por modal
+    if(await showConfirmation("¿Está seguro de que desea eliminar este usuario permanentemente?")) {
+      const fd = new FormData(); fd.append('id', id);
+      fetch('eliminar_usuario.php', {method:'POST', body:fd}).then(r=>r.json()).then(resp=>{
+        showModal(resp.msg, "Aviso", resp.ok?"✅":"❌", !resp.ok);
+        if(resp.ok) mostrarUsuarios();
       });
+    }
   }
 
-
-  // --- FUNCIÓN ELIMINAR USUARIO RESTAURADA ---
-  function eliminarUsuario(id) {
-    if (!confirm('¿Eliminar este usuario?')) return;
-    const fd = new FormData();
-    fd.append('id', id);
-    fetch('eliminar_usuario.php', { method: 'POST', body: fd })
-      .then(res => res.json())
-      .then(resp => {
-        alert(resp.msg);
-        mostrarUsuarios();
-      });
-  }
-
-  // --- FUNCIÓN ABRIR MODAL RESTAURADA ---
   function abrirModalUsuario(id) {
-    fetch(`listar_usuario_individual.php?id=${id}`)
-      .then(res => res.json())
-      .then(u => {
-        document.getElementById('usuario_id').value = u.id;
-        document.getElementById('usuario_correo').value = u.correo;
-        document.getElementById('usuario_pass').value = u.pass;
-        document.getElementById('modalEditarUsuario').style.display = 'flex';
-      });
+    fetch(`listar_usuario_individual.php?id=${id}`).then(r=>r.json()).then(u=>{
+      document.getElementById('usuario_id').value = u.id;
+      document.getElementById('usuario_correo').value = u.correo;
+      document.getElementById('modalEditarUsuario').style.display = 'flex';
+    });
   }
 
-  // Cerrar modal
-  function cerrarModalUsuario() {
+  function cerrarModalesEdicion() {
+    document.getElementById('modalEditar').style.display = 'none';
     document.getElementById('modalEditarUsuario').style.display = 'none';
   }
 
-  // --- LISTENER DE EDICIÓN RESTAURADO ---
+  // Listeners Edición
   document.addEventListener('DOMContentLoaded', () => {
-    // Asegurarse de que el formulario existe antes de añadir el listener
-    const formEditarUsuario = document.getElementById('formEditarUsuario');
-    if (formEditarUsuario) {
-        formEditarUsuario.addEventListener('submit', e => {
-          e.preventDefault();
-          const fd = new FormData(e.target);
-          fetch('editar_usuario.php', { method: 'POST', body: fd })
-            .then(res => res.json())
-            .then(resp => {
-              alert(resp.msg);
-              cerrarModalUsuario();
-              mostrarUsuarios();
-            });
-        });
-    }
+    // Postre
+    const fP = document.getElementById('formEditarPostre');
+    if(fP) fP.addEventListener('submit', async e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const res = await fetch('editar_postre.php', { method: 'POST', body: fd });
+      const msg = await res.text();
+      // Avisos reemplazados por modales
+      await showModal(msg, "Resultado", "✅");
+      cerrarModalesEdicion();
+      mostrarProductos();
+    });
+
+    // Usuario
+    const fU = document.getElementById('formEditarUsuario');
+    if(fU) fU.addEventListener('submit', async e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const res = await fetch('editar_usuario.php', { method: 'POST', body: fd });
+      const resp = await res.json();
+      // Avisos reemplazados por modales
+      await showModal(resp.msg, "Resultado", resp.ok?"✅":"❌", !resp.ok);
+      if(resp.ok){ cerrarModalesEdicion(); mostrarUsuarios(); }
+    });
   });
-  
-  // Funciones dummy para los modales de postres (para que no den error)
-  function cerrarModal() {
-      const modal = document.getElementById('modalEditar');
-      if (modal) modal.style.display = 'none';
-  }
-  // Añadido un script dummy que podría estar faltando
-  if (typeof administrarDashboard === 'undefined') {
-     // console.log("Cargando script dummy administradorDashboard.js");
-  }
 
 </script>
-<!-- Modal para editar postre -->
-<!-- Modal mejorado -->
-<div id="modalEditar">
-  <div class="modal-contenido">
-    <h2>Editar Receta</h2>
-    <form id="formEditarPostre">
-      <input type="hidden" id="editar_id" name="id">
-
-      <label for="editar_titulo">Título</label>
-      <input type="text" id="editar_titulo" name="titulo" required>
-
-      <label for="editar_descripcion">Descripción</label>
-      <textarea id="editar_descripcion" name="descripcion" rows="4" required></textarea>
-
-      <label for="editar_precio">Precio</label>
-      <input type="number" step="0.01" id="editar_precio" name="precio" required>
-
-      <label for="editar_categoria">Categoría</label>
-      <input type="text" id="editar_categoria" name="categoria">
-
-      <label for="editar_tamanio">Tamaño</label>
-      <input type="text" id="editar_tamanio" name="tamanio">
-
-      <label for="editar_sabor">Sabor</label>
-      <input type="text" id="editar_sabor" name="sabor">
-
-      <label for="editar_imagen_url">URL de Imagen</label>
-      <input type="text" id="editar_imagen_url" name="imagen_url">
-
-      <label for="editar_stock">Stock</label>
-      <input type="number" id="editar_stock" name="stock">
-
-      <div class="modal-botones">
-        <button type="submit">Guardar Cambios</button>
-        <button type="button" onclick="cerrarModal()">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Modal para editar usuario -->
-<div id="modalEditarUsuario" style="
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-">
-  <div class="modal-contenido">
-    <h2>Editar Usuario</h2>
-    <form id="formEditarUsuario">
-      <input type="hidden" id="usuario_id" name="id">
-      <label for="usuario_correo">Correo</label>
-      <input type="email" id="usuario_correo" name="correo" required>
-      <label for="usuario_pass">Contraseña</label>
-      <input type="text" id="usuario_pass" name="pass" required>
-      <div class="modal-botones">
-        <button type="submit">Guardar Cambios</button>
-        <button type="button" onclick="cerrarModalUsuario()">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- SCRIPT RESTAURADO -->
-<script src="administradorDashboard.js"></script> 
-
 </body>
-
-
 </html>

@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <title>Seguimiento de Pedido - La Casa del Pastel</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+128&family=Courier+Prime&family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root{
       --red-700:#a30015;
@@ -11,116 +13,153 @@
       --bg-card: #fff;
       --muted: #666;
       --radius: 12px;
-      --maxwidth:1000px;
+      --maxwidth:1100px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
-      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
+      font-family: "Open Sans", sans-serif;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center/cover;
+      background-attachment: fixed;
       color:#111;
-      -webkit-font-smoothing:antialiased;
     }
 
     header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:18px 28px;
-      background: rgba(0,0,0,0.45);
-      color:white;
-      position:sticky;
-      top:0;
-      z-index:10;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:18px 28px; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+      color:white; position:sticky; top:0; z-index:10;
     }
-    .brand{display:flex; align-items:center; gap:12px}
+    .brand{display:flex; align-items:center; gap:12px; font-family: 'Playfair Display', serif; font-size: 1.2rem;}
     .brand img{height:44px; border-radius:8px}
-    nav a{color:white; text-decoration:none; margin-left:14px}
+    nav a{color:white; text-decoration:none; margin-left:14px; opacity:0.9}
+    nav a:hover{opacity:1; text-decoration: underline;}
 
-    .container{
-      max-width: var(--maxwidth);
-      margin:28px auto;
-      padding:18px;
-    }
+    .container{max-width: var(--maxwidth); margin:28px auto; padding:18px;}
 
     .card{
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding:18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+      background: var(--bg-card); border-radius: var(--radius); padding:25px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
     }
 
-    h1{color:var(--red-500); margin:0 0 8px; font-family: 'Playfair Display', serif}
+    h1, h2, h3 { color:var(--red-700); margin:0 0 10px; font-family: 'Playfair Display', serif}
 
-    /* Layout */
-    .layout{
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:18px;
-      margin-top:16px;
-    }
-    @media (max-width:980px){
-      .layout{grid-template-columns:1fr}
-    }
+    /* Layout Principal */
+    .layout{ display:grid; grid-template-columns: 1fr 380px; gap:20px; margin-top:20px; }
+    @media (max-width:980px){ .layout{grid-template-columns:1fr} }
 
-    /* Order summary */
-    .order-meta{display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:12px}
-    .order-number{font-weight:800; color:var(--red-700)}
-    .order-status{padding:6px 10px; border-radius:8px; background: linear-gradient(90deg,var(--red-500),var(--red-700)); color:white; font-weight:800}
+    /* Estilos Pedido */
+    .order-meta{display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:15px;}
+    .order-number{font-weight:800; font-size:1.2rem; color:var(--red-700)}
+    .order-status{padding:6px 12px; border-radius:20px; background: #e8f5e9; color:#2e7d32; font-weight:800; border:1px solid #c8e6c9;}
 
-    .items-list{display:flex; flex-direction:column; gap:12px}
-    .item{
-      display:flex; gap:12px; align-items:center; padding:10px; border-radius:10px; background:#fff7f7; border:1px solid rgba(214,0,28,0.05);
-    }
-    .item img{width:90px; height:70px; object-fit:cover; border-radius:8px; flex-shrink:0}
+    .item{ display:flex; gap:15px; align-items:center; padding:12px; border-radius:10px; background:#f9f9f9; border:1px solid #eee; margin-bottom:10px;}
+    .item img{width:80px; height:80px; object-fit:cover; border-radius:8px;}
     .item .info{flex:1}
-    .item .info .title{font-weight:800; color:var(--red-700)}
-    .item .info .meta{color:var(--muted); font-size:0.95rem}
+    .item .title{font-weight:700; color:#333; margin-bottom:4px;}
+    .item .meta{color:var(--muted); font-size:0.9rem}
 
-    .totals{margin-top:12px; font-weight:800; font-size:1.05rem; color:var(--red-700)}
+    .totals{margin-top:20px; text-align:right; font-weight:800; font-size:1.4rem; color:var(--red-700)}
+
+    /* Botones */
+    .btn{padding:10px 16px; border-radius:8px; border:0; cursor:pointer; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition: transform 0.2s;}
+    .btn:hover{transform: translateY(-2px);}
+    .btn-primary{background:linear-gradient(90deg,var(--red-500),var(--red-700)); color:white}
+    .btn-ghost{background:transparent; border:2px solid #ddd; color:#555}
+    .btn-outline-red{background:white; border:2px solid var(--red-700); color:var(--red-700)}
 
     /* Timeline */
-    .timeline{
-      display:flex; flex-direction:column; gap:14px; padding:12px;
+    .timeline{display:flex; flex-direction:column; gap:0; padding:10px 0;}
+    .step{display:flex; gap:15px; padding-bottom:20px; position:relative;}
+    .step:last-child{padding-bottom:0;}
+    .step::before{
+        content:''; position:absolute; left:7px; top:20px; bottom:0; width:2px; background:#eee;
     }
-    .step{
-      display:flex; gap:12px; align-items:flex-start;
-    }
+    .step:last-child::before{display:none;}
+    
     .step .bullet{
-      width:14px; height:14px; border-radius:50%; background:#eee; margin-top:4px; flex-shrink:0;
-      border:2px solid #f0f0f0;
+      width:16px; height:16px; border-radius:50%; background:#eee; z-index:2; flex-shrink:0; margin-top:4px;
+      border:3px solid #fff; box-shadow: 0 0 0 1px #ddd;
     }
-    /* Clase 'done' hardcodeada en el HTML */
-    .step.done .bullet{background:linear-gradient(90deg,var(--red-500),var(--red-700)); box-shadow:0 6px 16px rgba(163,0,21,0.18); border-color:transparent}
-    .step .content{flex:1}
-    .step .when{font-size:0.85rem; color:var(--muted)}
+    .step.done .bullet{background:var(--red-500); box-shadow:0 0 0 3px rgba(214,0,28,0.2); border-color:white;}
+    .step .when{font-size:0.8rem; color:var(--muted); margin-top:2px;}
 
-    .progress{
-      height:10px; background:#f1f1f1; border-radius:999px; overflow:hidden; margin-top:8px;
+    /* MICROPAGOS */
+    .micropayment-card {
+        background: linear-gradient(135deg, #fff3cd, #fff8e1);
+        border: 1px solid #ffeeba; border-radius: var(--radius); padding: 20px; margin-top: 20px;
     }
-    .progress > i{display:block; height:100%; background:linear-gradient(90deg,var(--red-500),var(--red-700)); width:0%}
+    .micro-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; color:#856404; font-weight:bold; font-size:1.1rem;}
+    .micro-body { font-size:0.9rem; color:#666; margin-bottom:15px; line-height:1.4;}
+    .donation-options { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; }
+    .btn-donate {
+        background: white; border:1px solid #e0a800; color:#856404; padding:8px; 
+        border-radius:6px; cursor:pointer; font-weight:bold; transition:all 0.2s;
+    }
+    .btn-donate:hover { background: #e0a800; color:white; }
 
-    /* Actions */
-    .actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
-    .btn{padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:700; text-decoration:none}
-    .btn-primary{background:linear-gradient(90deg,var(--red-500),var(--red-700)); color:white}
-    .btn-ghost{background:transparent; border:2px solid rgba(0,0,0,0.06); color:var(--red-700)}
+    /* FACTURA & MODALES */
+    .invoice-overlay {
+        position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85);
+        z-index:2000; display:none; justify-content:center; align-items:start; overflow-y:auto; padding:40px 20px;
+        backdrop-filter: blur(4px);
+    }
+    
+    /* MODAL DE MENSAJE (NUEVO) */
+    .msg-modal-box {
+        background: white; padding: 30px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5); align-self: center; /* Centrado vertical */
+        animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
-    /* Small helper */
-    .muted{color:var(--muted)}
-    .center{text-align:center}
-    .small{font-size:0.9rem}
+    /* MODAL DE FACTURA */
+    .invoice-paper {
+        background:white; width:100%; max-width:850px; min-height:1000px; padding:40px;
+        box-shadow: 0 0 50px rgba(0,0,0,0.5); font-family: Arial, sans-serif; font-size:12px; color:#333;
+        position:relative;
+    }
+
+    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    
+    /* Estructura CFDI */
+    .cfdi-header { display:flex; justify-content:space-between; margin-bottom:30px; }
+    .cfdi-logo { width:120px; margin-bottom:10px; object-fit: contain; }
+    .cfdi-title { font-weight:bold; font-size:1.4rem; color:#555; text-align:right; margin-bottom:5px;}
+    .cfdi-label { font-weight:bold; color:#444; }
+    .cfdi-row { margin-bottom:4px; }
+    .cfdi-info-grid { display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px; }
+    .cfdi-box { border:1px solid #ddd; padding:15px; border-radius:4px; }
+    .cfdi-box h4 { margin:0 0 10px 0; border-bottom:1px solid #eee; padding-bottom:5px; color:var(--red-700); font-size:13px; }
+    .cfdi-table { width:100%; border-collapse:collapse; margin-bottom:30px; }
+    .cfdi-table th { background:#eee; border:1px solid #ccc; padding:8px; text-align:left; font-size:11px; font-weight:bold;}
+    .cfdi-table td { border:1px solid #ccc; padding:8px; font-size:11px; vertical-align:top;}
+    .text-right { text-align:right; }
+    .cfdi-footer-grid { display:grid; grid-template-columns: 2fr 1fr; gap:30px; }
+    .cfdi-seals { font-family: 'Courier Prime', monospace; font-size:9px; word-break:break-all; color:#555; }
+    .seal-block { margin-bottom:10px; }
+    .seal-label { font-weight:bold; margin-bottom:2px; display:block; color:#000;}
+    .qr-box { width:120px; height:120px; border:1px solid #000; padding:5px; margin-top:10px;}
+    .qr-img { width:100%; height:100%; object-fit:contain; }
+
+    /* CERTIFICACIÓN */
+    .cert-badge {
+        margin-top:20px; padding:10px; border:1px dashed #2e7d32; background:#e8f5e9;
+        color:#1b5e20; text-align:center; font-size:0.85rem; border-radius:4px; display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .footer-cert {
+        text-align:center; color:white; margin-top:40px; padding-bottom:20px; font-size:0.85rem; opacity:0.8;
+    }
+
   </style>
 </head>
 <body>
+
   <header>
     <div class="brand">
-      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='CasaPastel-small.png'">
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/F8D7DA/A30015?text=LCP'">
       <div style="font-weight:800">La Casa del Pastel</div>
     </div>
-
     <nav>
       <a href="menu.html">Menú</a>
       <a href="carritoCompra.html">Carrito</a>
@@ -129,116 +168,283 @@
   </header>
 
   <div class="container">
-    <div class="card" id="cardRoot">
+    <div class="card">
       <h1>Seguimiento de tu pedido</h1>
-      <div class="muted small" id="hint">Introduce tu número de pedido o utiliza el último pedido generado.</div>
-
-      <!-- Esta parte se mantiene igual que en la imagen -->
-      <div style="margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
-        <input id="orderInput" placeholder="Número de pedido (ej. 100345)" style="padding:10px; border-radius:8px; border:1px solid #e6e6e6; width:220px">
-        <button class="btn btn-ghost" id="btnLookup">Buscar pedido</button>
-
-        <div style="margin-left:auto; display:flex; gap:8px">
-          <a href="menu.html" class="btn btn-primary">Volver al menú</a>
-        </div>
+      
+      <div style="margin-top:15px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; border-bottom:1px solid #eee; padding-bottom:20px; margin-bottom:20px;">
+        <input type="text" value="923153" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:220px; background:#f5f5f5;" readonly>
+        <span style="color:#2e7d32; font-weight:bold; font-size:0.9rem;">✓ Pedido Encontrado</span>
       </div>
 
-      <!-- === INICIO DE CONTENIDO ESTATICO (PLACEHOLDER) === -->
-      <div class="layout" style="margin-top:18px">
-        <section class="card" id="leftColumn">
-          <div id="orderArea">
-            <!-- Contenido hardcodeado de la imagen -->
-            <div class="order-meta">
-              <div>
-                <div class="order-number">Pedido #923153</div>
-                <div class="muted small">Creado: 4/11/2025, 10:05:58 p.m.</div>
-              </div>
-              <div>
-                <div class="order-status">Recibido</div>
-              </div>
+      <div class="layout">
+        
+        <section>
+          <div class="order-meta">
+            <div>
+              <div class="order-number">Pedido #923153</div>
+              <div class="muted" style="font-size:0.9rem">4/11/2025, 10:05 p.m.</div>
             </div>
+            <div class="order-status">En Camino</div>
+          </div>
 
-            <div class="items-list" style="margin-top: 12px;">
-              <div class="item">
-                <img src="https://cdn.pixabay.com/photo/2019/07/26/20/30/jelly-4365579_1280.jpg" alt="Gelatina de frutas" onerror="this.onerror=null;this.src='https://via.placeholder.com/90x70'">
-                <div class="info">
-                  <div class="title">Gelatina de frutas</div>
-                  <div class="meta">Gelatina de leche con frutas • Cantidad: 2</div>
-                </div>
-                <div style="font-weight:800; color:var(--red-700)">$23.98</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div class="item">
+              <img src="https://cdn.pixabay.com/photo/2019/07/26/20/30/jelly-4365579_1280.jpg" alt="Producto">
+              <div class="info">
+                <div class="title">Gelatina de frutas Artesanal</div>
+                <div class="meta">Cantidad: 2 • Precio Unit: $11.99</div>
               </div>
+              <div style="font-weight:800">$23.98</div>
             </div>
+          </div>
 
-            <div class="totals" style="text-align: left; margin-top: 16px; font-size: 1.2rem;">
-              Total: $23.98
-            </div>
+          <div class="totals">
+            Total Pagado: $23.98
+          </div>
 
-            <div style="margin-top:24px; border-top: 1px solid #f0f0f0; padding-top: 16px;">
-              <div class="small muted">¿Necesitas ayuda con tu pedido?</div>
-              <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
-                <!-- Los botones ahora son enlaces muertos -->
-                <a class="btn btn-ghost" href="#">📞 Llamar</a>
-                <a class="btn btn-primary" href="#">📲 Compartir por WhatsApp</a>
-                <a class="btn btn-ghost" href="#">🖨 Imprimir</a>
-              </div>
-            </div>
-            <!-- Fin contenido hardcodeado -->
+          <div style="margin-top:30px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+             <span style="font-size:0.9rem; font-weight:600; color:#555;">Acciones:</span>
+             <button class="btn btn-outline-red" onclick="openInvoice()">📄 Solicitar / Ver Factura</button>
+             <button class="btn btn-ghost" onclick="showNotification('¡Gracias por contactarnos!', 'Nuestro equipo de soporte te llamará en breve.')">📞 Ayuda</button>
+          </div>
+          
+          <div class="cert-badge">
+             🔒 <strong>Certificación Digital 2025:</strong> Transacción auténtica y protegida por firma electrónica PKI.
           </div>
         </section>
 
-        <aside class="card" id="rightColumn">
-          <h3 style="margin:0 0 8px">Estado del pedido</h3>
-          <div id="timelineArea" class="timeline">
-            <!-- Timeline hardcodeado de la imagen -->
-            <div class="step done"> <!-- Clase 'done' para el estado activo -->
-              <div class="bullet" aria-hidden="true"></div>
-              <div class="content">
-                <div style="font-weight:800">Recibido</div>
-                <div class="when">4/11/2025, 10:05:58 p.m.</div>
+        <aside>
+          <div style="background:#fff; padding:15px; border-radius:10px; border:1px solid #eee;">
+            <h3 style="font-size:1.1rem; border-bottom:1px solid #eee; padding-bottom:10px;">Estado del envío</h3>
+            <div class="timeline">
+              <div class="step done">
+                <div class="bullet"></div>
+                <div class="content">
+                  <div style="font-weight:700">Recibido</div>
+                  <div class="when">10:05 p.m.</div>
+                </div>
               </div>
-            </div>
-            <div class="step">
-              <div class="bullet" aria-hidden="true"></div>
-              <div class="content">
-                <div style="font-weight:800">En preparación</div>
-                <div class="when"></div>
+              <div class="step done">
+                <div class="bullet"></div>
+                <div class="content">
+                  <div style="font-weight:700">Preparación</div>
+                  <div class="when">10:15 p.m.</div>
+                </div>
               </div>
-            </div>
-            <div class="step">
-              <div class="bullet" aria-hidden="true"></div>
-              <div class="content">
-                <div style="font-weight:800">En camino</div>
-                <div class="when"></div>
+              <div class="step done">
+                <div class="bullet"></div>
+                <div class="content">
+                  <div style="font-weight:700">En camino</div>
+                  <div class="when">Ahora</div>
+                </div>
               </div>
-            </div>
-            <div class="step">
-              <div class="bullet" aria-hidden="true"></div>
-              <div class="content">
-                <div style="font-weight:800">Entregado</div>
-                <div class="when"></div>
+              <div class="step">
+                <div class="bullet"></div>
+                <div class="content">
+                  <div style="font-weight:700; color:#999;">Entregado</div>
+                  <div class="when">Est: 10:45 p.m.</div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Barra de progreso hardcodeada (aprox 10% para el primer estado) -->
-          <div class="progress" aria-hidden="true">
-            <i id="progressBar" style="width:10%"></i>
+          <div class="micropayment-card">
+            <div class="micro-header">
+               <span>❤️</span> Donación con Causa
+            </div>
+            <div class="micro-body">
+               ¿Te sobró un poco de cambio? Apoya a <strong>"Niños del Futuro A.C."</strong> para combatir la pobreza infantil.
+               <br><br>
+               <em>¡Al donar desbloqueas cupones exclusivos para tu próxima compra!</em>
+            </div>
+            <div class="donation-options">
+               <button class="btn-donate" onclick="showDonateSuccess(10)">$10</button>
+               <button class="btn-donate" onclick="showDonateSuccess(20)">$20</button>
+               <button class="btn-donate" onclick="showDonateSuccess(50)">$50</button>
+            </div>
           </div>
 
-          <div style="margin-top:18px" id="etaArea">
-            <!-- ETA hardcodeada -->
-            <div class="muted small">Estimación: próximo estado "En preparación" alrededor de <strong>10:30 p.m.</strong></div>
-          </div>
         </aside>
       </div>
-      <!-- === FIN DE CONTENIDO ESTATICO === -->
     </div>
   </div>
 
-  <!-- SCRIPT ELIMINADO
-    Toda la lógica de JS que estaba aquí (getOrders, renderOrder, renderTimeline, etc.)
-    ha sido eliminada para que la página sea un placeholder estático.
-  -->
+  <div class="footer-cert">
+    La Casa del Pastel &copy; 2025 | Sitio Protegido por SSL y Firma Digital Avanzada (Simulada)
+  </div>
+
+  <div id="notificationModal" class="invoice-overlay">
+      <div class="msg-modal-box">
+          <div style="font-size:3rem; margin-bottom:15px;" id="notifIcon">🎉</div>
+          <h3 style="font-family:'Playfair Display',serif; color:#a30015; margin-bottom:10px;" id="notifTitle">¡Gracias!</h3>
+          <p style="color:#666; font-size:1rem; margin-bottom:20px; line-height:1.5;" id="notifMsg">
+              Tu donación ha sido procesada correctamente.
+          </p>
+          <button class="btn btn-primary" onclick="closeNotification()">Aceptar</button>
+      </div>
+  </div>
+
+  <div id="invoiceModal" class="invoice-overlay">
+     <div class="invoice-paper">
+        <div class="cfdi-header">
+           <div>
+              <img src="CasaPastel.png" alt="Logo" class="cfdi-logo" onerror="this.onerror=null;this.src='https://placehold.co/100x50?text=LOGO'">
+              <div style="font-weight:bold; font-size:1.2rem;">LA CASA DEL PASTEL S.A. DE C.V.</div>
+              <div class="cfdi-row">Av. Tecnológico #123, Aguascalientes</div>
+              <div class="cfdi-row">RFC: <span style="font-family:'Courier Prime'">LCP230101XYZ</span></div>
+              <div class="cfdi-row">Régimen Fiscal: 601 - General de Ley Personas Morales</div>
+           </div>
+           <div class="text-right">
+              <div class="cfdi-title">FACTURA ELECTRÓNICA</div>
+              <div class="cfdi-row"><span class="cfdi-label">Folio Fiscal:</span> A1B2C3D4-E5F6-7890-ABCD-1234567890EF</div>
+              <div class="cfdi-row"><span class="cfdi-label">No. de Serie del CSD:</span> 00001000000509876543</div>
+              <div class="cfdi-row"><span class="cfdi-label">Fecha y hora de emisión:</span> 2025-11-04T22:10:00</div>
+              <div class="cfdi-row"><span class="cfdi-label">Tipo de Comprobante:</span> I - Ingreso</div>
+           </div>
+        </div>
+
+        <div class="cfdi-info-grid">
+           <div class="cfdi-box">
+              <h4>DATOS DEL CLIENTE</h4>
+              <div class="cfdi-row"><span class="cfdi-label">Nombre:</span> JUAN PÉREZ</div>
+              <div class="cfdi-row"><span class="cfdi-label">RFC:</span> XAXX010101000 (Genérico)</div>
+              <div class="cfdi-row"><span class="cfdi-label">Uso CFDI:</span> G03 - Gastos en general</div>
+              <div class="cfdi-row"><span class="cfdi-label">C.P.:</span> 20000</div>
+           </div>
+           <div class="cfdi-box">
+              <h4>DATOS GENERALES</h4>
+              <div class="cfdi-row"><span class="cfdi-label">Moneda:</span> MXN - Peso Mexicano</div>
+              <div class="cfdi-row"><span class="cfdi-label">Forma de Pago:</span> 04 - Tarjeta de crédito</div>
+              <div class="cfdi-row"><span class="cfdi-label">Método de Pago:</span> PUE - Pago en una sola exhibición</div>
+           </div>
+        </div>
+
+        <table class="cfdi-table">
+           <thead>
+              <tr>
+                 <th>Clave Prod/Serv</th>
+                 <th>No. Identificación</th>
+                 <th>Cant</th>
+                 <th>Clave Unidad</th>
+                 <th>Descripción</th>
+                 <th>Valor Unitario</th>
+                 <th>Importe</th>
+              </tr>
+           </thead>
+           <tbody>
+              <tr>
+                 <td>50181900</td>
+                 <td>GEL-001</td>
+                 <td>2</td>
+                 <td>H87</td>
+                 <td>
+                    Gelatina de frutas Artesanal
+                    <div style="font-size:9px; color:#666; margin-top:2px;">Impuesto: 002 IVA Base: $23.98 Tasa: 0.160000 Importe: $3.84</div>
+                 </td>
+                 <td>$11.99</td>
+                 <td>$23.98</td>
+              </tr>
+           </tbody>
+        </table>
+
+        <div class="cfdi-footer-grid">
+           <div>
+              <div class="cfdi-row" style="font-size:11px; margin-bottom:15px;">
+                 <strong>Importe con letra:</strong> VEINTISIETE PESOS 82/100 M.N.
+              </div>
+           </div>
+           <div class="text-right">
+              <div class="cfdi-row"><span class="cfdi-label">Subtotal:</span> $23.98</div>
+              <div class="cfdi-row"><span class="cfdi-label">IVA (16%):</span> $3.84</div>
+              <div class="cfdi-row" style="font-size:1.2rem; border-top:2px solid #333; padding-top:5px; margin-top:5px;">
+                 <span class="cfdi-label">TOTAL:</span> $27.82
+              </div>
+           </div>
+        </div>
+
+        <div style="margin-top:30px; border-top:1px solid #ccc; padding-top:20px; display:flex; gap:20px;">
+           <div class="qr-box">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://verificacfdi.facturaelectronica.sat.gob.mx/" class="qr-img" alt="QR SAT">
+           </div>
+           <div class="cfdi-seals" style="flex:1">
+              <div class="seal-block">
+                 <span class="seal-label">Sello Digital del CFDI:</span>
+                 vK8s9f+2L0m1N3j4K5h6G7f8D9s0A1q2W3e4R5t6Y7u8I9o0P1a2S3d4F5g6H7j8K9l0ÑzXcVbNmQwErTyUiOpAsDfGhJkLñZxCvBnMqWeRtYuIoPaSdFgHjKlÑzXcVbNm==
+              </div>
+              <div class="seal-block">
+                 <span class="seal-label">Sello del SAT:</span>
+                 MnBvCxZlLkJhGfDsApOiUyTrEwQ1q2W3e4R5t6Y7u8I9o0P1lKmNjBhVgCfXdZsAwQrEtRyTuYiUoIpOaPsSdDfFgGhHjJkKlLñÑzZxXcCvVbBnNmM==
+              </div>
+              <div class="seal-block">
+                 <span class="seal-label">Cadena Original del complemento de certificación digital del SAT:</span>
+                 ||1.1|A1B2C3D4-E5F6-7890-ABCD-1234567890EF|2025-11-04T22:10:00|SAT970701NN3|vK8s9f+2L0m1N3j4K5h6G7f8D9s0A1q2W3e4R5t6Y7u8I9o0P1a2S3d4F5g6H7j8K9l0ÑzXcVbNmQwErTyUiOpAsDfGhJkLñZxCvBnMqWeRtYuIoPaSdFgHjKlÑzXcVbNm==|00001000000509876543||
+              </div>
+           </div>
+        </div>
+
+        <div style="margin-top:30px; text-align:center; display:flex; justify-content:center; gap:15px;">
+           <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+            <button class="btn btn-primary" onclick="window.print()">✉️ Enviar al correo</button>
+           <button class="btn btn-ghost" onclick="closeInvoice()">Cerrar</button>
+        </div>
+     </div>
+  </div>
+
+  <script>
+     // Funciones para Notificaciones (Reemplazo de Alerts)
+     function showNotification(title, message, icon = '🎉') {
+        const modal = document.getElementById('notificationModal');
+        document.getElementById('notifTitle').innerText = title;
+        document.getElementById('notifMsg').innerText = message;
+        document.getElementById('notifIcon').innerText = icon;
+        modal.style.display = 'flex';
+     }
+
+     function showDonateSuccess(amount) {
+        showNotification(
+           '¡Donación Exitosa!', 
+           `Has donado $${amount} a Niños del Futuro A.C.\n\nHemos enviado un cupón de descuento a tu correo como agradecimiento.`,
+           '❤️'
+        );
+     }
+
+     function closeNotification() {
+        document.getElementById('notificationModal').style.display = 'none';
+     }
+
+     // Funciones para Factura
+     function openInvoice() {
+        document.getElementById('invoiceModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+     }
+
+     function closeInvoice() {
+        document.getElementById('invoiceModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+     }
+
+     // Cerrar modales al hacer clic fuera
+     window.onclick = function(event) {
+        const notif = document.getElementById('notificationModal');
+        const invoice = document.getElementById('invoiceModal');
+        if (event.target == notif) {
+           closeNotification();
+        }
+        if (event.target == invoice) {
+           closeInvoice();
+        }
+     }
+  </script>
+
+  <style>
+     @media print {
+        body * { visibility: hidden; }
+        .invoice-paper, .invoice-paper * { visibility: visible; }
+        .invoice-overlay { position: absolute; left: 0; top: 0; background: white; display: block !important; overflow: visible;}
+        .invoice-paper { box-shadow: none; margin: 0; padding: 0; width: 100%; max-width: none; }
+        .btn { display: none; }
+     }
+  </style>
 
 </body>
 </html>

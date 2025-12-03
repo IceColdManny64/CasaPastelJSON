@@ -5,8 +5,23 @@
         "pass": "12345"
     },
     {
-        "id": 4,
-        "correo": "user@gmail.net",
-        "pass": "54321"
+        "correo": "manuel6496@outlook.com",
+        "pass": "12345",
+        "id": 2
+    },
+    {
+        "correo": "hola@email.com",
+        "pass": "12345",
+        "id": 3
+    },
+    {
+        "correo": "user@email.net",
+        "pass": "54321",
+        "id": 4
+    },
+    {
+        "correo": "nuevouser@si.com",
+        "pass": "12334",
+        "id": 5
     }
 ]

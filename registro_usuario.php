@@ -7,18 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validar campos obligatorios
     if (empty($correo) || empty($password)) {
-        echo "<script>
-                alert('Correo y contraseña son obligatorios.');
-                window.history.back();
-              </script>";
+        header("Location: registroUsuario.html?error=empty");
         exit;
     }
 
     if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-        echo "<script>
-                alert('Ingresa un correo electrónico válido.');
-                window.history.back();
-              </script>";
+        header("Location: registroUsuario.html?error=invalid_email");
         exit;
     }
 
@@ -26,10 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Verificar si el correo ya existe
     if ($jsonHelper->emailExists($correo)) {
-        echo "<script>
-                alert('Este correo ya está registrado.');
-                window.history.back();
-              </script>";
+        header("Location: registroUsuario.html?error=exists");
         exit;
     }
 
@@ -42,16 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $result = $jsonHelper->create('usuarios', $newUser);
 
     if ($result) {
-        echo "<script>
-                alert('Registro exitoso. Ahora puedes iniciar sesión.');
-                window.location.href='index.html';
-              </script>";
+        // Éxito: Redirigir al login (index.html) con mensaje de éxito
+        // Asumiendo que index.html también tiene sistema de modales para leer ?msg=registered
+// Ejemplo en registro_usuario.php al finalizar con éxito:
+header("Location: registroUsuario.html?registro=exito");
+exit();
     } else {
-        echo "<script>
-                alert('Error al registrar el usuario.');
-                window.history.back();
-              </script>";
+        header("Location: registroUsuario.html?error=server");
     }
 
     exit;
 }
+?>

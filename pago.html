@@ -2,254 +2,551 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Pago - La Casa del Pastel</title>
+  <title>Finalizar Compra - La Casa del Pastel</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <style>
+    /* === ESTILOS BASE === */
     :root{
       --red-700:#a30015;
       --red-500:#d6001c;
+      --bg-color:#f9f9f9;
       --card-bg:#ffffff;
-      --muted:#666;
+      --border-color:#e0e0e0;
       --radius:12px;
-      --maxwidth:1000px;
-
-      /* Tamaño de miniatura coherente con carrito */
-      --thumb-w:120px;
-      --thumb-h:90px;
+      --maxwidth:1100px;
     }
+
     *{box-sizing:border-box}
-    html,body{height:100%}
+    
     body{
-      margin:0;
-      font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
-      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
-        url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center/cover;
-      color:#111;
-      -webkit-font-smoothing:antialiased;
+      margin:0; font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color:#333;
     }
+
+    /* HEADER */
     header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:16px 22px;
-      background: rgba(0,0,0,0.45);
-      color:white;
-      position:sticky;
-      top:0;
-      z-index:10;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:16px 22px; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); color:white;
+      position:sticky; top:0; z-index:10; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-    .brand{display:flex;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px; font-family: 'Playfair Display', serif; font-size: 1.2rem;}
     .brand img{height:40px;border-radius:6px}
-    nav a{color:white;text-decoration:none;margin-left:12px}
+    nav a{color:white;text-decoration:none;margin-left:15px; font-size: 0.95rem; opacity: 0.9;}
 
-    .container{max-width:var(--maxwidth); margin:28px auto; padding:18px;}
+    /* LAYOUT */
+    .container{
+      max-width:var(--maxwidth); margin:40px auto; padding:0 20px;
+      display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 30px;
+    }
+    @media (max-width: 850px) { .container { grid-template-columns: 1fr; } .order-summary { order: -1; margin-bottom: 20px; } }
 
-    .card{background:var(--card-bg); border-radius:var(--radius); padding:18px; box-shadow:0 12px 30px rgba(0,0,0,0.18)}
+    h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--red-700); margin-top: 0; }
+    
+    /* SECCIONES CARD */
+    .checkout-section {
+      background: var(--card-bg); border-radius: var(--radius);
+      padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); margin-bottom: 25px;
+    }
+    
+    .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+    .form-group { flex: 1; margin-bottom: 15px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; color: #444; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 12px; border: 1px solid var(--border-color);
+      border-radius: 6px; font-size: 1rem; font-family: 'Open Sans', sans-serif;
+      transition: border 0.2s;
+    }
+    .form-group input:focus { border-color: var(--red-500); outline: none; }
 
-    h1{color:var(--red-500); margin:0 0 6px; font-family:'Playfair Display', serif}
+    /* === MÉTODOS DE PAGO === */
+    .payment-methods { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+    .payment-option { border-bottom: 1px solid var(--border-color); }
+    .payment-option:last-child { border-bottom: none; }
+    
+    .payment-header {
+      padding: 18px; background: #fafafa; cursor: pointer;
+      display: flex; align-items: center; gap: 15px; transition: background 0.2s;
+    }
+    .payment-header:hover { background: #f0f0f0; }
+    .payment-header input[type="radio"] { transform: scale(1.3); accent-color: var(--red-500); }
+    .payment-label { font-weight: 700; flex: 1; color: #333; font-size: 1rem; }
+    
+    /* Cuerpo del método (Expandible) */
+    .payment-body {
+      padding: 25px; background: white; border-top: 1px solid var(--border-color);
+      display: none; animation: fadeIn 0.3s ease;
+    }
+    .payment-body.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-    .layout{display:grid; grid-template-columns:1fr 360px; gap:18px; margin-top:14px}
-    @media (max-width:980px){ .layout{grid-template-columns:1fr} }
+    /* ESTILOS MONEDERO */
+    .wallet-card {
+      background: linear-gradient(135deg, #0097a7, #006064); color: white;
+      border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 96, 100, 0.3);
+    }
+    .wallet-amount { font-size: 2rem; font-weight: 800; margin: 10px 0; font-family: 'Playfair Display', serif; }
+    
+    .add-funds-area {
+      background: #f0fbfc; border: 1px dashed #0097a7; border-radius: 8px; padding: 15px;
+      display: flex; align-items: flex-end; gap: 10px;
+    }
+    .add-funds-btn {
+      background: #0097a7; color: white; border: none; padding: 12px 20px; border-radius: 6px;
+      font-weight: 600; cursor: pointer;
+    }
+    .add-funds-btn:hover { background: #00838f; }
 
-    /* --- Card / item layout (copia estilo carrito) --- */
-    .summary .item{
-      display:flex;
-      gap:16px;
-      align-items:flex-start;
-      border-radius:10px;
-      padding:12px;
-      background:#fff7f7;
-      border:1px solid rgba(214,0,28,0.05);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    /* ESTILOS CAJERO (QR) */
+    .atm-visual {
+      display: flex; gap: 20px; align-items: center; background: #fffcf5; 
+      border: 1px solid #ffeeba; padding: 20px; border-radius: 8px;
+    }
+    .qr-placeholder {
+      width: 120px; height: 120px; background: white; padding: 5px; border: 1px solid #ddd;
+    }
+    .atm-details strong { display: block; color: #555; margin-bottom: 4px; font-size: 0.85rem; }
+    .atm-ref { font-family: monospace; font-size: 1.4rem; letter-spacing: 2px; color: #333; margin-bottom: 10px; display: block;}
+
+    /* ESTILOS BOTONES EXTERNOS */
+    .btn-paypal {
+      width: 100%; background: #ffc439; color: #111; font-weight: bold; padding: 14px;
+      border-radius: 50px; border: none; cursor: pointer; display: flex; justify-content: center; gap: 8px; font-size: 1rem;
+    }
+    .btn-mercadopago {
+      width: 100%; background: #009ee3; color: white; font-weight: bold; padding: 14px;
+      border-radius: 6px; border: none; cursor: pointer; display: flex; justify-content: center; gap: 8px; font-size: 1rem;
     }
 
-    .summary .item img{
-      width:var(--thumb-w);
-      height:var(--thumb-h);
-      object-fit:cover;
-      border-radius:8px;
-      flex-shrink:0;
-      display:block;
-      background:#f6f6f6;
+    /* ESTILOS E-CHECK */
+    .check-visual {
+      border: 2px solid #ddd; background: #fff; padding: 20px; position: relative;
+      background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 10px 10px;
     }
+    .check-watermark { position: absolute; top: 10px; right: 20px; font-family: serif; font-style: italic; color: #eee; font-size: 3rem; font-weight: bold; pointer-events: none;}
 
-    .summary .item-body{flex:1}
-    .summary .item-title{font-weight:800; color:var(--red-700); margin-bottom:6px}
-    .summary .item-desc{color:var(--muted); margin-bottom:8px}
-    .summary .item-price{font-weight:800; margin-bottom:8px; color:var(--red-700)}
-    .summary .qty-row{display:flex; align-items:center; gap:8px; margin-top:6px}
-
-    .summary .item-total{font-weight:800; text-align:right; min-width:120px}
-
-    /* contenedor de items con scroll si hay muchos */
-    #summaryItems{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      max-height:420px;
-      overflow:auto;
-      padding-right:6px;
+    /* RESUMEN LATERAL */
+    .order-summary {
+      background: white; border-radius: var(--radius);
+      padding: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      height: fit-content; position: sticky; top: 90px;
     }
-
-    .summary .totals{margin-top:12px; font-weight:900; color:var(--red-700)}
-
-    .form-row{display:flex; gap:10px; margin-top:10px}
-    .form-field{display:flex; flex-direction:column; margin-bottom:10px}
-    input, select, textarea{padding:10px; border-radius:8px; border:1px solid #e6e6e6; font-size:0.95rem}
-    textarea{min-height:80px}
-
-    .btn{padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:800; text-decoration: none;}
-    .btn-primary{background:linear-gradient(90deg,var(--red-500),var(--red-700)); color:white}
-    .btn-ghost{background:transparent; border:2px solid rgba(0,0,0,0.06); color:var(--red-700)}
-
-    .muted{color:var(--muted)}
-
-    /* responsive: reducir miniatura en pantallas pequeñas */
-    @media (max-width:560px){
-      :root{ --thumb-w:100px; --thumb-h:78px; }
-      #summaryItems{ max-height:520px; }
+    .summary-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+    .summary-item.total { 
+      border-top: 2px solid #eee; margin-top: 15px; padding-top: 15px;
+      font-weight: 800; font-size: 1.3rem; color: var(--red-700);
     }
+    
+    .btn-pay {
+      width: 100%; padding: 16px; background: linear-gradient(90deg, var(--red-500), var(--red-700));
+      color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; margin-top: 25px; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(214,0,28,0.4); }
+
+    /* === MODAL UNIFICADO CORREGIDO === */
+    .processing-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); z-index: 2000; backdrop-filter: blur(5px);
+      display: none; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .modal-box {
+      background: white; padding: 40px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .spinner {
+      width: 60px; height: 60px; border: 6px solid #f3f3f3; border-top-color: var(--red-500);
+      border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px auto;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    
+    /* Configuración de iconos: Todos ocultos por defecto */
+    .modal-icon { font-size: 4rem; margin-bottom: 15px; display: none; }
+    .btn-modal-action { 
+      padding: 12px 24px; background: #333; color: white; border: none; border-radius: 6px; 
+      cursor: pointer; display: none; margin: 0 auto; font-weight: 600;
+    }
+    .btn-modal-action:hover { background: #111; }
+    
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #222; margin-bottom: 10px; }
+    .modal-msg { font-family: 'Open Sans', sans-serif; color: #666; font-size: 1rem; line-height: 1.5; margin-bottom: 20px;}
+
+    /* === LÓGICA DE VISUALIZACIÓN CORREGIDA === */
+    /* Muestra SOLO el icono que corresponde al ID específico según la clase del padre */
+    
+    /* Estado: SUCCESS */
+    .processing-overlay.success #iconSpinner { display: none; }
+    .processing-overlay.success #iconSuccess { display: block; } /* Solo Check */
+    
+    /* Estado: ERROR */
+    .processing-overlay.error #iconSpinner { display: none; }
+    .processing-overlay.error #iconError { display: block; } /* Solo X */
+    .processing-overlay.error .btn-modal-action { display: block; } /* Botón Reintentar */
+
+    /* Estado: INFO */
+    .processing-overlay.info #iconSpinner { display: none; }
+    .processing-overlay.info #iconInfo { display: block; } /* Solo Info */
+    .processing-overlay.info .btn-modal-action { display: block; }
+
   </style>
 </head>
 <body>
+
   <header>
     <div class="brand">
-      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='CasaPastel-small.png'">
-      <div style="font-weight:800">La Casa del Pastel</div>
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/F8D7DA/A30015?text=LCP'">
+      La Casa del Pastel
     </div>
     <nav>
-      <a href="menu.html">Menú</a>
-      <a href="carritoCompra.html">Carrito</a>
-      <a href="seguimiento_pedido.html">Seguimiento</a>
+      <a href="carritoCompra.html">← Volver al Carrito</a>
     </nav>
   </header>
 
   <div class="container">
-    <div class="card">
-      <h1>Pago y Confirmación</h1>
-      <p class="muted">Revisa tu pedido y completa los datos de pago. Al confirmar, serás redirigido a la pantalla de seguimiento.</p>
-
-      <div class="layout">
-        <!-- LEFT: formulario de pago -->
-        <div class="card" id="leftColumn">
-          <h3 style="margin-top:0">Datos de facturación y entrega</h3>
-
-          <div style="margin-top:8px">
-            <div class="form-field">
-              <label>Nombre</label>
-              <input id="payerName" placeholder="Nombre completo">
-            </div>
-            <div class="form-field">
-              <label>Teléfono (WhatsApp)</label>
-              <input id="payerPhone" placeholder="Ej. 4491234567">
-            </div>
-            <div class="form-field">
-              <label>Método de pago</label>
-              <select id="payMethod">
-                <option value="efectivo">Efectivo al recoger/entrega</option>
-                <option value="transferencia">Transferencia / Depósito</option>
-                <option value="tarjeta">Tarjeta (simulado)</option>
-              </select>
-            </div>
-
-            <div class="form-field">
-              <label>Instrucciones / Dirección</label>
-              <textarea id="payerNote" placeholder="Comentarios, dirección o indicaciones"></textarea>
-            </div>
+    
+    <div class="left-col">
+      <div class="checkout-section">
+        <h2>1. Información de Envío</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" value="cliente@ejemplo.com" id="userEmail">
           </div>
-
-          <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
-            <!-- BOTÓN MODIFICADO -->
-            <button id="btnPay" class="btn btn-primary">Pagar y Generar pedido</button>
-            <a href="carritoCompra.html" class="btn btn-ghost">Volver al carrito</a>
+          <div class="form-group">
+            <label>Nombre del Destinatario</label>
+            <input type="text" value="Juan Pérez" id="userName">
           </div>
-
-          <p class="muted" style="margin-top:10px">Al confirmar, el pedido se registrará y se abrirá el seguimiento.</p>
         </div>
-
-        <!-- RIGHT: resumen del pedido -->
-        <aside class="card summary" id="rightColumn">
-          <h3 style="margin:0 0 8px">Resumen del pedido</h3>
-          <!-- contenedor con scroll si es necesario -->
-          <div id="summaryItems" aria-live="polite"></div>
-          <div class="totals summaryTotals" id="summaryTotal">Total: $0.00</div>
-        </aside>
+        <div class="form-group">
+          <label>Dirección de Entrega</label>
+          <input type="text" placeholder="Calle, Número, Colonia, CP">
+        </div>
       </div>
+
+      <div class="checkout-section">
+        <h2>2. Método de Pago</h2>
+        
+        <div class="payment-methods">
+          
+          <div class="payment-option">
+            <label class="payment-header">
+              <input type="radio" name="payment" value="card" checked onchange="togglePayment('card')">
+              <span class="payment-label">Tarjeta de Crédito / Débito</span>
+              <span>💳</span>
+            </label>
+            <div id="pay-card" class="payment-body active">
+              <div class="form-row">
+                <div class="form-group" style="flex:2">
+                  <label>Número de Tarjeta</label>
+                  <input type="text" id="cardNumInput" placeholder="0000 0000 0000 0000" maxlength="19">
+                </div>
+                <div class="form-group">
+                  <label>Vencimiento</label>
+                  <input type="text" placeholder="MM/AA" maxlength="5">
+                </div>
+              </div>
+              <div class="form-row">
+                 <div class="form-group" style="flex:2">
+                   <label>Titular de la Tarjeta</label>
+                   <input type="text" placeholder="Nombre como aparece en el plástico">
+                 </div>
+                 <div class="form-group">
+                   <label>CVV</label>
+                   <input type="password" placeholder="123" maxlength="4">
+                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="payment-option">
+            <label class="payment-header">
+              <input type="radio" name="payment" value="paypal" onchange="togglePayment('paypal')">
+              <span class="payment-label">PayPal</span>
+              <span style="color:#003087; font-weight:bold; font-style:italic;">Pay<span style="color:#009cde;">Pal</span></span>
+            </label>
+            <div id="pay-paypal" class="payment-body">
+              <p style="margin-bottom:20px; color:#555;">Serás redirigido al sitio seguro de PayPal para completar tu compra.</p>
+              <button type="button" class="btn-paypal" onclick="processExternalPayment('PayPal')">
+                 Pagar con PayPal
+              </button>
+            </div>
+          </div>
+
+           <div class="payment-option">
+            <label class="payment-header">
+              <input type="radio" name="payment" value="mercadopago" onchange="togglePayment('mercadopago')">
+              <span class="payment-label">Mercado Pago</span>
+              <span style="color:#009ee3; font-weight:bold;">mercadopago</span>
+            </label>
+            <div id="pay-mercadopago" class="payment-body">
+              <p style="margin-bottom:20px; color:#555;">Usa tu cuenta de Mercado Pago, tarjetas guardadas o dinero en cuenta.</p>
+              <button type="button" class="btn-mercadopago" onclick="processExternalPayment('Mercado Pago')">
+                 Pagar con Mercado Pago
+              </button>
+            </div>
+          </div>
+
+          <div class="payment-option">
+            <label class="payment-header">
+              <input type="radio" name="payment" value="wallet" onchange="togglePayment('wallet')">
+              <span class="payment-label">Monedero La Casa del Pastel</span>
+              <span>📱</span>
+            </label>
+            <div id="pay-wallet" class="payment-body">
+              <div class="wallet-card">
+                <div>Saldo Disponible</div>
+                <div class="wallet-amount" id="walletBalanceDisplay">$5,000.00</div>
+                <small>ID: 8829-1029</small>
+              </div>
+              
+              <div class="add-funds-area">
+                <div class="form-group" style="margin-bottom:0">
+                   <label style="font-size:0.8rem;">Recargar Saldo Rápido</label>
+                   <input type="number" id="fundsInput" placeholder="$ Monto" style="padding:10px;">
+                </div>
+                <button type="button" class="add-funds-btn" onclick="addFunds()">+ Cargar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="payment-option">
+            <label class="payment-header">
+              <input type="radio" name="payment" value="check" onchange="togglePayment('check')">
+              <span class="payment-label">Cheque Electrónico (Empresas)</span>
+              <span>📝</span>
+            </label>
+            <div id="pay-check" class="payment-body">
+              <div class="check-visual">
+                <div class="check-watermark">E-CHECK</div>
+                <div class="form-row">
+                   <div class="form-group">
+                      <label>Número de Cheque</label>
+                      <input type="text" placeholder="CHK-000123" id="checkNumber">
+                   </div>
+                   <div class="form-group">
+                      <label>Fecha de Emisión</label>
+                      <input type="date" id="checkDate">
+                   </div>
+                </div>
+                <div class="form-group">
+                  <label>Monto Autorizado</label>
+                  <input type="text" id="checkAmount" readonly style="background:#f9f9f9; font-weight:bold; color:#333;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="payment-option">
+            <label class="payment-header">
+              <input type="radio" name="payment" value="atm" onchange="togglePayment('atm')">
+              <span class="payment-label">Depósito Bancario / Transferencia</span>
+              <span>🏧</span>
+            </label>
+            <div id="pay-atm" class="payment-body">
+              <div class="atm-visual">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PastelReference123" alt="QR Pago" class="qr-placeholder">
+                <div class="atm-details">
+                  <strong>Referencia Única:</strong>
+                  <span class="atm-ref">9920 1029 3847</span>
+                  <strong>Beneficiario:</strong> La Casa del Pastel S.A.
+                  <strong>Banco:</strong> BBVA / Santander
+                  <p style="font-size:0.8rem; color:#888; margin-top:5px;">Escanea el código o usa la referencia en ventanilla.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <aside class="order-summary">
+      <h3>Resumen del Pedido</h3>
+      <div id="mini-cart-items"></div>
+      <div class="summary-item total">
+        <span>Total a Pagar</span>
+        <span id="final-total">$0.00</span>
+      </div>
+      
+      <div id="selection-mock" style="margin-top:15px; font-weight:600; color:var(--red-700); font-size:0.9rem;">
+        Método: Tarjeta de Crédito
+      </div>
+
+      <button id="btnConfirmPay" class="btn-pay">Confirmar Compra</button>
+      
+      <div style="margin-top:20px; text-align:center; display:flex; justify-content:center; gap:10px; opacity:0.6;">
+        <span>🔒 SSL Seguro</span> | <span>🛡️ Garantía de Entrega</span>
+      </div>
+    </aside>
+
+  </div>
+
+  <div id="processingModal" class="processing-overlay">
+    <div class="modal-box">
+      <div id="iconSpinner" class="spinner"></div>
+      
+      <div id="iconSuccess" class="modal-icon">✅</div>
+      <div id="iconError" class="modal-icon">❌</div>
+      <div id="iconInfo" class="modal-icon">ℹ️</div>
+
+      <div class="modal-title" id="modalTitle">Procesando...</div>
+      <div class="modal-msg" id="modalMsg">Conectando de forma segura...</div>
+      
+      <button class="btn-modal-action" id="btnModalRetry" onclick="closeModal()">Entendido</button>
     </div>
   </div>
 
-  <!-- SCRIPT MODIFICADO -->
   <script>
-    // helpers
+    let currentTotal = 0;
+    let currentWalletBalance = 5000;
+
+    // --- 1. CARGA INICIAL ---
     function loadCart(){
-      return JSON.parse(localStorage.getItem('carrito') || '[]');
-    }
-    function escapeHtml(str){ if(!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-
-    function renderSummary(){
-      const cart = loadCart();
-      const container = document.getElementById('summaryItems');
-      container.innerHTML = '';
+      const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+      const container = document.getElementById('mini-cart-items');
       let total = 0;
-      if(!cart || cart.length === 0){
-        container.innerHTML = '<div class="muted">No hay productos en el carrito.</div>';
-        document.getElementById('btnPay').disabled = true;
+      container.innerHTML = '';
+
+      if(cart.length === 0){
+        container.innerHTML = '<p style="color:#999;">Tu carrito está vacío.</p>';
+        document.getElementById('btnConfirmPay').disabled = true;
+        document.getElementById('btnConfirmPay').style.background = '#ccc';
       } else {
-        document.getElementById('btnPay').disabled = false;
-        cart.forEach((p, index)=>{
-          const qty = Number(p.cantidad) || Number(p.qty) || 1;
-          const price = Number(p.precio ?? p.price ?? 0);
+        cart.forEach(p => {
+          const qty = p.cantidad || 1;
+          const price = parseFloat(p.precio || 0);
           total += price * qty;
-
-          // Crear tarjeta como en el carrito
-          const card = document.createElement('div');
-          card.className = 'item';
-
-          const img = document.createElement('img');
-          img.src = (p.imagen_url || p.img || 'https://via.placeholder.com/300x200');
-          img.alt = (p.titulo || p.nombre || 'Producto');
-          img.onerror = function(){ this.onerror=null; this.src='https://via.placeholder.com/300x200'; };
-
-          const body = document.createElement('div');
-          body.className = 'item-body';
-          // Se ha quitado onchange="" del input y se ha puesto readonly
-          body.innerHTML = `<div class="item-title">${escapeHtml(p.titulo || p.nombre || 'Producto')}</div>
-                            <div class="item-desc">${escapeHtml(p.descripcion || '')}</div>
-                            <div class="item-price">Precio unitario: $${price.toFixed(2)}</div>
-                            <div class="qty-row"><label style="font-weight:700; color:var(--red-700)">Cant:</label>
-                              <input type="number" min="1" value="${qty}" style="width:70px; padding:6px; border-radius:6px; border:1px solid #e6e6e6"
-                                readonly>
-                              <span style="margin-left:10px; color:var(--muted)">Stock: ${p.stock ?? '—'}</span>
-                            </div>`;
-
-          const totalDiv = document.createElement('div');
-          totalDiv.className = 'item-total';
-          totalDiv.textContent = `$${(price*qty).toFixed(2)}`;
-
-          card.appendChild(img);
-          card.appendChild(body);
-          card.appendChild(totalDiv);
-          container.appendChild(card);
+          const row = document.createElement('div');
+          row.className = 'summary-item';
+          row.innerHTML = `<span>${qty} x ${p.titulo || 'Producto'}</span><span>$${(price * qty).toFixed(2)}</span>`;
+          container.appendChild(row);
         });
       }
-      document.getElementById('summaryTotal').textContent = `Total: $${total.toFixed(2)}`;
+      currentTotal = total;
+      document.getElementById('final-total').textContent = `$${total.toFixed(2)}`;
+      document.getElementById('checkAmount').value = `$${total.toFixed(2)}`;
     }
 
-    // --- SE HAN ELIMINADO LAS FUNCIONES COMPLEJAS ---
-    //- updateQtyFromSummary
-    //- generateOrderNumber
-    //- createOrderFromCartAndRedirect
+    // --- 2. MANEJO DE INTERFAZ ---
+    function togglePayment(method) {
+      document.querySelectorAll('.payment-body').forEach(el => el.classList.remove('active'));
+      document.getElementById('pay-' + method).classList.add('active');
+      
+      const btn = document.getElementById('btnConfirmPay');
+      const txt = document.getElementById('selection-mock');
+      
+      if(method === 'paypal' || method === 'mercadopago'){
+        btn.style.display = 'none';
+        txt.innerText = method === 'paypal' ? "Método: PayPal" : "Método: Mercado Pago";
+      } else {
+        btn.style.display = 'block';
+        if(method === 'card') { btn.innerText = "Pagar con Tarjeta"; txt.innerText = "Método: Tarjeta Crédito/Débito"; }
+        if(method === 'wallet') { btn.innerText = "Pagar con Saldo"; txt.innerText = "Método: Monedero Digital"; }
+        if(method === 'check') { btn.innerText = "Emitir Cheque"; txt.innerText = "Método: Cheque Electrónico"; }
+        if(method === 'atm') { btn.innerText = "Imprimir Ficha"; txt.innerText = "Método: Depósito Bancario"; }
+      }
+    }
 
-    // --- LISTENER MODIFICADO ---
-    document.getElementById('btnPay').addEventListener('click', function(){
-      // Sin validación, sin guardar. Solo redirige.
-      console.log("Simulando pago y redirigiendo a seguimiento.html");
-      window.location.href = 'seguimiento.html';
+    // --- 3. FUNCIONES DE MODAL ---
+    function openModal(type, title, msg) {
+      const modal = document.getElementById('processingModal');
+      
+      // Limpia clases anteriores y asigna la nueva (success, error, info)
+      modal.className = 'processing-overlay'; 
+      modal.classList.add(type); 
+      
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMsg').textContent = msg;
+
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('processingModal').style.display = 'none';
+    }
+
+    // --- 4. LÓGICA DE SALDO ---
+    function addFunds() {
+      const input = document.getElementById('fundsInput');
+      const amount = parseFloat(input.value);
+      
+      if(!amount || amount <= 0) {
+        openModal('error', 'Error en monto', 'Por favor ingresa una cantidad válida para recargar.');
+        return;
+      }
+      
+      openModal('default', 'Recargando...', 'Procesando tu abono al monedero.');
+      
+      setTimeout(() => {
+        currentWalletBalance += amount;
+        document.getElementById('walletBalanceDisplay').textContent = `$${currentWalletBalance.toFixed(2)}`;
+        input.value = ''; 
+        openModal('info', 'Saldo Actualizado', `Se han agregado $${amount.toFixed(2)} a tu cuenta correctamente.`);
+      }, 1500);
+    }
+
+    // --- 5. LÓGICA EXTERNA ---
+    function processExternalPayment(provider) {
+      openModal('default', `Conectando con ${provider}`, 'Por favor no cierres esta ventana...');
+      setTimeout(() => {
+         window.location.href = 'seguimiento.html';
+      }, 2500);
+    }
+
+    // --- 6. PROCESO DE PAGO ---
+    document.getElementById('btnConfirmPay').addEventListener('click', function(){
+      const selectedMethod = document.querySelector('input[name="payment"]:checked').value;
+      
+      // Modal cargando (estado default)
+      const modal = document.getElementById('processingModal');
+      modal.className = 'processing-overlay'; 
+      document.getElementById('modalTitle').textContent = "Procesando Pago";
+      document.getElementById('modalMsg').textContent = "Validando transacción con el banco...";
+      modal.style.display = 'flex';
+
+      setTimeout(() => {
+        if(selectedMethod === 'card') {
+          const cardNum = document.getElementById('cardNumInput').value.replace(/\s/g, '');
+          
+          if(cardNum.startsWith('0000')) { 
+            openModal('error', 'Pago Rechazado', 'El banco ha declinado la transacción. Verifica tus datos.'); return; 
+          }
+          if(cardNum.startsWith('1111')) { 
+            openModal('error', 'Fondos Insuficientes', 'La tarjeta no tiene crédito disponible.'); return; 
+          }
+          if(cardNum.startsWith('5555')) { 
+            openModal('error', 'Error de Conexión', 'No pudimos contactar al emisor. Intenta más tarde.'); return; 
+          }
+        } 
+        else if(selectedMethod === 'wallet') {
+          if(currentTotal > currentWalletBalance) {
+            openModal('error', 'Saldo Insuficiente', 'No tienes suficiente dinero en tu monedero. Recarga saldo e intenta de nuevo.');
+            return;
+          }
+        }
+        else if(selectedMethod === 'check') {
+            if(!document.getElementById('checkNumber').value) {
+                openModal('error', 'Faltan Datos', 'Por favor ingresa el número del cheque electrónico.'); return;
+            }
+        }
+
+        openModal('success', '¡Pedido Confirmado!', 'Hemos recibido tu pago correctamente. Redirigiendo...');
+        
+        setTimeout(() => {
+           window.location.href = 'seguimiento.html';
+        }, 2000);
+
+      }, 2000);
     });
 
-    // render on load
-    renderSummary();
+    loadCart();
   </script>
 </body>
 </html>
-

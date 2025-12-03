@@ -22,12 +22,10 @@
       min-height:100vh;
       display:flex;
       flex-direction:column;
- background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
         url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center/cover;
       color:#111;
     }
-
-
 
     header {
       display: flex;
@@ -38,7 +36,7 @@
       z-index: 10;
       position: relative;
     }
-    .logo{display:flex; align-items:center; gap:12px}
+    .logo{display:flex; align-items:center; gap:12px; color: white;}
     .logo img{height:46px}
     .logo h1{font-size:18px; margin:0; font-weight:800}
     nav {
@@ -61,6 +59,7 @@
       display:flex;
       align-items:center;
       gap:8px;
+      color: white;
     }
 
     /* Main card */
@@ -193,13 +192,48 @@
       .item-total{text-align:center; width:100%}
       .actions{flex-direction:column; align-items:stretch}
     }
+
+    /* --- MODAL PERSONALIZADO (CSS) --- */
+    .custom-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 3000;
+      display: none; justify-content: center; align-items: center;
+      backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s ease;
+    }
+    .custom-modal-overlay.open { display: flex; opacity: 1; }
+    .custom-modal-box {
+      background: white; padding: 30px; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      max-width: 420px; width: 90%; text-align: center;
+      /* Usamos la fuente del sitio */
+      font-family: 'Playfair Display', serif;
+      transform: translateY(20px); transition: transform 0.3s ease;
+    }
+    .custom-modal-overlay.open .custom-modal-box { transform: translateY(0); }
+    .custom-modal-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+    .custom-modal-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; color: var(--red-700); }
+    /* Mensaje con fuente sans-serif para legibilidad */
+    .custom-modal-msg { 
+      font-size: 1rem; margin-bottom: 25px; color: #555; line-height: 1.5; 
+      font-family: system-ui, -apple-system, sans-serif; 
+    }
+    .custom-modal-actions { display: flex; justify-content: center; gap: 10px; }
+    .custom-btn {
+      padding: 12px 24px; border: none; border-radius: 8px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
+      font-family: sans-serif;
+    }
+    .btn-modal-confirm { background: linear-gradient(135deg, var(--red-500), var(--red-700)); color: white; box-shadow: 0 4px 10px rgba(214,0,28,0.3); }
+    .btn-modal-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(214,0,28,0.4); }
+    .btn-modal-cancel { background: #f0f0f0; color: #333; }
+    .btn-modal-cancel:hover { background: #e0e0e0; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="logo">
-      <img src="CasaPastel.png" alt="Logo La Casa Del Pastel">
+      <img src="CasaPastel.png" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/50x50?text=CP'">
       <h1>La Casa Del Pastel</h1>
     </div>
 
@@ -245,8 +279,93 @@
     </div>
   </main>
 
+  <!-- Modal Personalizado (HTML) -->
+  <div id="custom-modal-overlay" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+      <span id="custom-modal-icon" class="custom-modal-icon"></span>
+      <div id="custom-modal-title" class="custom-modal-title"></div>
+      <div id="custom-modal-msg" class="custom-modal-msg"></div>
+      <div id="custom-modal-actions" class="custom-modal-actions"></div>
+    </div>
+  </div>
+
   <script>
-    // Mantengo la funcionalidad existente (lee localStorage 'carrito' con estructura esperada)
+    // --- LOGICA DE MODALES ---
+    function closeCustomModal() {
+      const overlay = document.getElementById('custom-modal-overlay');
+      overlay.classList.remove('open');
+      setTimeout(() => { overlay.style.display = 'none'; }, 300);
+    }
+
+    function showNotification(message, title = "Aviso", type = "info") {
+      return new Promise(resolve => {
+        const overlay = document.getElementById('custom-modal-overlay');
+        const icon = document.getElementById('custom-modal-icon');
+        const titleEl = document.getElementById('custom-modal-title');
+        const msgEl = document.getElementById('custom-modal-msg');
+        const actions = document.getElementById('custom-modal-actions');
+
+        overlay.style.display = 'flex';
+        void overlay.offsetWidth; // Forzar reflow
+        overlay.classList.add('open');
+
+        titleEl.textContent = title;
+        msgEl.innerHTML = message.replace(/\n/g, '<br>');
+        
+        if (type === 'error') {
+          icon.innerHTML = '❌'; 
+          titleEl.style.color = '#d32f2f';
+        } else if (type === 'success') {
+          icon.innerHTML = '✅';
+          titleEl.style.color = '#2e7d32';
+        } else {
+          icon.innerHTML = 'ℹ️';
+          titleEl.style.color = '#a30015';
+        }
+
+        actions.innerHTML = `<button class="custom-btn btn-modal-confirm" id="btn-modal-ok">Entendido</button>`;
+        
+        document.getElementById('btn-modal-ok').onclick = () => {
+          closeCustomModal();
+          resolve();
+        };
+      });
+    }
+
+    function showConfirmation(message, title = "Confirmación") {
+      return new Promise(resolve => {
+        const overlay = document.getElementById('custom-modal-overlay');
+        const icon = document.getElementById('custom-modal-icon');
+        const titleEl = document.getElementById('custom-modal-title');
+        const msgEl = document.getElementById('custom-modal-msg');
+        const actions = document.getElementById('custom-modal-actions');
+
+        overlay.style.display = 'flex';
+        void overlay.offsetWidth;
+        overlay.classList.add('open');
+
+        icon.innerHTML = '❓';
+        titleEl.textContent = title;
+        titleEl.style.color = '#a30015';
+        msgEl.innerHTML = message;
+
+        actions.innerHTML = `
+          <button class="custom-btn btn-modal-cancel" id="btn-modal-cancel">Cancelar</button>
+          <button class="custom-btn btn-modal-confirm" id="btn-modal-yes">Sí, confirmar</button>
+        `;
+
+        document.getElementById('btn-modal-yes').onclick = () => {
+          closeCustomModal();
+          resolve(true);
+        };
+        document.getElementById('btn-modal-cancel').onclick = () => {
+          closeCustomModal();
+          resolve(false);
+        };
+      });
+    }
+
+    // --- LOGICA DEL CARRITO ---
     function mostrarCarrito() {
       const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
       const lista = document.getElementById("carrito-lista");
@@ -259,7 +378,6 @@
       let totalGeneral = 0;
 
       if (carrito.length === 0) {
-        // Mostrar mensaje de carrito vacío
         mensajeVacio.style.display = "block";
         vaciarBtn.hidden = true;
         totalDiv.textContent = "Total: $0.00";
@@ -271,7 +389,6 @@
       }
 
       carrito.forEach((producto, index) => {
-        // soporta campos: imagen_url, titulo, precio, descripcion, cantidad, stock
         const cantidad = Number(producto.cantidad) || 1;
         const unitPrice = Number(producto.precio) || 0;
         const totalPorProducto = (unitPrice * cantidad);
@@ -299,44 +416,46 @@
       });
 
       totalDiv.textContent = `Total: $${totalGeneral.toFixed(2)}`;
-
-      // Indicador en header: número de items y total
       const count = carrito.reduce((s, p) => s + (Number(p.cantidad) || 0), 0);
       cartIndicator.textContent = `${count} item(s) • $${totalGeneral.toFixed(2)}`;
     }
 
+    // ACTUALIZACIÓN: Uso de showNotification en lugar de alert
     function actualizarCantidad(index, nuevaCantidad) {
       const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
       nuevaCantidad = parseInt(nuevaCantidad);
 
       if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
-        alert("La cantidad debe ser al menos 1.");
-        mostrarCarrito();
+        showNotification("La cantidad debe ser al menos 1.", "Cantidad Inválida", "error");
+        mostrarCarrito(); // Restaurar valor visual
         return;
       }
 
       const disponible = carrito[index].stock ?? Infinity;
 
       if (nuevaCantidad > disponible) {
-        alert(`Lo sentimos. Solo hay ${disponible} unidades disponibles de "${carrito[index].titulo || carrito[index].nombre}".`);
-        mostrarCarrito();
+        showNotification(`Lo sentimos. Solo hay ${disponible} unidades disponibles.`, "Stock Insuficiente", "error");
+        mostrarCarrito(); // Restaurar valor visual
         return;
       }
 
       carrito[index].cantidad = nuevaCantidad;
       localStorage.setItem("carrito", JSON.stringify(carrito));
-      mostrarCarrito(); // recargar vista
+      mostrarCarrito();
     }
 
-    function vaciarCarrito() {
-      if (confirm('¿Seguro que quieres vaciar el carrito?')) {
+    // ACTUALIZACIÓN: Uso de showConfirmation asíncrono
+    async function vaciarCarrito() {
+      const confirmado = await showConfirmation('¿Seguro que quieres vaciar todo el carrito? No podrás deshacer esta acción.', 'Vaciar Carrito');
+      
+      if (confirmado) {
         localStorage.removeItem('carrito');
         mostrarCarrito();
+        showNotification("El carrito se ha vaciado correctamente.", "Carrito Vacío", "success");
       }
     }
 
     function irAPago() {
-      // No modifiqué tu flujo: redirige a pago.html (puedes cambiar si lo deseas)
       window.location.href = 'pago.html';
     }
 

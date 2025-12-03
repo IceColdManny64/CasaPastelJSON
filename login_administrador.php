@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contrasena = $_POST['contrasena'];
 
     $jsonHelper = new JsonHelper('./data/');
+    // Asegúrate de que 'admons' sea el nombre correcto de tu archivo/tabla en el JSON
     $admin = $jsonHelper->authenticateUser('admons', 'usuario', 'passw', $usuario, $contrasena);
 
     if ($admin) {
@@ -16,5 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    echo "<script>alert('Usuario o contraseña incorrectos'); window.history.back();</script>";
+    // --- CAMBIO CLAVE AQUÍ ---
+    // En lugar de imprimir un script con alert(), redirigimos con un parámetro de error.
+    header("Location: login_administrador.html?error=1");
+    exit;
 }
+?>
