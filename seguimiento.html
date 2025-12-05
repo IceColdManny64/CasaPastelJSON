@@ -106,10 +106,10 @@
         backdrop-filter: blur(4px);
     }
     
-    /* MODAL DE MENSAJE (NUEVO) */
+    /* MODAL DE MENSAJE */
     .msg-modal-box {
         background: white; padding: 30px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5); align-self: center; /* Centrado vertical */
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5); align-self: center;
         animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
@@ -118,28 +118,48 @@
         background:white; width:100%; max-width:850px; min-height:1000px; padding:40px;
         box-shadow: 0 0 50px rgba(0,0,0,0.5); font-family: Arial, sans-serif; font-size:12px; color:#333;
         position:relative;
+        overflow: hidden; /* Para que la marca de agua no se salga */
+    }
+    
+    /* --- NUEVO ESTILO: MARCA DE AGUA --- */
+    .watermark-overlay {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        font-size: 6rem;
+        font-weight: 800;
+        color: rgba(163, 0, 21, 0.08); /* Rojo muy transparente */
+        border: 8px solid rgba(163, 0, 21, 0.08);
+        padding: 20px 40px;
+        border-radius: 20px;
+        pointer-events: none; /* Permite hacer clic a través de ella */
+        white-space: nowrap;
+        z-index: 0;
+        font-family: 'Arial', sans-serif;
+        text-transform: uppercase;
+        user-select: none;
     }
 
     @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     
     /* Estructura CFDI */
-    .cfdi-header { display:flex; justify-content:space-between; margin-bottom:30px; }
+    .cfdi-header { display:flex; justify-content:space-between; margin-bottom:30px; position:relative; z-index:1;}
     .cfdi-logo { width:120px; margin-bottom:10px; object-fit: contain; }
     .cfdi-title { font-weight:bold; font-size:1.4rem; color:#555; text-align:right; margin-bottom:5px;}
     .cfdi-label { font-weight:bold; color:#444; }
     .cfdi-row { margin-bottom:4px; }
-    .cfdi-info-grid { display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px; }
-    .cfdi-box { border:1px solid #ddd; padding:15px; border-radius:4px; }
+    .cfdi-info-grid { display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px; position:relative; z-index:1;}
+    .cfdi-box { border:1px solid #ddd; padding:15px; border-radius:4px; background: rgba(255,255,255,0.8); }
     .cfdi-box h4 { margin:0 0 10px 0; border-bottom:1px solid #eee; padding-bottom:5px; color:var(--red-700); font-size:13px; }
-    .cfdi-table { width:100%; border-collapse:collapse; margin-bottom:30px; }
+    .cfdi-table { width:100%; border-collapse:collapse; margin-bottom:30px; position:relative; z-index:1;}
     .cfdi-table th { background:#eee; border:1px solid #ccc; padding:8px; text-align:left; font-size:11px; font-weight:bold;}
-    .cfdi-table td { border:1px solid #ccc; padding:8px; font-size:11px; vertical-align:top;}
+    .cfdi-table td { border:1px solid #ccc; padding:8px; font-size:11px; vertical-align:top; background: rgba(255,255,255,0.8);}
     .text-right { text-align:right; }
-    .cfdi-footer-grid { display:grid; grid-template-columns: 2fr 1fr; gap:30px; }
+    .cfdi-footer-grid { display:grid; grid-template-columns: 2fr 1fr; gap:30px; position:relative; z-index:1;}
     .cfdi-seals { font-family: 'Courier Prime', monospace; font-size:9px; word-break:break-all; color:#555; }
     .seal-block { margin-bottom:10px; }
     .seal-label { font-weight:bold; margin-bottom:2px; display:block; color:#000;}
-    .qr-box { width:120px; height:120px; border:1px solid #000; padding:5px; margin-top:10px;}
+    .qr-box { width:120px; height:120px; border:1px solid #000; padding:5px; margin-top:10px; background:white;}
     .qr-img { width:100%; height:100%; object-fit:contain; }
 
     /* CERTIFICACIÓN */
@@ -286,6 +306,9 @@
 
   <div id="invoiceModal" class="invoice-overlay">
      <div class="invoice-paper">
+        
+        <div class="watermark-overlay">SIN VALIDEZ OFICIAL</div>
+
         <div class="cfdi-header">
            <div>
               <img src="CasaPastel.png" alt="Logo" class="cfdi-logo" onerror="this.onerror=null;this.src='https://placehold.co/100x50?text=LOGO'">
@@ -382,7 +405,7 @@
            </div>
         </div>
 
-        <div style="margin-top:30px; text-align:center; display:flex; justify-content:center; gap:15px;">
+        <div style="margin-top:30px; text-align:center; display:flex; justify-content:center; gap:15px; position:relative; z-index:2;">
            <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
             <button class="btn btn-primary" onclick="window.print()">✉️ Enviar al correo</button>
            <button class="btn btn-ghost" onclick="closeInvoice()">Cerrar</button>
@@ -391,7 +414,6 @@
   </div>
 
   <script>
-     // Funciones para Notificaciones (Reemplazo de Alerts)
      function showNotification(title, message, icon = '🎉') {
         const modal = document.getElementById('notificationModal');
         document.getElementById('notifTitle').innerText = title;
@@ -412,7 +434,6 @@
         document.getElementById('notificationModal').style.display = 'none';
      }
 
-     // Funciones para Factura
      function openInvoice() {
         document.getElementById('invoiceModal').style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -423,7 +444,6 @@
         document.body.style.overflow = 'auto';
      }
 
-     // Cerrar modales al hacer clic fuera
      window.onclick = function(event) {
         const notif = document.getElementById('notificationModal');
         const invoice = document.getElementById('invoiceModal');
