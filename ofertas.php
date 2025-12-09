@@ -21,12 +21,47 @@ include 'ofertas_logic.php';
             font-family: 'Playfair Display', serif;
         }
 
+        
+
         body {
             position: relative;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
+
+         footer.legal-footer {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ccc;
+      padding: 25px;
+      text-align: center;
+      font-size: 0.8em;
+      font-family: 'Open Sans', sans-serif;
+      z-index: 2;
+      width: 100%;
+    }
+
+    footer.legal-footer a {
+      color: #f4a261;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    footer.legal-footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer.legal-footer p {
+      margin: 0;
+      padding: 5px 0;
+    }
+
+    footer.legal-footer .credits {
+      margin-top: 10px;
+      opacity: 0.7;
+    }
+        
+
 
         body::before {
             content: '';
@@ -447,6 +482,19 @@ include 'ofertas_logic.php';
       }, 300);
     }
   </script>
+            <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
+  <footer class="legal-footer">
+    <p>
+      <a href="legales.html#terminos">Términos y Condiciones</a> |
+      <a href="legales.html#privacidad">Aviso de Privacidad</a> |
+      <a href="legales.html#devoluciones">Políticas de Devolución</a>
+    </p>
+    <p class="credits">
+      Créditos de imagen: Todas las fotografías utilizadas en este sitio (incluyendo el fondo) fueron obtenidas de <a href="https://pixabay.com" target="_blank">Pixabay</a> bajo licencia de uso libre.
+    </p>
+    <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
+  </footer>
+  <!-- FIN: PIE DE PÁGINA -->
 
 </body>
 </html>

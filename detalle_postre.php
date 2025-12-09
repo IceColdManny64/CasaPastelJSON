@@ -31,6 +31,36 @@ $new_price = round($old_price * 0.8, 2);
   <!-- Fuente Open Sans para textos del modal -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <style>
+     footer.legal-footer {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ccc;
+      padding: 25px;
+      text-align: center;
+      font-size: 0.8em;
+      font-family: 'Open Sans', sans-serif;
+      z-index: 2;
+      width: 100%;
+    }
+
+    footer.legal-footer a {
+      color: #f4a261;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    footer.legal-footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer.legal-footer p {
+      margin: 0;
+      padding: 5px 0;
+    }
+
+    footer.legal-footer .credits {
+      margin-top: 10px;
+      opacity: 0.7;
+    }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Playfair Display', serif; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center/cover; color:#333; }
@@ -129,7 +159,7 @@ $new_price = round($old_price * 0.8, 2);
       <h1><?= htmlspecialchars($postre['titulo']) ?></h1>
       <div class="price">
         <span class="old-price">$<?= number_format($old_price,2) ?></span>
-        <span class="new-price">$<?= number_format($new_price,2) ?> (20% OFF)</span>
+        <span class="new-price">$<?= number_format($new_price,2) ?> (20% MENOS)</span>
       </div>
       <div class="meta">
         <span>Categoría: <?= htmlspecialchars($postre['categoria']) ?></span>
@@ -212,6 +242,19 @@ document.querySelector(".btn-cart").addEventListener("click", function () {
   showModal("El producto se ha añadido correctamente a tu carrito.", "¡Añadido!", "✅");
 });
 </script>
+            <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
+  <footer class="legal-footer">
+    <p>
+      <a href="legales.html#terminos">Términos y Condiciones</a> |
+      <a href="legales.html#privacidad">Aviso de Privacidad</a> |
+      <a href="legales.html#devoluciones">Políticas de Devolución</a>
+    </p>
+    <p class="credits">
+      Créditos de imagen: Todas las fotografías utilizadas en este sitio (incluyendo el fondo) fueron obtenidas de <a href="https://pixabay.com" target="_blank">Pixabay</a> bajo licencia de uso libre.
+    </p>
+    <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
+  </footer>
+  <!-- FIN: PIE DE PÁGINA -->
 
 </body>
-</html>s
+</html>
