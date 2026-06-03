@@ -1,47 +1,67 @@
 <?php
 require_once 'JsonHelper.php';
+require_once 'crud_auditoria.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $correo   = trim($_POST["correo"] ?? "");
-    $password = trim($_POST["password"] ?? "");
-
-    // Validar campos obligatorios
-    if (empty($correo) || empty($password)) {
-        header("Location: registroUsuario.html?error=empty");
-        exit;
-    }
-
-    if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-        header("Location: registroUsuario.html?error=invalid_email");
-        exit;
-    }
-
-    $jsonHelper = new JsonHelper('./data/');
-
-    // Verificar si el correo ya existe
-    if ($jsonHelper->emailExists($correo)) {
-        header("Location: registroUsuario.html?error=exists");
-        exit;
-    }
-
-    // Insertar usuario nuevo
-    $newUser = [
-        'correo' => $correo,
-        'pass' => $password
-    ];
-
-    $result = $jsonHelper->create('usuarios', $newUser);
-
-    if ($result) {
-        // Éxito: Redirigir al login (index.html) con mensaje de éxito
-        // Asumiendo que index.html también tiene sistema de modales para leer ?msg=registered
-// Ejemplo en registro_usuario.php al finalizar con éxito:
-header("Location: registroUsuario.html?registro=exito");
-exit();
-    } else {
-        header("Location: registroUsuario.html?error=server");
-    }
-
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
     exit;
 }
-?>
+
+$correo    = trim($_POST['correo'] ?? '');
+$password  = trim($_POST['password'] ?? '');
+$nombre    = trim($_POST['nombre'] ?? '');
+$telefono  = trim($_POST['telefono'] ?? '');
+$direccion = trim($_POST['direccion'] ?? '');
+
+if ($correo === '' || $password === '' || $nombre === '') {
+    header('Location: registroUsuario.html?error=empty');
+    exit;
+}
+
+if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+    header('Location: registroUsuario.html?error=invalid_email');
+    exit;
+}
+
+$jh = new JsonHelper('./data/');
+
+if ($jh->emailExists($correo)) {
+    header('Location: registroUsuario.html?error=exists');
+    exit;
+}
+
+// Usar password_hash para guardar la contraseña de forma segura
+$newUser = [
+    'correo'      => $correo,
+    'pass'        => password_hash($password, PASSWORD_BCRYPT),
+    'nombre'      => $nombre,
+    'telefono'    => $telefono,
+    'direccion'   => $direccion,
+    'tipo_cuenta' => 'cliente',
+];
+
+$creado = $jh->create('usuarios', $newUser);
+if (!$creado || empty($creado['id'])) {
+    header('Location: registroUsuario.html?error=server');
+    exit;
+}
+
+$uid = (int) $creado['id'];
+
+$jh->create('crm_clientes', [
+    'usuario_id'     => $uid,
+    'email'          => $correo,
+    'nombre'         => $nombre,
+    'etiqueta'       => 'nuevo',
+    'total_compras'  => 0,
+    'ltv'            => 0,
+    'fecha_registro' => date('Y-m-d H:i:s'),
+]);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+registrarAuditoria('CRM', 'cliente.registro', "Nuevo cliente registrado: {$correo}", ['usuario_id' => $uid]);
+
+header('Location: registroUsuario.html?registro=exito');
+exit;

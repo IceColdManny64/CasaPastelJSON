@@ -1,0 +1,252 @@
+[
+    {
+        "fecha": "2026-05-12 03:57:50",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260512-C320",
+        "referencia_id": "CP-20260512-C320",
+        "referencia_tipo": "pedido",
+        "monto": 399.9,
+        "metodo_pago": "card",
+        "id": 1
+    },
+    {
+        "fecha": "2026-05-15 06:29:16",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260515-4841",
+        "referencia_id": "CP-20260515-4841",
+        "referencia_tipo": "pedido",
+        "monto": 95.99,
+        "metodo_pago": "card",
+        "id": 2
+    },
+    {
+        "fecha": "2026-05-17 23:46:31",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260517-D5E4",
+        "referencia_id": "CP-20260517-D5E4",
+        "referencia_tipo": "pedido",
+        "monto": 383.96,
+        "metodo_pago": "card",
+        "id": 3
+    },
+    {
+        "fecha": "2026-05-17 23:52:46",
+        "tipo": "egreso",
+        "concepto": "Orden de compra OC-20260517-3FD2",
+        "referencia_id": "OC-20260517-3FD2",
+        "referencia_tipo": "orden_compra",
+        "monto": 13500,
+        "metodo_pago": "transferencia",
+        "id": 4
+    },
+    {
+        "fecha": "2026-05-17 23:56:37",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260517-041A",
+        "referencia_id": "CP-20260517-041A",
+        "referencia_tipo": "pedido",
+        "monto": 119.99,
+        "metodo_pago": "card",
+        "id": 5
+    },
+    {
+        "fecha": "2026-05-18 00:06:57",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260518-F757",
+        "referencia_id": "CP-20260518-F757",
+        "referencia_tipo": "pedido",
+        "monto": 95.99,
+        "metodo_pago": "card",
+        "id": 6
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260518-5D7C",
+        "referencia_id": "CP-20260518-5D7C",
+        "referencia_tipo": "pedido",
+        "monto": 3894.35,
+        "metodo_pago": "wallet",
+        "id": 7
+    },
+    {
+        "fecha": "2026-05-18 06:43:55",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260518-8101",
+        "referencia_id": "CP-20260518-8101",
+        "referencia_tipo": "pedido",
+        "monto": 79995,
+        "metodo_pago": "card",
+        "id": 8
+    },
+    {
+        "fecha": "2026-05-18 06:44:36",
+        "tipo": "egreso",
+        "concepto": "Nómina María López – 2026-05",
+        "referencia_id": "",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 9
+    },
+    {
+        "fecha": "2026-05-18 06:44:37",
+        "tipo": "egreso",
+        "concepto": "Nómina Carlos Ruiz – 2026-05",
+        "referencia_id": "",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 10
+    },
+    {
+        "fecha": "2026-05-22 18:32:41",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260522-81FF",
+        "referencia_id": "CP-20260522-81FF",
+        "referencia_tipo": "pedido",
+        "monto": 95.94,
+        "metodo_pago": "card",
+        "id": 11
+    },
+    {
+        "fecha": "2026-05-26 19:38:34",
+        "tipo": "egreso",
+        "concepto": "Nómina María López – 2026-05",
+        "referencia_id": "",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 12
+    },
+    {
+        "fecha": "2026-05-26 19:38:37",
+        "tipo": "egreso",
+        "concepto": "Nómina Carlos Ruiz – 2026-05",
+        "referencia_id": "",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 13
+    },
+    {
+        "fecha": "2026-06-01 15:23:19",
+        "tipo": "egreso",
+        "concepto": "Orden de compra OC-20260601-AA25",
+        "referencia_id": "OC-20260601-AA25",
+        "referencia_tipo": "orden_compra",
+        "monto": 250,
+        "metodo_pago": "transferencia",
+        "id": 14
+    },
+    {
+        "fecha": "2026-06-01 15:23:42",
+        "tipo": "egreso",
+        "concepto": "Nómina María López – 2026-06",
+        "referencia_id": "",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 15
+    },
+    {
+        "fecha": "2026-06-01 15:23:44",
+        "tipo": "egreso",
+        "concepto": "Nómina Carlos Ruiz – 2026-06",
+        "referencia_id": "",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 16
+    },
+    {
+        "fecha": "2026-06-03 07:22:16",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260603-A7D5",
+        "referencia_id": "CP-20260603-A7D5",
+        "referencia_tipo": "pedido",
+        "monto": 374.37,
+        "metodo_pago": "card",
+        "id": 17
+    },
+    {
+        "fecha": "2026-06-03 14:21:27",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260603-2650",
+        "referencia_id": "CP-20260603-2650",
+        "referencia_tipo": "pedido",
+        "monto": 11.99,
+        "metodo_pago": "paypal",
+        "id": 18
+    },
+    {
+        "fecha": "2026-06-03 14:25:46",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260603-704B",
+        "referencia_id": "CP-20260603-704B",
+        "referencia_tipo": "pedido",
+        "monto": 259.17,
+        "metodo_pago": "mercadopago",
+        "id": 19
+    },
+    {
+        "fecha": "2026-06-03 16:24:01",
+        "tipo": "egreso",
+        "concepto": "Reembolso pedido CP-20260603-704B",
+        "referencia_id": "CP-20260603-704B",
+        "referencia_tipo": "reembolso",
+        "monto": 259.17,
+        "metodo_pago": "mercadopago",
+        "id": 20
+    },
+    {
+        "fecha": "2026-06-03 16:53:06",
+        "tipo": "ingreso",
+        "concepto": "Pedido CP-20260603-027F",
+        "referencia_id": "CP-20260603-027F",
+        "referencia_tipo": "pedido",
+        "monto": 45122.63,
+        "metodo_pago": "check",
+        "id": 21
+    },
+    {
+        "fecha": "2026-06-03 17:01:58",
+        "tipo": "egreso",
+        "concepto": "Nómina María López – 2026-06",
+        "referencia_id": "",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 22
+    },
+    {
+        "fecha": "2026-06-03 17:05:40",
+        "tipo": "egreso",
+        "concepto": "Nómina - Carlos Ruiz (2026-06)",
+        "referencia_id": "8",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 23
+    },
+    {
+        "fecha": "2026-06-03 17:05:45",
+        "tipo": "egreso",
+        "concepto": "Nómina - Carlos Ruiz (2026-06)",
+        "referencia_id": "9",
+        "referencia_tipo": "nomina",
+        "monto": 7000,
+        "metodo_pago": "transferencia",
+        "id": 24
+    },
+    {
+        "fecha": "2026-06-03 17:15:44",
+        "tipo": "egreso",
+        "concepto": "Nómina - Marco Baez (2026-06)",
+        "referencia_id": "10",
+        "referencia_tipo": "nomina",
+        "monto": 5000,
+        "metodo_pago": "transferencia",
+        "id": 25
+    }
+]

@@ -1,0 +1,19 @@
+[
+    {
+        "id": 1780496596,
+        "folio": "CP-20260603-704B",
+        "usuario_id": 9,
+        "cliente": "Jose Reyes",
+        "correo": "correo@pastel.com",
+        "tipo": "devolucion",
+        "estado": "aprobada",
+        "motivo": "sabor incorrecto",
+        "monto": 259.17,
+        "metodo_pago": "mercadopago",
+        "pedido_estado": "Entregado",
+        "fecha_solicitud": "2026-06-03 16:23:16",
+        "fecha_resolucion": "2026-06-03 16:24:01",
+        "resuelto_por": "Administrador General",
+        "resuelto_rol": "admin"
+    }
+]

@@ -8,7 +8,9 @@
         "tamanio": "G",
         "sabor": "Chocolate Negro",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2016\/11\/22\/18\/52\/cake-1850011_1280.jpg",
-        "stock": 12
+        "stock": 8,
+        "stock_minimo": 5,
+        "activo": true
     },
     {
         "id": 2,
@@ -19,7 +21,9 @@
         "tamanio": "M",
         "sabor": "Chocolate",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2015\/05\/07\/15\/08\/cookie-756601_1280.jpg",
-        "stock": 12
+        "stock": 5,
+        "stock_minimo": 5,
+        "activo": true
     },
     {
         "id": 3,
@@ -30,7 +34,9 @@
         "tamanio": "S",
         "sabor": "Chocolate con azúcar glass y lunetas",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2018\/04\/24\/20\/12\/dessert-3347905_1280.jpg",
-        "stock": 3
+        "stock": 1,
+        "stock_minimo": 2,
+        "activo": true
     },
     {
         "id": 4,
@@ -41,7 +47,9 @@
         "tamanio": "XL",
         "sabor": "Queso y fresa",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2018\/11\/05\/03\/03\/strawberry-tart-3795363_1280.jpg",
-        "stock": 2
+        "stock": 250,
+        "stock_minimo": 20,
+        "activo": true
     },
     {
         "id": 5,
@@ -52,7 +60,9 @@
         "tamanio": "P",
         "sabor": "Durazno, manzana, naranja, fresa, kiwi",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2019\/07\/26\/20\/30\/jelly-4365579_1280.jpg",
-        "stock": 13
+        "stock": 12,
+        "stock_minimo": 5,
+        "activo": true
     },
     {
         "id": 6,
@@ -63,7 +73,9 @@
         "tamanio": "P",
         "sabor": "Chocolate",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2015\/09\/21\/04\/15\/cake-949352_1280.jpg",
-        "stock": 19
+        "stock": 13,
+        "stock_minimo": 5,
+        "activo": true
     },
     {
         "id": 7,
@@ -74,7 +86,9 @@
         "tamanio": "P",
         "sabor": "Chocolate",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2016\/05\/07\/16\/23\/cookies-1377582_1280.jpg",
-        "stock": 5
+        "stock": 2,
+        "stock_minimo": 2,
+        "activo": true
     },
     {
         "id": 8,
@@ -85,7 +99,9 @@
         "tamanio": "M",
         "sabor": "arcoiris y vainilla",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2025\/02\/07\/14\/22\/cupcake-9390170_1280.jpg",
-        "stock": 12
+        "stock": 12,
+        "stock_minimo": 5,
+        "activo": true
     },
     {
         "id": 9,
@@ -96,7 +112,9 @@
         "tamanio": "G",
         "sabor": "Mermelada, crema pastelera, durazno, cajeta, choco",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2017\/03\/30\/15\/46\/churros-2188869_1280.jpg",
-        "stock": 20
+        "stock": 4,
+        "stock_minimo": 5,
+        "activo": true
     },
     {
         "id": 10,
@@ -107,6 +125,8 @@
         "tamanio": "M",
         "sabor": "Pan salado",
         "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2025\/02\/27\/07\/40\/croissant-9434564_1280.jpg",
-        "stock": 34
+        "stock": 34,
+        "stock_minimo": 10,
+        "activo": true
     }
 ]

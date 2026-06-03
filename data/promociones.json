@@ -1,0 +1,26 @@
+[
+    {
+        "nombre": "Festival del chocolate",
+        "tipo": "descuento_porcentaje",
+        "valor": 20,
+        "aplica_a": "categoria",
+        "referencia": "Pasteles y roscas",
+        "clientes": "todos",
+        "activa": true,
+        "fecha_inicio": "2026-05-15",
+        "fecha_fin": "2026-06-25",
+        "id": 1
+    },
+    {
+        "nombre": "Lleve lleve",
+        "tipo": "descuento_porcentaje",
+        "valor": 5,
+        "aplica_a": "todos",
+        "referencia": "",
+        "clientes": "todos",
+        "activa": true,
+        "fecha_inicio": "2026-05-12",
+        "fecha_fin": "2026-06-28",
+        "id": 2
+    }
+]

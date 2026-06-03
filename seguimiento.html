@@ -221,102 +221,13 @@
   <div class="container">
     <div class="card">
       <h1>Seguimiento de tu pedido</h1>
-      
+      <p class="muted" style="color:#555;margin-top:6px;">Introduce el folio de tu pedido (por ejemplo <strong>CP-20260515-4841</strong>) o llega aquí desde el checkout o tu perfil.</p>
       <div style="margin-top:15px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; border-bottom:1px solid #eee; padding-bottom:20px; margin-bottom:20px;">
-        <input type="text" value="923153" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:220px; background:#f5f5f5;" readonly>
-        <span style="color:#2e7d32; font-weight:bold; font-size:0.9rem;">✓ Pedido Encontrado</span>
+        <input type="text" id="folioBuscar" placeholder="Folio del pedido" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:min(100%,320px);">
+        <button type="button" class="btn btn-primary" onclick="cargarPedidoSeguimiento()">Consultar</button>
       </div>
-
-      <div class="layout">
-        
-        <section>
-          <div class="order-meta">
-            <div>
-              <div class="order-number">Pedido #923153</div>
-              <div class="muted" style="font-size:0.9rem">4/11/2025, 10:05 p.m.</div>
-            </div>
-            <div class="order-status">En Camino</div>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <div class="item">
-              <img src="https://cdn.pixabay.com/photo/2019/07/26/20/30/jelly-4365579_1280.jpg" alt="Producto">
-              <div class="info">
-                <div class="title">Gelatina de frutas Artesanal</div>
-                <div class="meta">Cantidad: 2 • Precio Unit: $11.99</div>
-              </div>
-              <div style="font-weight:800">$23.98</div>
-            </div>
-          </div>
-
-          <div class="totals">
-            Total Pagado: $23.98
-          </div>
-
-          <div style="margin-top:30px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-             <span style="font-size:0.9rem; font-weight:600; color:#555;">Acciones:</span>
-             <button class="btn btn-outline-red" onclick="openInvoice()">📄 Solicitar / Ver Factura</button>
-             <button class="btn btn-ghost" onclick="showNotification('¡Gracias por contactarnos!', 'Nuestro equipo de soporte te llamará en breve.')">📞 Ayuda</button>
-          </div>
-          
-          <div class="cert-badge">
-             🔒 <strong>Certificación Digital 2025:</strong> Transacción auténtica y protegida por firma electrónica PKI.
-          </div>
-        </section>
-
-        <aside>
-          <div style="background:#fff; padding:15px; border-radius:10px; border:1px solid #eee;">
-            <h3 style="font-size:1.1rem; border-bottom:1px solid #eee; padding-bottom:10px;">Estado del envío</h3>
-            <div class="timeline">
-              <div class="step done">
-                <div class="bullet"></div>
-                <div class="content">
-                  <div style="font-weight:700">Recibido</div>
-                  <div class="when">10:05 p.m.</div>
-                </div>
-              </div>
-              <div class="step done">
-                <div class="bullet"></div>
-                <div class="content">
-                  <div style="font-weight:700">Preparación</div>
-                  <div class="when">10:15 p.m.</div>
-                </div>
-              </div>
-              <div class="step done">
-                <div class="bullet"></div>
-                <div class="content">
-                  <div style="font-weight:700">En camino</div>
-                  <div class="when">Ahora</div>
-                </div>
-              </div>
-              <div class="step">
-                <div class="bullet"></div>
-                <div class="content">
-                  <div style="font-weight:700; color:#999;">Entregado</div>
-                  <div class="when">Est: 10:45 p.m.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="micropayment-card">
-            <div class="micro-header">
-               <span>❤️</span> Donación con Causa
-            </div>
-            <div class="micro-body">
-               ¿Te sobró un poco de cambio? Apoya a <strong>"Niños del Futuro A.C."</strong> para combatir la pobreza infantil.
-               <br><br>
-               <em>¡Al donar desbloqueas cupones exclusivos para tu próxima compra!</em>
-            </div>
-            <div class="donation-options">
-               <button class="btn-donate" onclick="showDonateSuccess(10)">$10</button>
-               <button class="btn-donate" onclick="showDonateSuccess(20)">$20</button>
-               <button class="btn-donate" onclick="showDonateSuccess(50)">$50</button>
-            </div>
-          </div>
-
-        </aside>
-      </div>
+      <p id="segMsg" style="display:none;color:#a30015;font-weight:600;"></p>
+      <div id="segContenido"></div>
     </div>
   </div>
 
@@ -445,6 +356,144 @@
   </div>
 
   <script>
+    // Verificar sesión antes de permitir búsquedas
+async function verificarSesionSeguimiento() {
+  try {
+    const r = await fetch('sesion_info.php');
+    const info = await r.json();
+    if (!info.activo || info.rol !== 'cliente') {
+      document.getElementById('segMsg').textContent = 'Debes iniciar sesión para consultar tu pedido.';
+      document.getElementById('segMsg').style.display = 'block';
+      document.getElementById('folioBuscar').disabled = true;
+      document.querySelector('button[onclick="cargarPedidoSeguimiento()"]').disabled = true;
+      // Mostrar enlace de login
+      const msg = document.getElementById('segMsg');
+      msg.innerHTML = '⚠️ <a href="login.html" style="color:#a30015;font-weight:bold;">Inicia sesión</a> para consultar el estado de tu pedido.';
+    }
+  } catch(e) {}
+}
+     window._pedidoSeguimiento = null;
+
+     function estadoIndex(estado) {
+       const orden = ['Recibido','En preparación','En camino','Entregado','Cancelado'];
+       const i = orden.indexOf(estado || 'Recibido');
+       return i < 0 ? 0 : i;
+     }
+
+     function renderTimeline(estado) {
+       const labels = ['Recibido','En preparación','En camino','Entregado'];
+       const idx = estado === 'Cancelado' ? -1 : estadoIndex(estado);
+       return labels.map((lab, i) => {
+         const done = idx >= i && estado !== 'Cancelado';
+         const muted = !done ? 'color:#999;' : '';
+         return `<div class="step ${done ? 'done' : ''}">
+           <div class="bullet"></div>
+           <div class="content">
+             <div style="font-weight:700;${muted}">${lab}</div>
+             <div class="when">${done ? 'Completado / en curso' : 'Pendiente'}</div>
+           </div>
+         </div>`;
+       }).join('');
+     }
+
+     async function cargarPedidoSeguimiento() {
+       const folio = document.getElementById('folioBuscar').value.trim();
+       const msg = document.getElementById('segMsg');
+       const box = document.getElementById('segContenido');
+       msg.style.display = 'none';
+       box.innerHTML = '';
+       if (!folio) {
+         msg.textContent = 'Escribe un folio válido.';
+         msg.style.display = 'block';
+         return;
+       }
+       try {
+         const r = await fetch('consultar_pedido.php?folio=' + encodeURIComponent(folio));
+         const data = await r.json();
+         if (!data.ok || !data.pedido) {
+           msg.textContent = data.msg || 'No se encontró el pedido.';
+           msg.style.display = 'block';
+           return;
+         }
+         const p = data.pedido;
+         window._pedidoSeguimiento = p;
+         const folioP = p.folio || p.numero_pedido || folio;
+         const items = (p.items || []).map(it => {
+           const img = it.imagen_url || 'https://cdn.pixabay.com/photo/2016/11/22/18/52/cake-1850011_1280.jpg';
+           const sub = (parseFloat(it.precio) * parseInt(it.cantidad || 1, 10)).toFixed(2);
+           return `<div class="item">
+             <img src="${img}" alt="">
+             <div class="info">
+               <div class="title">${it.titulo || 'Producto'}</div>
+               <div class="meta">Cantidad: ${it.cantidad || 1} • Precio unit. $${parseFloat(it.precio).toFixed(2)}</div>
+             </div>
+             <div style="font-weight:800">$${sub}</div>
+           </div>`;
+         }).join('');
+         const estado = p.estado || 'Recibido';
+         const badge = estado === 'Cancelado' ? '#dc3545' : '#2e7d32';
+         box.innerHTML = `
+           <div class="layout">
+             <section>
+               <div class="order-meta">
+                 <div>
+                   <div class="order-number">Pedido ${folioP}</div>
+                   <div class="muted" style="font-size:0.9rem">${(p.fecha || '').replace(' ', ' · ')}</div>
+                   <div class="muted" style="margin-top:6px;">Cliente: ${p.cliente || '—'} · ${p.correo || ''}</div>
+                 </div>
+                 <div class="order-status" style="background:${estado==='Cancelado'?'#fdecea':'#e8f5e9'};color:${badge};">${estado}</div>
+               </div>
+               <div style="display:flex; flex-direction:column; gap:10px;">${items || '<p class="muted">Sin detalle de artículos.</p>'}</div>
+               <div class="totals">Total: $${parseFloat(p.total||0).toFixed(2)} · ${p.metodo_pago || p.metodo || 'Pago'}</div>
+               <div id="accionesPostventa"
+style="
+margin-top:20px;
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+">
+</div>
+               <div style="margin-top:24px; display:flex; gap:10px; flex-wrap:wrap;">
+                 <button class="btn btn-outline-red" onclick="openInvoice()">📄 Ver factura simulada</button>
+                 <button class="btn btn-ghost" onclick="showNotification('Soporte', 'Nuestro equipo te contactará pronto.', '📞')">📞 Ayuda</button>
+               </div>
+               <div class="cert-badge" style="margin-top:16px;">
+                 🔒 Referencia de pago / finanzas: <strong>${folioP}</strong>
+               </div>
+             </section>
+             <aside>
+               <div style="background:#fff; padding:15px; border-radius:10px; border:1px solid #eee;">
+                 <h3 style="font-size:1.1rem; border-bottom:1px solid #eee; padding-bottom:10px;">Estado del envío</h3>
+                 <div class="timeline">${renderTimeline(estado)}</div>
+               </div>
+               <div class="micropayment-card">
+                 <div class="micro-header"><span>❤️</span> Donación con Causa</div>
+                 <div class="micro-body">Apoya a <strong>Niños del Futuro A.C.</strong> (simulado).</div>
+                 <div class="donation-options">
+                   <button class="btn-donate" onclick="showDonateSuccess(10)">$10</button>
+                   <button class="btn-donate" onclick="showDonateSuccess(20)">$20</button>
+                   <button class="btn-donate" onclick="showDonateSuccess(50)">$50</button>
+                 </div>
+               </div>
+             </aside>
+           </div>`;
+renderPostventa(p);
+       } catch (e) {
+         msg.textContent = 'Error de red al consultar el pedido.';
+         msg.style.display = 'block';
+       }
+     }
+
+      document.addEventListener('DOMContentLoaded', () => {
+      verificarSesionSeguimiento();
+       const u = new URLSearchParams(window.location.search);
+       const f = u.get('folio');
+       if (f) {
+         document.getElementById('folioBuscar').value = f;
+         cargarPedidoSeguimiento();
+       }
+     });
+
      function showNotification(title, message, icon = '🎉') {
         const modal = document.getElementById('notificationModal');
         document.getElementById('notifTitle').innerText = title;
@@ -466,6 +515,20 @@
      }
 
      function openInvoice() {
+        const p = window._pedidoSeguimiento;
+        if (p) {
+          const folio = p.folio || p.numero_pedido || '';
+          const el = document.querySelector('.cfdi-title');
+          if (el) el.textContent = 'FACTURA (simulada) · ' + folio;
+          const tbody = document.querySelector('.cfdi-table tbody');
+          if (tbody && p.items && p.items.length) {
+            tbody.innerHTML = p.items.map(it => `<tr>
+              <td>50181900</td><td>${(it.id||'')}</td><td>${it.cantidad||1}</td><td>H87</td>
+              <td>${it.titulo||''}</td><td>$${parseFloat(it.precio).toFixed(2)}</td>
+              <td>$${(parseFloat(it.precio)*(parseInt(it.cantidad||1,10))).toFixed(2)}</td>
+            </tr>`).join('');
+          }
+        }
         document.getElementById('invoiceModal').style.display = 'flex';
         document.body.style.overflow = 'hidden';
      }
@@ -485,6 +548,114 @@
            closeInvoice();
         }
      }
+     function renderPostventa(pedido){
+
+    const cont =
+    document.getElementById(
+        'accionesPostventa'
+    );
+
+    if(!cont) return;
+
+    /*
+    |--------------------------------------------------------------------------
+    | YA EXISTE SOLICITUD
+    |--------------------------------------------------------------------------
+    */
+
+    if(pedido.solicitud_postventa){
+
+        const s = pedido.solicitud_postventa;
+
+        cont.innerHTML = `
+        <div style="
+            background:#fff3cd;
+            border:1px solid #ffeeba;
+            color:#856404;
+            padding:14px 18px;
+            border-radius:10px;
+            width:100%;
+            font-weight:bold;
+        ">
+            Solicitud de ${s.tipo}
+            · Estado:
+            ${s.estado}
+        </div>
+        `;
+
+        return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | BOTONES
+    |--------------------------------------------------------------------------
+    */
+
+    cont.innerHTML = `
+    
+    <button class="btn btn-outline-red"
+    onclick="solicitarPostventa(
+        '${pedido.folio}',
+        'cancelacion'
+    )">
+        Cancelar pedido
+    </button>
+
+    <button class="btn btn-outline-red"
+    onclick="solicitarPostventa(
+        '${pedido.folio}',
+        'devolucion'
+    )">
+        Solicitar devolución
+    </button>
+    `;
+}
+
+async function solicitarPostventa(
+    folio,
+    tipo
+){
+
+    const motivo =
+    prompt(
+        'Describe el motivo'
+    );
+
+    if(!motivo) return;
+
+    const res =
+    await fetch(
+        'crud_postventa.php',
+        {
+            method:'POST',
+
+            headers:{
+                'Content-Type':
+                'application/json'
+            },
+
+            body:JSON.stringify({
+
+                folio,
+                tipo,
+                motivo
+            })
+        }
+    );
+
+    const data =
+    await res.json();
+
+    if(data.ok){
+
+        alert(
+            'Solicitud enviada'
+        );
+
+        location.reload();
+    }
+}
   </script>
 
   <style>

@@ -1,0 +1,314 @@
+[
+    {
+        "fecha": "2026-05-12 03:57:50",
+        "tipo": "salida",
+        "producto_id": 9,
+        "producto": "Churros rellenos",
+        "cantidad": 10,
+        "referencia": "pedido",
+        "motivo": "Venta",
+        "id": 1
+    },
+    {
+        "fecha": "2026-05-15 06:29:16",
+        "tipo": "salida",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 1,
+        "referencia": "pedido",
+        "motivo": "Venta",
+        "id": 2
+    },
+    {
+        "fecha": "2026-05-17 23:46:31",
+        "tipo": "salida",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 4,
+        "referencia": "CP-20260517-D5E4",
+        "motivo": "Venta",
+        "id": 3
+    },
+    {
+        "fecha": "2026-05-17 23:52:46",
+        "tipo": "entrada",
+        "producto_id": 0,
+        "insumo_id": 5,
+        "producto": "Chocolate amargo",
+        "cantidad": 30,
+        "referencia": "OC-20260517-3FD2",
+        "motivo": "Compra a proveedor (insumo)",
+        "id": 4
+    },
+    {
+        "fecha": "2026-05-17 23:54:27",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Chocolate amargo",
+        "cantidad": 2,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x10 lotes",
+        "id": 5
+    },
+    {
+        "fecha": "2026-05-17 23:54:27",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Azúcar",
+        "cantidad": 1,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x10 lotes",
+        "id": 6
+    },
+    {
+        "fecha": "2026-05-17 23:54:27",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Huevo",
+        "cantidad": 40,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x10 lotes",
+        "id": 7
+    },
+    {
+        "fecha": "2026-05-17 23:54:27",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Vainilla",
+        "cantidad": 20,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x10 lotes",
+        "id": 8
+    },
+    {
+        "fecha": "2026-05-17 23:54:27",
+        "tipo": "entrada",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 10,
+        "referencia": "produccion",
+        "motivo": "Producción x10 lotes de \"Tradicional\"",
+        "id": 9
+    },
+    {
+        "fecha": "2026-05-17 23:56:37",
+        "tipo": "salida",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 1,
+        "referencia": "CP-20260517-041A",
+        "motivo": "Venta",
+        "id": 10
+    },
+    {
+        "fecha": "2026-05-18 00:06:57",
+        "tipo": "salida",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 1,
+        "referencia": "CP-20260518-F757",
+        "motivo": "Venta",
+        "id": 11
+    },
+    {
+        "fecha": "2026-05-18 00:22:12",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Chocolate amargo",
+        "cantidad": 4,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x20 lotes",
+        "id": 12
+    },
+    {
+        "fecha": "2026-05-18 00:22:12",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Azúcar",
+        "cantidad": 2,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x20 lotes",
+        "id": 13
+    },
+    {
+        "fecha": "2026-05-18 00:22:12",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Huevo",
+        "cantidad": 80,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x20 lotes",
+        "id": 14
+    },
+    {
+        "fecha": "2026-05-18 00:22:12",
+        "tipo": "salida",
+        "producto_id": 0,
+        "producto": "Vainilla",
+        "cantidad": 40,
+        "referencia": "produccion",
+        "motivo": "Producción: Tradicional x20 lotes",
+        "id": 15
+    },
+    {
+        "fecha": "2026-05-18 00:22:12",
+        "tipo": "entrada",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 20,
+        "referencia": "produccion",
+        "motivo": "Producción x20 lotes de \"Tradicional\"",
+        "id": 16
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "salida",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 20,
+        "referencia": "CP-20260518-5D7C",
+        "motivo": "Venta",
+        "id": 17
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "salida",
+        "producto_id": 2,
+        "producto": "Galleta estilo nueva york",
+        "cantidad": 7,
+        "referencia": "CP-20260518-5D7C",
+        "motivo": "Venta",
+        "id": 18
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "salida",
+        "producto_id": 3,
+        "producto": "Brownie de momia",
+        "cantidad": 2,
+        "referencia": "CP-20260518-5D7C",
+        "motivo": "Venta",
+        "id": 19
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "salida",
+        "producto_id": 4,
+        "producto": "Pay de fresa y queso",
+        "cantidad": 2,
+        "referencia": "CP-20260518-5D7C",
+        "motivo": "Venta",
+        "id": 20
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "salida",
+        "producto_id": 6,
+        "producto": "Flan de chocolate",
+        "cantidad": 25,
+        "referencia": "CP-20260518-5D7C",
+        "motivo": "Venta",
+        "id": 21
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "salida",
+        "producto_id": 7,
+        "producto": "Galleta glaseada",
+        "cantidad": 3,
+        "referencia": "CP-20260518-5D7C",
+        "motivo": "Venta",
+        "id": 22
+    },
+    {
+        "fecha": "2026-05-18 00:23:37",
+        "tipo": "salida",
+        "producto_id": 9,
+        "producto": "Churros rellenos",
+        "cantidad": 6,
+        "referencia": "CP-20260518-5D7C",
+        "motivo": "Venta",
+        "id": 23
+    },
+    {
+        "fecha": "2026-05-18 06:43:55",
+        "tipo": "salida",
+        "producto_id": 4,
+        "producto": "Pay de fresa y queso",
+        "cantidad": 500,
+        "referencia": "CP-20260518-8101",
+        "motivo": "Venta",
+        "id": 24
+    },
+    {
+        "fecha": "2026-05-22 18:32:41",
+        "tipo": "salida",
+        "producto_id": 6,
+        "producto": "Flan de chocolate",
+        "cantidad": 6,
+        "referencia": "CP-20260522-81FF",
+        "motivo": "Venta",
+        "id": 25
+    },
+    {
+        "fecha": "2026-06-01 15:23:19",
+        "tipo": "entrada",
+        "producto_id": 0,
+        "insumo_id": 4,
+        "producto": "Mantequilla",
+        "cantidad": 500,
+        "referencia": "OC-20260601-AA25",
+        "motivo": "Compra a proveedor (insumo)",
+        "id": 26
+    },
+    {
+        "fecha": "2026-06-03 07:22:16",
+        "tipo": "salida",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 1,
+        "referencia": "CP-20260603-A7D5",
+        "motivo": "Venta",
+        "id": 27
+    },
+    {
+        "fecha": "2026-06-03 07:22:16",
+        "tipo": "salida",
+        "producto_id": 4,
+        "producto": "Pay de fresa y queso",
+        "cantidad": 2,
+        "referencia": "CP-20260603-A7D5",
+        "motivo": "Venta",
+        "id": 28
+    },
+    {
+        "fecha": "2026-06-03 14:21:27",
+        "tipo": "salida",
+        "producto_id": 5,
+        "producto": "Gelatina de frutas",
+        "cantidad": 1,
+        "referencia": "CP-20260603-2650",
+        "motivo": "Venta",
+        "id": 29
+    },
+    {
+        "fecha": "2026-06-03 14:25:46",
+        "tipo": "salida",
+        "producto_id": 1,
+        "producto": "Pastel de tres leches de chocolate",
+        "cantidad": 3,
+        "referencia": "CP-20260603-704B",
+        "motivo": "Venta",
+        "id": 30
+    },
+    {
+        "fecha": "2026-06-03 16:53:06",
+        "tipo": "salida",
+        "producto_id": 4,
+        "producto": "Pay de fresa y queso",
+        "cantidad": 250,
+        "referencia": "CP-20260603-027F",
+        "motivo": "Venta",
+        "id": 31
+    }
+]

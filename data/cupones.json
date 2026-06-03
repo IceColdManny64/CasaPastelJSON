@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1780463307,
+        "usuario_id": 7,
+        "codigo": "PASTEL-F45068",
+        "descripcion": "Cupón de recuperación de carrito",
+        "tipo": "descuento_porcentaje",
+        "valor": 10,
+        "fecha_expiracion": "2026-06-10",
+        "estado": "activo",
+        "usos_restantes": 1,
+        "motivo": "abandono_carrito",
+        "fecha_creacion": "2026-06-03 07:08:27",
+        "usado": true,
+        "folio_pedido": "CP-20260603-A7D5"
+    },
+    {
+        "id": 1780489492,
+        "usuario_id": 9,
+        "codigo": "PASTEL-96F12D",
+        "descripcion": "Cupón de recuperación de carrito",
+        "tipo": "descuento_porcentaje",
+        "valor": 10,
+        "fecha_expiracion": "2026-06-10",
+        "estado": "activo",
+        "usos_restantes": 1,
+        "motivo": "abandono_carrito",
+        "fecha_creacion": "2026-06-03 14:24:52",
+        "usado": true,
+        "folio_pedido": "CP-20260603-704B"
+    }
+]

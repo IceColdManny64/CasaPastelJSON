@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "nombre": "Distribuidora La Dulce",
+        "contacto": "dulce@distribuidora.mx",
+        "telefono": "449-100-2001",
+        "productos": "Harina, azúcar, mantequilla",
+        "categoria": "Pasteles y roscas",
+        "tiempo_entrega": "2 días",
+        "activo": true
+    },
+    {
+        "id": 2,
+        "nombre": "Chocolates del Norte",
+        "contacto": "ventas@choconorte.mx",
+        "telefono": "449-200-3003",
+        "productos": "Chocolate, cacao, crema",
+        "categoria": "Chocolates y caramelos",
+        "tiempo_entrega": "1 día",
+        "activo": true
+    },
+    {
+        "id": 3,
+        "nombre": "Frutas Frescas Aguascalientes",
+        "contacto": "pedidos@frutasags.mx",
+        "telefono": "449-300-4004",
+        "productos": "Fresas, mango, limón, frutas de temporada",
+        "categoria": "Frutas frescas",
+        "tiempo_entrega": "1 día",
+        "activo": true
+    }
+]

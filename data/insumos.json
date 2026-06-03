@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "nombre": "Harina de trigo",
+        "unidad": "kg",
+        "stock": 25,
+        "stock_minimo": 5,
+        "proveedor_id": 1
+    },
+    {
+        "id": 2,
+        "nombre": "Azúcar",
+        "unidad": "kg",
+        "stock": 17,
+        "stock_minimo": 5,
+        "proveedor_id": 1
+    },
+    {
+        "id": 3,
+        "nombre": "Huevo",
+        "unidad": "pza",
+        "stock": 0,
+        "stock_minimo": 24,
+        "proveedor_id": 1
+    },
+    {
+        "id": 4,
+        "nombre": "Mantequilla",
+        "unidad": "kg",
+        "stock": 510,
+        "stock_minimo": 3,
+        "proveedor_id": 1
+    },
+    {
+        "id": 5,
+        "nombre": "Chocolate amargo",
+        "unidad": "kg",
+        "stock": 32,
+        "stock_minimo": 2,
+        "proveedor_id": 2
+    },
+    {
+        "id": 6,
+        "nombre": "Crema para batir",
+        "unidad": "lt",
+        "stock": 15,
+        "stock_minimo": 4,
+        "proveedor_id": 2
+    },
+    {
+        "id": 7,
+        "nombre": "Vainilla",
+        "unidad": "ml",
+        "stock": 440,
+        "stock_minimo": 100,
+        "proveedor_id": 1
+    },
+    {
+        "id": 8,
+        "nombre": "Levadura",
+        "unidad": "gr",
+        "stock": 300,
+        "stock_minimo": 50,
+        "proveedor_id": 1
+    }
+]

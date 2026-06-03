@@ -1,0 +1,35 @@
+[
+    {
+        "nombre": "Tradicional",
+        "postre_id": 1,
+        "postre_nombre": "Pastel de tres leches de chocolate",
+        "rinde": 1,
+        "ingredientes": [
+            {
+                "insumo_id": 5,
+                "insumo_nombre": "Chocolate amargo",
+                "cantidad": 0.2,
+                "unidad": "kg"
+            },
+            {
+                "insumo_id": 2,
+                "insumo_nombre": "Azúcar",
+                "cantidad": 0.1,
+                "unidad": "kg"
+            },
+            {
+                "insumo_id": 3,
+                "insumo_nombre": "Huevo",
+                "cantidad": 4,
+                "unidad": "pza"
+            },
+            {
+                "insumo_id": 7,
+                "insumo_nombre": "Vainilla",
+                "cantidad": 2,
+                "unidad": "ml"
+            }
+        ],
+        "id": 1
+    }
+]

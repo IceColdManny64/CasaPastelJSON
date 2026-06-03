@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Perfil - La Casa del Pastel</title>
-
+    <link rel="stylesheet" href="carrito-drawer.css">
   <!-- Fuentes -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Segoe+UI:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
@@ -126,6 +126,33 @@
       flex-direction:column;
       gap:18px;
     }
+    .cupon-card{
+  border:2px dashed #d6001c;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:15px;
+  background:#3e1414;
+}
+
+.cupon-card h4{
+  margin:0 0 10px;
+  color:#a30015;
+}
+
+.cupon-card p{
+  margin:4px 0;
+}
+
+.cupon-codigo{
+  font-size:1.2rem;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+
+.cupon-expirado{
+  opacity:0.6;
+  border-color:#999;
+}
 
     .welcome{
       display:flex;
@@ -133,6 +160,7 @@
       align-items:center;
       gap:12px;
     }
+
     .welcome h2{font-family:'Playfair Display',serif; color:white; margin:0; font-size:1.7rem}
     .welcome p{color:#fff; opacity:0.95; margin:6px 0 0}
 
@@ -206,375 +234,224 @@
         <a href="ofertas.php">Ofertas</a>
         <a href="contacto.html">Contacto</a>
       </nav>
-      <a href="carritoCompra.html" style="color:white; text-decoration:none; font-size:1.1rem">🛒</a>
+                <a href="#" id="btn-abrir-carrito"
+             onclick="abrirCarritoDrawer();return false;">
+            🛒 <span id="cart-nav-badge" class="cart-nav-badge hidden">0</span>
+          </a>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- SIDEBAR -->
     <aside class="card">
       <div class="profile-top">
         <img src="perfil.png" alt="Avatar" class="avatar">
-        <div class="user-name">Alexito Luna</div>
-        <div class="user-email">Alex@example.com</div>
+        <div class="user-name" id="sideNombre">—</div>
+        <div class="user-email" id="sideCorreo">—</div>
+        <p style="margin-top:10px;font-size:0.9rem;color:var(--red-700);font-weight:600;">Tipo de cuenta: <span id="sideTipo">—</span></p>
       </div>
-
       <div class="quick-stats" aria-hidden="true">
         <div class="stat">
-          <strong>4</strong>
+          <strong id="statPedidos">0</strong>
           <small>Pedidos</small>
         </div>
-        <div class="stat">
-          <strong>2</strong>
-          <small>Favoritos</small>
-        </div>
       </div>
-
       <nav class="sidebar-menu" aria-label="Menú de usuario">
-        <a href="#" data-tab="overview" class="menu-link">🏠 Resumen</a>
-        <a href="#" data-tab="profile" class="menu-link">⚙️ Configuración</a>
-        <a href="#" data-tab="orders" class="menu-link">🧾 Pedidos</a>
-        <a href="#" data-tab="history" class="menu-link">📜 Historial</a>
-        <a href="#" data-tab="addresses" class="menu-link">📍 Direcciones</a>
-        <a href="#" data-tab="payments" class="menu-link">💳 Métodos de pago</a>
-        <a href="#" data-tab="wishlist" class="menu-link">⭐ Favoritos</a>
+        <a href="#" onclick="document.getElementById('historialPedidos').scrollIntoView({behavior:'smooth'});return false;">🧾 Ver historial</a>
+        <a href="menu.html">🍰 Ir al menú</a>
       </nav>
-
-      <a href="login.html" class="logout">Cerrar sesión</a>
+<a href="#" class="logout" onclick="cerrarSesion();return false;">Cerrar sesión</a>
     </aside>
 
-    <!-- MAIN -->
     <section class="main">
-
       <div class="welcome">
+        
         <div>
-          <h2>Hola, Alexito</h2>
-          <p class="muted">Bienvenida a tu panel de usuario — administra tu perfil y pedidos aquí.</p>
+          <h2 id="welcomeTitulo">Tu perfil</h2>
+          
         </div>
-        <div>
-          <button class="btn-primary" onclick="openTab('orders')">Ver mis pedidos</button>
-        </div>
+        <section class="card">
+  <h3 style="color:#a30015; margin-bottom:15px;">
+    🎟️ Mis Cupones
+  </h3>
+
+  <div id="lista-cupones">
+    <p>Cargando cupones...</p>
+  </div>
+</section>
       </div>
 
-      <div class="tabs card" role="tablist" aria-label="Secciones del perfil">
-
-
-
-        <div class="tab-content" id="tabContent">
-          <!-- OVERVIEW -->
-          <div class="tab-panel" id="overview">
-            <div class="panel-grid">
-              <div class="panel">
-                <h3>Información básica</h3>
-                <p><strong>Nombre:</strong> Alexito Luna</p>
-                <p><strong>Correo:</strong> Alex@example.com</p>
-                <p><strong>Teléfono:</strong> +52 449 123 4567</p>
-                <p class="muted">Puedes editar tu información en Configuración.</p>
-              </div>
-
-              <div class="panel">
-                <h3>Último pedido</h3>
-                <div class="order-item" style="margin-top:10px">
-                  <img src="https://cdn.pixabay.com/photo/2016/11/22/18/52/cake-1850011_1280.jpg" alt="" class="order-thumb">
-                  <div class="order-meta">
-                    <div><strong>Pastel de chocolate</strong></div>
-                    <small>Orden #1023 — Entregado 2025-10-02</small>
-                    <div style="margin-top:8px"><span class="muted">Total:</span> $520.00 MXN</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel">
-                <h3>Recomendaciones</h3>
-                <p class="muted">Pasteles recomendados según tus favoritos.</p>
-                <ul style="margin-top:8px">
-                  <li>Pastel Red Velvet</li>
-                  <li>Box de galletas surtidas</li>
-                </ul>
-              </div>
-
-              <div class="panel">
-                <h3>Soporte</h3>
-                <p class="muted">¿Tienes un problema con un pedido? Contáctanos.</p>
-                <button class="btn-primary" style="margin-top:10px">Contactar soporte</button>
-              </div>
-            </div>
+      <div class="tabs card" role="region" aria-label="Datos de cuenta">
+        <h3 style="margin:0 0 12px;font-family:'Playfair Display',serif;color:var(--red-700);">Datos de contacto (solo lectura)</h3>
+        <div class="panel-grid">
+          <div class="panel">
+            <p><strong>Nombre:</strong> <span id="roNombre">—</span></p>
+            <p><strong>Correo:</strong> <span id="roCorreo">—</span></p>
           </div>
-
-          <!-- PROFILE SETTINGS -->
-          <div class="tab-panel" id="profile" style="display:none">
-            <div class="panel-grid">
-              <div class="panel">
-                <h3>Editar perfil</h3>
-                <form onsubmit="event.preventDefault(); alert('Simulado: Datos guardados')">
-                  <div class="form-row">
-                    <div class="form-field">
-                      <label for="fname">Nombre</label>
-                      <input id="fname" value="Alexito" />
-                    </div>
-                    <div class="form-field">
-                      <label for="lname">Apellido</label>
-                      <input id="lname" value="Luna" />
-                    </div>
-                  </div>
-
-                  <div class="form-field">
-                    <label for="email">Correo</label>
-                    <input id="email" value="Alexn@example.com" />
-                  </div>
-
-                  <div class="form-row">
-                    <div class="form-field">
-                      <label for="phone">Teléfono</label>
-                      <input id="phone" value="+52 449 123 4567" />
-                    </div>
-                    <div class="form-field">
-                      <label for="birth">Fecha de nacimiento</label>
-                      <input id="birth" type="date" />
-                    </div>
-                  </div>
-
-                  <div class="form-field">
-                    <label for="bio">Biografía (opcional)</label>
-                    <textarea id="bio" placeholder="Tus gustos, alérgenos, etc."></textarea>
-                  </div>
-
-                  <button class="btn-primary">Guardar cambios</button>
-                </form>
-              </div>
-
-              <div class="panel">
-                <h3>Seguridad</h3>
-                <p class="muted">Cambia tu contraseña o activa autenticación biométrica.</p>
-
-                <form onsubmit="event.preventDefault(); alert('Simulado: Contraseña actualizada')">
-                  <div class="form-field">
-                    <label for="currpass">Contraseña actual</label>
-                    <input id="currpass" type="password" />
-                  </div>
-                  <div class="form-row">
-                    <div class="form-field">
-                      <label for="newpass">Nueva contraseña</label>
-                      <input id="newpass" type="password" />
-                    </div>
-                    <div class="form-field">
-                      <label for="confirm">Confirmar contraseña</label>
-                      <input id="confirm" type="password" />
-                    </div>
-                  </div>
-                  <button class="btn-primary">Cambiar contraseña</button>
-                </form>
-              </div>
-            </div>
+          <div class="panel">
+            <p><strong>Teléfono:</strong> <span id="roTel">—</span></p>
+            <p><strong>Dirección:</strong> <span id="roDir">—</span></p>
           </div>
+        </div>
 
-          <!-- ORDERS -->
-          <div class="tab-panel" id="orders" style="display:none">
-            <div class="panel">
-              <h3>Pedidos recientes</h3>
-              <div style="margin-top:12px; display:flex; flex-direction:column; gap:12px">
-                <!-- Sample order -->
-                <div class="panel" style="display:flex; justify-content:space-between; align-items:center; gap:12px">
-                  <div style="display:flex; gap:12px; align-items:center">
-                    <img src="https://cdn.pixabay.com/photo/2016/11/22/18/52/cake-1850011_1280.jpg" alt="" class="order-thumb">
-                    <div>
-                      <div><strong>#1023 — Pastel de chocolate</strong></div>
-                      <small class="muted">Entregado 2025-10-02 • Pago: Tarjeta</small>
-                    </div>
-                  </div>
-                  <div style="text-align:right">
-                    <div style="font-weight:700">$520.00 MXN</div>
-                    <div style="margin-top:8px"><button class="tab-btn" onclick="alert('Simulado: Ver detalle')">Ver detalle</button></div>
-                  </div>
-                </div>
-
-                <div class="panel" style="display:flex; justify-content:space-between; align-items:center; gap:12px">
-                  <div style="display:flex; gap:12px; align-items:center">
-                    <img src="https://cdn.pixabay.com/photo/2015/05/07/15/08/cookie-756601_1280.jpg" alt="" class="order-thumb">
-                    <div>
-                      <div><strong>#1009 — Caja galletas</strong></div>
-                      <small class="muted">Entregado 2025-08-12 • Pago: Efectivo</small>
-                    </div>
-                  </div>
-                  <div style="text-align:right">
-                    <div style="font-weight:700">$190.00 MXN</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- HISTORY -->
-          <div class="tab-panel" id="history" style="display:none">
-            <div class="panel-grid">
-              <div class="panel">
-                <h3>Historial de actividad</h3>
-                <ul style="margin-top:10px; color:var(--muted)">
-                  <li>2025-10-02 — Pedido #1023 entregado</li>
-                  <li>2025-09-20 — Actualizaste tu dirección</li>
-                  <li>2025-08-12 — Pedido #1009 entregado</li>
-                </ul>
-              </div>
-
-              <div class="panel">
-                <h3>Notas</h3>
-                <p class="muted">Aquí puedes ver eventos del sistema relacionados con tu cuenta.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ADDRESSES -->
-          <div class="tab-panel" id="addresses" style="display:none">
-            <div class="panel-grid">
-              <div class="panel">
-                <h3>Direcciones guardadas</h3>
-                <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px">
-                  <div style="padding:10px; border-radius:10px; background:#fff7f6; border:1px solid rgba(214,0,28,0.06)">
-                    <div style="font-weight:700">Casa — Calle Dulce #123</div>
-                    <div class="muted" style="margin-top:6px">Aguascalientes, México</div>
-                    <div style="margin-top:8px"><button class="tab-btn" onclick="alert('Simulado: Editar dirección')">Editar</button></div>
-                  </div>
-
-                  <div style="padding:10px; border-radius:10px; background:#fff7f6; border:1px solid rgba(214,0,28,0.06)">
-                    <div style="font-weight:700">Trabajo — Av. Central 45</div>
-                    <div class="muted" style="margin-top:6px">Aguascalientes, México</div>
-                    <div style="margin-top:8px"><button class="tab-btn" onclick="alert('Simulado: Establecer como predeterminada')">Predeterminada</button></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel">
-                <h3>Agregar nueva dirección</h3>
-                <form onsubmit="event.preventDefault(); alert('Simulado: Dirección agregada')">
-                  <div class="form-field">
-                    <label>Alias (ej. Casa, Trabajo)</label>
-                    <input />
-                  </div>
-                  <div class="form-field">
-                    <label>Dirección completa</label>
-                    <input />
-                  </div>
-                  <div class="form-row">
-                    <div class="form-field">
-                      <label>Ciudad</label>
-                      <input />
-                    </div>
-                    <div class="form-field">
-                      <label>CP</label>
-                      <input />
-                    </div>
-                  </div>
-                  <button class="btn-primary">Agregar dirección</button>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <!-- PAYMENTS -->
-          <div class="tab-panel" id="payments" style="display:none">
-            <div class="panel-grid">
-              <div class="panel">
-                <h3>Métodos de pago</h3>
-                <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px">
-                  <div style="padding:10px; border-radius:10px; background:#fff; border:1px solid #eee">
-                    <div style="display:flex; justify-content:space-between; align-items:center">
-                      <div><strong>Visa **** 4242</strong><div class="muted">Exp: 12/2027</div></div>
-                      <div><button class="tab-btn" onclick="alert('Simulado: Eliminar método')">Eliminar</button></div>
-                    </div>
-                  </div>
-
-                  <div style="padding:10px; border-radius:10px; background:#fff; border:1px solid #eee">
-                    <div style="display:flex; justify-content:space-between; align-items:center">
-                      <div><strong>PayPal</strong><div class="muted">Cuenta: Alex@example.com</div></div>
-                      <div><button class="tab-btn" onclick="alert('Simulado: Conectar')">Conectar</button></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel">
-                <h3>Agregar método</h3>
-                <form onsubmit="event.preventDefault(); alert('Simulado: Método agregado')">
-                  <div class="form-field">
-                    <label>Tipo</label>
-                    <select>
-                      <option>Tarjeta</option>
-                      <option>PayPal</option>
-                      <option>MercadoPago</option>
-                    </select>
-                  </div>
-                  <div class="form-field">
-                    <label>Detalles</label>
-                    <input placeholder="Número de tarjeta o email" />
-                  </div>
-                  <button class="btn-primary">Añadir</button>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <!-- WISHLIST -->
-          <div class="tab-panel" id="wishlist" style="display:none">
-            <div class="panel">
-              <h3>Favoritos</h3>
-              <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px">
-                <div style="width:150px; background:white; border-radius:10px; padding:10px; text-align:center">
-                  <img src="https://via.placeholder.com/140" style="width:100%; border-radius:8px" alt="">
-                  <div style="margin-top:8px; font-weight:700">Red Velvet</div>
-                  <div class="muted">$420.00</div>
-                  <div style="margin-top:8px"><button class="tab-btn" onclick="alert('Simulado: Agregar al carrito')">Comprar</button></div>
-                </div>
-
-                <div style="width:150px; background:white; border-radius:10px; padding:10px; text-align:center">
-                  <img src="https://via.placeholder.com/140" style="width:100%; border-radius:8px" alt="">
-                  <div style="margin-top:8px; font-weight:700">Caja galletas</div>
-                  <div class="muted">$190.00</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <h3 id="historialPedidos" style="margin:24px 0 12px;font-family:'Playfair Display',serif;color:var(--red-700);">Historial de compras</h3>
+        <div class="panel" style="overflow-x:auto;">
+          <p id="pedidosMsg" class="muted" style="display:none;">Aún no tienes pedidos registrados con esta cuenta.</p>
+          <table id="tablaPedidos" style="width:100%;border-collapse:collapse;display:none;">
+            <thead>
+              <tr style="text-align:left;border-bottom:1px solid #eee;">
+                <th style="padding:8px;">Folio</th>
+                <th style="padding:8px;">Fecha</th>
+                <th style="padding:8px;">Total</th>
+                <th style="padding:8px;">Estado</th>
+                <th style="padding:8px;"></th>
+              </tr>
+            </thead>
+            <tbody id="pedidosBody"></tbody>
+          </table>
         </div>
       </div>
-        </div>
     </section>
 
   </main>
 
   <script>
-    // Tab system
-    const tabs = document.querySelectorAll('.tab-btn');
-    const panels = document.querySelectorAll('.tab-panel');
-    const menuLinks = document.querySelectorAll('.menu-link');
+    (async function initPerfil() {
+      let info;
+      try {
+        const r = await fetch('sesion_info.php');
+        info = await r.json();
+      } catch (e) {
+        window.location.href = 'login.html';
+        return;
+      }
+      if (!info.activo || info.rol !== 'cliente') {
+        window.location.href = 'login.html';
+        return;
+      }
 
-    function activateTab(tabName){
-      // buttons
-      tabs.forEach(b => {
-        if (b.dataset.tab === tabName) b.classList.add('active'); else b.classList.remove('active');
+      document.getElementById('sideNombre').textContent = info.nombre || info.correo || 'Cliente';
+      document.getElementById('sideCorreo').textContent = info.correo || '';
+      document.getElementById('sideTipo').textContent = (info.etiqueta_crm || 'cliente').toString();
+      document.getElementById('welcomeTitulo').textContent = 'Hola, ' + (info.nombre || 'cliente');
+      document.getElementById('roNombre').textContent = info.nombre || '—';
+      document.getElementById('roCorreo').textContent = info.correo || '—';
+      document.getElementById('roTel').textContent = info.telefono || '—';
+      document.getElementById('roDir').textContent = info.direccion || '—';
+
+      let pedidos = [];
+      try {
+        const rp = await fetch('listar_mis_pedidos.php');
+        if (rp.ok) pedidos = await rp.json();
+      } catch (e) {}
+
+      document.getElementById('statPedidos').textContent = pedidos.length;
+      const tbody = document.getElementById('pedidosBody');
+      const tbl = document.getElementById('tablaPedidos');
+      const msg = document.getElementById('pedidosMsg');
+      if (!pedidos.length) {
+        msg.style.display = 'block';
+        return;
+      }
+      tbl.style.display = 'table';
+      pedidos.forEach(p => {
+        const folio = p.folio || p.numero_pedido || ('#' + p.id);
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f0f0f0';
+        tr.innerHTML = `
+          <td style="padding:8px;font-family:monospace;font-size:0.9em;">${folio}</td>
+          <td style="padding:8px;">${(p.fecha || '').split(' ')[0]}</td>
+          <td style="padding:8px;">$${parseFloat(p.total || 0).toFixed(2)}</td>
+          <td style="padding:8px;">${p.estado || '—'}</td>
+          <td style="padding:8px;"><a class="btn-primary" style="display:inline-block;text-decoration:none;padding:6px 10px;font-size:0.85rem;" href="seguimiento.html?folio=${encodeURIComponent(folio)}">Seguimiento</a></td>`;
+        tbody.appendChild(tr);
       });
-      // panels
-      panels.forEach(p => {
-        if (p.id === tabName) p.style.display = ''; else p.style.display = 'none';
-      });
-      // sidebar highlight
-      menuLinks.forEach(l => {
-        if (l.dataset.tab === tabName) l.style.fontWeight = '800'; else l.style.fontWeight = '600';
-      });
-      // scroll to top of tab content on mobile for better UX
-      document.getElementById('tabContent').scrollIntoView({behavior:'smooth', block:'start'});
+    })();
+    async function cerrarSesion() {
+  try {
+    const r = await fetch('logout.php');
+    const res = await r.json();
+    // Limpiar carrito del usuario que cerró sesión
+    if (res.usuario_id) {
+      localStorage.setItem('carrito_backup_' + res.usuario_id, localStorage.getItem('carrito') || '[]');
+    }
+    localStorage.removeItem('carrito');
+    localStorage.removeItem('carrito_usuario_id');
+  } catch(e) {}
+  window.location.href = 'login.html';
+}
+async function cargarCupones() {
+  try {
+
+    const res = await fetch('crud_cupones.php');
+
+    if (!res.ok) {
+      document.getElementById('lista-cupones').innerHTML = `
+        <p>No fue posible cargar los cupones.</p>
+      `;
+      return;
     }
 
-    // attach events
-    tabs.forEach(b => b.addEventListener('click', () => activateTab(b.dataset.tab)));
-    menuLinks.forEach(l => l.addEventListener('click', (e) => { e.preventDefault(); activateTab(l.dataset.tab); }));
+    const cupones = await res.json();
 
-    // helper to open a tab programmatically
-    function openTab(name){ activateTab(name); }
+    const contenedor = document.getElementById('lista-cupones');
 
-    // initial
-    activateTab('overview');
+    if (!Array.isArray(cupones) || cupones.length === 0) {
+      contenedor.innerHTML = `
+        <p>No tienes cupones disponibles actualmente.</p>
+      `;
+      return;
+    }
+
+    contenedor.innerHTML = cupones.map(c => {
+
+      const expirado =
+        c.fecha_expiracion &&
+        new Date(c.fecha_expiracion) < new Date();
+
+      return `
+        <div class="cupon-card ${expirado ? 'cupon-expirado' : ''}">
+          <h4>${c.descripcion || 'Cupón disponible'}</h4>
+
+          <p class="cupon-codigo">
+            ${c.codigo}
+          </p>
+
+          <p>
+            Descuento:
+            ${
+              c.tipo === 'monto_fijo'
+                ? '$' + c.valor
+                : c.valor + '%'
+            }
+          </p>
+
+          <p>
+            Expira:
+            ${c.fecha_expiracion || 'Sin expiración'}
+          </p>
+
+          ${
+            expirado
+              ? '<p style="color:red;"><strong>Expirado</strong></p>'
+              : '<p style="color:green;"><strong>Disponible</strong></p>'
+          }
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+
+    console.error(err);
+
+    document.getElementById('lista-cupones').innerHTML = `
+      <p>Error al cargar cupones.</p>
+    `;
+  }
+}
+
+cargarCupones();
   </script>
-
+<script src="carrito-drawer.js" defer></script>
 </body>
 </html>

@@ -177,6 +177,18 @@
         <h2>Crear una cuenta nueva</h2>
         
         <div class="form-field">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Nombre y apellido" required>
+        </div>
+        <div class="form-field">
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="449-000-0000">
+        </div>
+        <div class="form-field">
+          <label for="direccion">Dirección de entrega habitual</label>
+          <input type="text" id="direccion" name="direccion" placeholder="Calle, número, colonia, ciudad, CP">
+        </div>
+        <div class="form-field">
           <label for="correo">Correo electrónico</label>
           <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
         </div>
@@ -253,7 +265,9 @@
         const errorType = params.get('error');
 
         if(errorType === 'existe') msg = "El correo ingresado ya está registrado.";
-        if(errorType === 'db') msg = "Error de conexión. Intente más tarde.";
+        if(errorType === 'empty') msg = "Completa correo, contraseña y nombre.";
+        if(errorType === 'invalid_email') msg = "El correo no es válido.";
+        if(errorType === 'server') msg = "Error en el servidor. Intenta más tarde.";
 
         showModal(msg, "Error de Registro", "❌");
         

@@ -1,0 +1,42 @@
+[
+    {
+        "usuario_id": 7,
+        "email": "correo@inventado.com",
+        "nombre": "José Juarez",
+        "etiqueta": "vip",
+        "total_compras": 6,
+        "ltv": 84755.61,
+        "fecha_registro": "2026-05-17 23:45:42",
+        "id": 1
+    },
+    {
+        "usuario_id": 8,
+        "email": "user10@gmail.com",
+        "nombre": "JOB EMILIANO",
+        "etiqueta": "nuevo",
+        "total_compras": 0,
+        "ltv": 0,
+        "fecha_registro": "2026-05-26 19:24:00",
+        "id": 2
+    },
+    {
+        "usuario_id": 9,
+        "email": "correo@pastel.com",
+        "nombre": "Jose Reyes",
+        "etiqueta": "nuevo",
+        "total_compras": 2,
+        "ltv": 45381.8,
+        "fecha_registro": "2026-06-03 14:23:54",
+        "id": 3
+    },
+    {
+        "usuario_id": 10,
+        "email": "correo2@pastel.com",
+        "nombre": "Carlos Amador",
+        "etiqueta": "nuevo",
+        "total_compras": 0,
+        "ltv": 0,
+        "fecha_registro": "2026-06-03 17:25:20",
+        "id": 4
+    }
+]

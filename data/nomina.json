@@ -1,0 +1,102 @@
+[
+    {
+        "empleado_id": 1,
+        "empleado": "María López",
+        "periodo": "2026-05",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-05-18 06:44:36",
+        "id": 1
+    },
+    {
+        "empleado_id": 2,
+        "empleado": "Carlos Ruiz",
+        "periodo": "2026-05",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-05-18 06:44:37",
+        "id": 2
+    },
+    {
+        "empleado_id": 1,
+        "empleado": "María López",
+        "periodo": "2026-05",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-05-26 19:38:34",
+        "id": 3
+    },
+    {
+        "empleado_id": 2,
+        "empleado": "Carlos Ruiz",
+        "periodo": "2026-05",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-05-26 19:38:37",
+        "id": 4
+    },
+    {
+        "empleado_id": 1,
+        "empleado": "María López",
+        "periodo": "2026-06",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-06-01 15:23:42",
+        "id": 5
+    },
+    {
+        "empleado_id": 2,
+        "empleado": "Carlos Ruiz",
+        "periodo": "2026-06",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-06-01 15:23:44",
+        "id": 6
+    },
+    {
+        "empleado_id": 1,
+        "empleado": "María López",
+        "periodo": "2026-06",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-06-03 17:01:58",
+        "id": 7
+    },
+    {
+        "empleado_id": 2,
+        "empleado": "Carlos Ruiz",
+        "periodo": "2026-06",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-06-03 17:05:40",
+        "id": 8
+    },
+    {
+        "empleado_id": 2,
+        "empleado": "Carlos Ruiz",
+        "periodo": "2026-06",
+        "salario_base": 7000,
+        "bono": 0,
+        "total": 7000,
+        "fecha": "2026-06-03 17:05:45",
+        "id": 9
+    },
+    {
+        "empleado_id": 5,
+        "empleado": "Marco Baez",
+        "periodo": "2026-06",
+        "salario_base": 5000,
+        "bono": 0,
+        "total": 5000,
+        "fecha": "2026-06-03 17:15:44",
+        "id": 10
+    }
+]

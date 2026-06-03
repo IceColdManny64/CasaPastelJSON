@@ -1,12 +1,30 @@
 [
-  {
-    "id": 1,
-    "usuario": "login@admin123",
-    "passw": "admin"
-  },
-  {
-    "id": 2,
-    "usuario": "login@admin321", 
-    "passw": "admin"
-  }
+    {
+        "id": 1,
+        "usuario": "login@admin123",
+        "passw": "$2y$10$4RL.fkt687.faJLq6m9.redoOxXI6D22np71BxqJFyYBYkRbKBXTS",
+        "nombre": "Administrador General",
+        "rol": "admin"
+    },
+    {
+        "usuario": "ventas@pastel.com",
+        "passw": "$2y$10$Ne5oThcKuddhP8YxO3trEeQRvXAiRvAOvzBKXyjyE5ddmZV2.45Sy",
+        "nombre": "JORGE REY",
+        "rol": "vendedor",
+        "id": 2
+    },
+    {
+        "usuario": "pedro@gerencia.com",
+        "passw": "$2y$10$nQPkbjd4bm2bSjISFZi1D.mYdQQ0l\/yad5xFtOoqna5aVZAjt00cS",
+        "nombre": "Pedro Gonzalez",
+        "rol": "gerente",
+        "id": 3
+    },
+    {
+        "usuario": "carlos@pastel.com",
+        "passw": "$2y$10$3kGBW\/ea.VPA9ZRDbn8fputx8t66jKNtCnSoVCTWokSBA2I1MHCPy",
+        "nombre": "Carlos Barrera",
+        "rol": "gerente",
+        "id": 4
+    }
 ]

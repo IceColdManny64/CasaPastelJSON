@@ -1,0 +1,380 @@
+[
+    {
+        "folio": "CP-20260506-C415",
+        "fecha": "2026-05-06 02:53:29",
+        "cliente": "Juan Pérez",
+        "correo": "cliente@ejemplo.com",
+        "metodo": "card",
+        "total": 239.98,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 2,
+                "precio": 119.99
+            }
+        ],
+        "id": 1
+    },
+    {
+        "folio": "CP-20260506-808A",
+        "fecha": "2026-05-06 02:55:16",
+        "cliente": "Juan Pérez",
+        "correo": "cliente@ejemplo.com",
+        "metodo": "card",
+        "total": 95.99,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 1,
+                "precio": 95.99
+            }
+        ],
+        "id": 2
+    },
+    {
+        "folio": "CP-20260512-C320",
+        "numero_pedido": "CP-20260512-C320",
+        "fecha": "2026-05-12 03:57:50",
+        "usuario_id": null,
+        "cliente": "Juan Pérez",
+        "correo": "cliente@ejemplo.com",
+        "metodo_pago": "card",
+        "total": 399.9,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 9,
+                "titulo": "Churros rellenos",
+                "cantidad": 10,
+                "precio": 39.99
+            }
+        ],
+        "id": 3
+    },
+    {
+        "folio": "CP-20260515-4841",
+        "numero_pedido": "CP-20260515-4841",
+        "fecha": "2026-05-15 06:29:16",
+        "usuario_id": null,
+        "cliente": "Carlos Reyes",
+        "correo": "cliente@ejemplo.com",
+        "metodo_pago": "card",
+        "total": 95.99,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 1,
+                "precio": 95.99
+            }
+        ],
+        "id": 4
+    },
+    {
+        "folio": "CP-20260517-D5E4",
+        "numero_pedido": "CP-20260517-D5E4",
+        "fecha": "2026-05-17 23:46:31",
+        "usuario_id": 7,
+        "cliente": "José Juarez",
+        "correo": "correo@inventado.com",
+        "direccion_envio": "Calle inventada 123, Col. Cumbres",
+        "metodo_pago": "card",
+        "metodo": "card",
+        "total": 383.96,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 4,
+                "precio": 95.99
+            }
+        ],
+        "id": 5
+    },
+    {
+        "folio": "CP-20260517-041A",
+        "numero_pedido": "CP-20260517-041A",
+        "fecha": "2026-05-17 23:56:37",
+        "usuario_id": 7,
+        "cliente": "",
+        "correo": "",
+        "direccion_envio": "",
+        "metodo_pago": "card",
+        "metodo": "card",
+        "total": 119.99,
+        "estado": "Recibido",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 1,
+                "precio": 119.99
+            }
+        ],
+        "id": 6
+    },
+    {
+        "folio": "CP-20260518-F757",
+        "numero_pedido": "CP-20260518-F757",
+        "fecha": "2026-05-18 00:06:57",
+        "usuario_id": 7,
+        "cliente": "",
+        "correo": "",
+        "direccion_envio": "",
+        "metodo_pago": "card",
+        "metodo": "card",
+        "total": 95.99,
+        "estado": "Cancelado",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 1,
+                "precio": 95.99
+            }
+        ],
+        "id": 7
+    },
+    {
+        "folio": "CP-20260518-5D7C",
+        "numero_pedido": "CP-20260518-5D7C",
+        "fecha": "2026-05-18 00:23:37",
+        "usuario_id": 7,
+        "cliente": "José Juarez",
+        "correo": "correo@inventado.com",
+        "direccion_envio": "Calle inventada 123, Col. Cumbres",
+        "metodo_pago": "wallet",
+        "metodo": "wallet",
+        "total": 3894.35,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 20,
+                "precio": 119.99
+            },
+            {
+                "id": 2,
+                "titulo": "Galleta estilo nueva york",
+                "cantidad": 7,
+                "precio": 29.99
+            },
+            {
+                "id": 3,
+                "titulo": "Brownie de momia",
+                "cantidad": 2,
+                "precio": 19.99
+            },
+            {
+                "id": 4,
+                "titulo": "Pay de fresa y queso",
+                "cantidad": 2,
+                "precio": 199.99
+            },
+            {
+                "id": 6,
+                "titulo": "Flan de chocolate",
+                "cantidad": 25,
+                "precio": 19.99
+            },
+            {
+                "id": 7,
+                "titulo": "Galleta glaseada",
+                "cantidad": 3,
+                "precio": 14.99
+            },
+            {
+                "id": 9,
+                "titulo": "Churros rellenos",
+                "cantidad": 6,
+                "precio": 49.99
+            }
+        ],
+        "id": 8
+    },
+    {
+        "folio": "CP-20260518-8101",
+        "numero_pedido": "CP-20260518-8101",
+        "fecha": "2026-05-18 06:43:55",
+        "usuario_id": 7,
+        "cliente": "José Juarez",
+        "correo": "correo@inventado.com",
+        "direccion_envio": "Calle inventada 123, Col. Cumbres",
+        "metodo_pago": "card",
+        "metodo": "card",
+        "total": 79995,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 4,
+                "titulo": "Pay de fresa y queso",
+                "cantidad": 500,
+                "precio": 159.99,
+                "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2018\/11\/05\/03\/03\/strawberry-tart-3795363_1280.jpg"
+            }
+        ],
+        "id": 9
+    },
+    {
+        "folio": "CP-20260522-81FF",
+        "numero_pedido": "CP-20260522-81FF",
+        "fecha": "2026-05-22 18:32:41",
+        "usuario_id": 7,
+        "cliente": "José Juarez",
+        "correo": "correo@inventado.com",
+        "direccion_envio": "Calle inventada 123, Col. Cumbres",
+        "metodo_pago": "card",
+        "metodo": "card",
+        "total": 95.94,
+        "estado": "En camino",
+        "items": [
+            {
+                "id": 6,
+                "titulo": "Flan de chocolate",
+                "cantidad": 6,
+                "precio": 15.99,
+                "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2015\/09\/21\/04\/15\/cake-949352_1280.jpg"
+            }
+        ],
+        "id": 10
+    },
+    {
+        "folio": "CP-20260603-A7D5",
+        "numero_pedido": "CP-20260603-A7D5",
+        "fecha": "2026-06-03 07:22:16",
+        "usuario_id": 7,
+        "cliente": "José Juarez",
+        "correo": "correo@inventado.com",
+        "direccion_envio": "Calle inventada 123, Col. Cumbres",
+        "metodo_pago": "card",
+        "metodo": "card",
+        "subtotal": 415.97,
+        "descuento_promo": 0,
+        "descuento_cupon": 41.6,
+        "cupon_codigo": "PASTEL-F45068",
+        "total": 374.37,
+        "estado": "Recibido",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 1,
+                "precio": 95.99,
+                "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2016\/11\/22\/18\/52\/cake-1850011_1280.jpg"
+            },
+            {
+                "id": 4,
+                "titulo": "Pay de fresa y queso",
+                "cantidad": 2,
+                "precio": 159.99,
+                "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2018\/11\/05\/03\/03\/strawberry-tart-3795363_1280.jpg"
+            }
+        ],
+        "id": 11
+    },
+    {
+        "folio": "CP-20260603-2650",
+        "numero_pedido": "CP-20260603-2650",
+        "fecha": "2026-06-03 14:21:27",
+        "usuario_id": 7,
+        "cliente": "José Juarez",
+        "correo": "correo@inventado.com",
+        "direccion_envio": "Calle inventada 123, Col. Cumbres",
+        "metodo_pago": "paypal",
+        "metodo": "paypal",
+        "subtotal": 11.99,
+        "descuento_promo": 0,
+        "descuento_cupon": 0,
+        "cupon_codigo": null,
+        "total": 11.99,
+        "estado": "Recibido",
+        "items": [
+            {
+                "id": 5,
+                "titulo": "Gelatina de frutas",
+                "cantidad": 1,
+                "precio": 11.99,
+                "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2019\/07\/26\/20\/30\/jelly-4365579_1280.jpg"
+            }
+        ],
+        "id": 12
+    },
+    {
+        "folio": "CP-20260603-704B",
+        "numero_pedido": "CP-20260603-704B",
+        "fecha": "2026-06-03 14:25:46",
+        "usuario_id": 9,
+        "cliente": "Jose Reyes",
+        "correo": "correo@pastel.com",
+        "direccion_envio": "Calle falsa 113, Col. Inventin",
+        "metodo_pago": "mercadopago",
+        "metodo": "mercadopago",
+        "subtotal": 287.97,
+        "descuento_promo": 0,
+        "descuento_cupon": 28.8,
+        "cupon_codigo": "PASTEL-96F12D",
+        "total": 259.17,
+        "estado": "Cancelado",
+        "items": [
+            {
+                "id": 1,
+                "titulo": "Pastel de tres leches de chocolate",
+                "cantidad": 3,
+                "precio": 95.99,
+                "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2016\/11\/22\/18\/52\/cake-1850011_1280.jpg"
+            }
+        ],
+        "id": 13,
+        "solicitud_postventa": {
+            "id": 1780496596,
+            "folio": "CP-20260603-704B",
+            "usuario_id": 9,
+            "cliente": "Jose Reyes",
+            "correo": "correo@pastel.com",
+            "tipo": "devolucion",
+            "estado": "aprobada",
+            "motivo": "sabor incorrecto",
+            "monto": 259.17,
+            "metodo_pago": "mercadopago",
+            "pedido_estado": "Entregado",
+            "fecha_solicitud": "2026-06-03 16:23:16",
+            "fecha_resolucion": "2026-06-03 16:24:01",
+            "resuelto_por": "Administrador General",
+            "resuelto_rol": "admin"
+        }
+    },
+    {
+        "folio": "CP-20260603-027F",
+        "numero_pedido": "CP-20260603-027F",
+        "fecha": "2026-06-03 16:53:06",
+        "usuario_id": 9,
+        "cliente": "Jose Reyes",
+        "correo": "correo@pastel.com",
+        "direccion_envio": "Calle falsa 113, Col. Inventin",
+        "metodo_pago": "check",
+        "metodo": "check",
+        "subtotal": 47497.5,
+        "descuento_promo": 2374.88,
+        "descuento_cupon": 0,
+        "cupon_codigo": null,
+        "total": 45122.63,
+        "estado": "Entregado",
+        "items": [
+            {
+                "id": 4,
+                "titulo": "Pay de fresa y queso",
+                "cantidad": 250,
+                "precio": 189.99,
+                "imagen_url": "https:\/\/cdn.pixabay.com\/photo\/2018\/11\/05\/03\/03\/strawberry-tart-3795363_1280.jpg"
+            }
+        ],
+        "id": 14
+    }
+]

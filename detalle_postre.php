@@ -2,6 +2,7 @@
 // detalle_postre.php
 require_once 'JsonHelper.php';
 
+
 // Obtener y validar ID
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) {
@@ -18,9 +19,79 @@ if (!$postre) {
     exit;
 }
 
-// Simulación de 20% OFF
-$old_price = $postre['precio'];
-$new_price = round($old_price * 0.8, 2);
+if (isset($postre['activo']) && $postre['activo'] === false) {
+    header("Location: menu.html");
+    exit;
+}
+$old_price = floatval($postre['precio']);
+$new_price = $old_price;
+
+$jsonHelper = new JsonHelper('./data/');
+$promociones = $jsonHelper->getAll('promociones');
+
+$hoy = date('Y-m-d');
+
+foreach ($promociones as $promo) {
+
+    if (!($promo['activa'] ?? true)) continue;
+
+    if (
+        !empty($promo['fecha_inicio']) &&
+        $promo['fecha_inicio'] > $hoy
+    ) continue;
+
+    if (
+        !empty($promo['fecha_fin']) &&
+        $promo['fecha_fin'] < $hoy
+    ) continue;
+
+    $aplica = false;
+
+    if (($promo['aplica_a'] ?? '') === 'todos') {
+        $aplica = true;
+    }
+
+    elseif (($promo['aplica_a'] ?? '') === 'categoria') {
+
+        if (
+            strtolower($promo['referencia'] ?? '') ===
+            strtolower($postre['categoria'] ?? '')
+        ) {
+            $aplica = true;
+        }
+    }
+
+    elseif (($promo['aplica_a'] ?? '') === 'producto') {
+
+        if (
+            (string)$promo['referencia'] === (string)$postre['id']
+        ) {
+            $aplica = true;
+        }
+    }
+
+    if (!$aplica) continue;
+
+    if (($promo['tipo'] ?? '') === 'descuento_porcentaje') {
+
+        $new_price = round(
+            $old_price - ($old_price * (floatval($promo['valor']) / 100)),
+            2
+        );
+    }
+
+    elseif (($promo['tipo'] ?? '') === 'precio_especial') {
+
+        $new_price = round(floatval($promo['valor']), 2);
+    }
+
+    elseif (($promo['tipo'] ?? '') === '2x1') {
+
+        $new_price = round($old_price * 0.5, 2);
+    }
+
+    break;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -30,6 +101,7 @@ $new_price = round($old_price * 0.8, 2);
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
   <!-- Fuente Open Sans para textos del modal -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="carrito-drawer.css">
   <style>
      footer.legal-footer {
       background-color: rgba(0, 0, 0, 0.8);
@@ -148,7 +220,11 @@ $new_price = round($old_price * 0.8, 2);
             <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
             <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
             <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
-            <a href="carritoCompra.html">🛒</a>
+          <a href="#" id="btn-abrir-carrito"
+             onclick="abrirCarritoDrawer();return false;">
+            🛒 <span id="cart-nav-badge" class="cart-nav-badge hidden">0</span>
+          </a>
+                <a href="pantallaUsuario.html">👤</a>
     </div>
   </header>
 
@@ -159,7 +235,7 @@ $new_price = round($old_price * 0.8, 2);
       <h1><?= htmlspecialchars($postre['titulo']) ?></h1>
       <div class="price">
         <span class="old-price">$<?= number_format($old_price,2) ?></span>
-        <span class="new-price">$<?= number_format($new_price,2) ?> (20% MENOS)</span>
+        <span class="new-price">$<?= number_format($new_price,2) ?></span>
       </div>
       <div class="meta">
         <span>Categoría: <?= htmlspecialchars($postre['categoria']) ?></span>
@@ -167,6 +243,12 @@ $new_price = round($old_price * 0.8, 2);
         <span>Sabor: <?= htmlspecialchars($postre['sabor']) ?></span>
       </div>
       <div class="description"><?= nl2br(htmlspecialchars($postre['descripcion'])) ?></div>
+      <div style="margin:14px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <label for="qty_detalle" style="font-weight:600;">Piezas</label>
+        <input type="number" id="qty_detalle" min="1" max="<?= max(1, intval($postre['stock'] ?? 1)) ?>" value="1"
+          style="width:76px;padding:8px;border-radius:6px;border:1px solid #ccc;font-size:1rem;">
+        <span style="color:#666;font-size:0.9em;">Máx. <?= intval($postre['stock'] ?? 0) ?> disponibles</span>
+      </div>
       <div class="actions">
         <button class="btn-cart">Añadir al carrito</button>
         <button class="btn-back" onclick="history.back()">Volver</button>
@@ -212,14 +294,23 @@ function closeModal() {
 
 // --- LOGICA DEL CARRITO ---
 document.querySelector(".btn-cart").addEventListener("click", function () {
+  const qtyInput = document.getElementById('qty_detalle');
+  let addQty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+  if (isNaN(addQty) || addQty < 1) addQty = 1;
+  const maxStock = <?= intval($postre['stock'] ?? 0) ?>;
+  if (addQty > maxStock) {
+    showModal(`Solo hay <strong>${maxStock}</strong> unidades disponibles.`, "Stock insuficiente", "⚠️");
+    return;
+  }
+
   const producto = {
     id: <?= $postre['id'] ?>,
     titulo: <?= json_encode($postre['titulo']) ?>,
     precio: <?= $new_price ?>,
     descripcion: <?= json_encode($postre['descripcion']) ?>,
     imagen_url: <?= json_encode($postre['imagen_url']) ?>,
-    cantidad: 1,
-    stock: <?= intval($postre['stock'] ?? 10) ?>
+    cantidad: addQty,
+    stock: maxStock
   };
 
   let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
@@ -227,18 +318,16 @@ document.querySelector(".btn-cart").addEventListener("click", function () {
 
   if (indexExistente !== -1) {
     const existente = carrito[indexExistente];
-    if (existente.cantidad + 1 > existente.stock) {
-      // REEMPLAZO: Alert nativo por modal
+    if (existente.cantidad + addQty > existente.stock) {
       showModal(`Solo hay <strong>${existente.stock}</strong> unidades disponibles en inventario.`, "Stock Limitado", "⚠️");
       return;
     }
-    carrito[indexExistente].cantidad += 1;
+    carrito[indexExistente].cantidad += addQty;
   } else {
     carrito.push(producto);
   }
 
   localStorage.setItem("carrito", JSON.stringify(carrito));
-  // REEMPLAZO: Alert nativo por modal de éxito
   showModal("El producto se ha añadido correctamente a tu carrito.", "¡Añadido!", "✅");
 });
 </script>
@@ -255,6 +344,6 @@ document.querySelector(".btn-cart").addEventListener("click", function () {
     <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
   </footer>
   <!-- FIN: PIE DE PÁGINA -->
-
+<script src="carrito-drawer.js" defer></script>
 </body>
 </html>

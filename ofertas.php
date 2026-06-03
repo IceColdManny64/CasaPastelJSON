@@ -8,6 +8,7 @@ include 'ofertas_logic.php';
   <title>Ofertas Especiales - La Casa del Pastel</title>
   <!-- Fuente Open Sans para textos del modal -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="carrito-drawer.css">
 <style>
         * {
             margin: 0;
@@ -406,7 +407,11 @@ include 'ofertas_logic.php';
             <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
             <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
             <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
-            <a href="carritoCompra.html">🛒</a>
+          <a href="#" id="btn-abrir-carrito"
+             onclick="abrirCarritoDrawer();return false;">
+            🛒 <span id="cart-nav-badge" class="cart-nav-badge hidden">0</span>
+          </a>
+                <a href="pantallaUsuario.html">👤</a>
         </div>
   </header>
 
@@ -495,6 +500,6 @@ include 'ofertas_logic.php';
     <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
   </footer>
   <!-- FIN: PIE DE PÁGINA -->
-
+<script src="carrito-drawer.js" defer></script>
 </body>
 </html>

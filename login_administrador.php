@@ -3,22 +3,30 @@ session_start();
 require_once 'JsonHelper.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = $_POST['usuario'];
-    $contrasena = $_POST['contrasena'];
+    $usuario    = trim($_POST['usuario'] ?? '');
+    $contrasena = trim($_POST['contrasena'] ?? '');
 
-    $jsonHelper = new JsonHelper('./data/');
-    // Asegúrate de que 'admons' sea el nombre correcto de tu archivo/tabla en el JSON
-    $admin = $jsonHelper->authenticateUser('admons', 'usuario', 'passw', $usuario, $contrasena);
-
-    if ($admin) {
-        $_SESSION['rol'] = 'admin';
-        $_SESSION['usuario'] = $usuario;
-        header("Location: panel.html");
+    if (empty($usuario) || empty($contrasena)) {
+        header("Location: login_administrador.html?error=1");
         exit;
     }
 
-    // --- CAMBIO CLAVE AQUÍ ---
-    // En lugar de imprimir un script con alert(), redirigimos con un parámetro de error.
+    $jh    = new JsonHelper('./data/');
+    $admin = $jh->authenticateUser('admons', 'usuario', 'passw', $usuario, $contrasena);
+
+    if ($admin) {
+        $_SESSION['rol']     = $admin['rol'] ?? 'empleado';
+        $_SESSION['usuario'] = $usuario;
+        $_SESSION['nombre']  = $admin['nombre'] ?? $usuario;
+        $_SESSION['usuario_id'] = $admin['id'];
+        $_SESSION['admin_id']= $admin['id'];
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+        header('Expires: Thu, 01 Jan 1970 00:00:01 GMT');
+        header("Location: panel.html?t=" . time());
+        exit;
+    }
+
     header("Location: login_administrador.html?error=1");
     exit;
 }

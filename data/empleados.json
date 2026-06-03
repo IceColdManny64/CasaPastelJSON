@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "nombre": "María López",
+        "puesto": "Vendedor",
+        "turno": "Mañana",
+        "correo": "maria@casapastel.mx",
+        "telefono": "449-111-2222",
+        "fecha_ingreso": "2024-01-15",
+        "salario_base": 7000,
+        "activo": true
+    },
+    {
+        "id": 2,
+        "nombre": "Carlos Ruiz",
+        "puesto": "Empleado",
+        "turno": "Tarde",
+        "correo": "carlos@casapastel.mx",
+        "telefono": "449-333-4444",
+        "fecha_ingreso": "2024-03-10",
+        "salario_base": 7000,
+        "activo": true
+    },
+    {
+        "nombre": "Gonzalo Reyes",
+        "puesto": "Supervisor",
+        "turno": "Mañana",
+        "correo": "gonzalo@casapastel.mx",
+        "telefono": "443-213-3234",
+        "fecha_ingreso": "2012-06-06",
+        "salario_base": 7000,
+        "activo": false,
+        "id": 3
+    },
+    {
+        "nombre": "Jorge Hernandez",
+        "puesto": "Repartidor",
+        "turno": "Noche",
+        "correo": "jorch@casapastel.mx",
+        "telefono": "443-213-3235",
+        "fecha_ingreso": "2026-05-06",
+        "activo": false,
+        "id": 4
+    },
+    {
+        "nombre": "Marco Baez",
+        "puesto": "Repartidor",
+        "turno": "Tarde",
+        "correo": "marco@casapastel.com",
+        "telefono": "134-324-2344",
+        "fecha_ingreso": "2026-05-13",
+        "activo": true,
+        "id": 5,
+        "salario_base": 5000
+    }
+]

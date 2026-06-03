@@ -2,26 +2,91 @@
     {
         "id": 1,
         "correo": "user@gmail.com",
-        "pass": "12345"
+        "pass": "12345",
+        "nombre": "Usuario Demo",
+        "telefono": "",
+        "direccion": "",
+        "tipo_cuenta": "cliente"
     },
     {
+        "id": 2,
         "correo": "manuel6496@outlook.com",
         "pass": "12345",
-        "id": 2
+        "nombre": "Manuel",
+        "telefono": "449-000-0000",
+        "direccion": "Aguascalientes",
+        "tipo_cuenta": "cliente"
     },
     {
+        "id": 3,
         "correo": "hola@email.com",
         "pass": "12345",
-        "id": 3
+        "nombre": "Cliente Hola",
+        "telefono": "",
+        "direccion": "",
+        "tipo_cuenta": "cliente"
     },
     {
+        "id": 4,
         "correo": "user@email.net",
         "pass": "54321",
-        "id": 4
+        "nombre": "Usuario Email",
+        "telefono": "",
+        "direccion": "",
+        "tipo_cuenta": "cliente"
     },
     {
+        "id": 5,
         "correo": "nuevouser@si.com",
         "pass": "12334",
-        "id": 5
+        "nombre": "Nuevo Usuario",
+        "telefono": "",
+        "direccion": "",
+        "tipo_cuenta": "cliente"
+    },
+    {
+        "id": 6,
+        "correo": "user@correo.com",
+        "pass": "1234",
+        "nombre": "Usuario Correo",
+        "telefono": "",
+        "direccion": "",
+        "tipo_cuenta": "cliente"
+    },
+    {
+        "correo": "correo@inventado.com",
+        "pass": "12345",
+        "nombre": "José Juarez",
+        "telefono": "4493552145",
+        "direccion": "Calle inventada 123, Col. Cumbres",
+        "tipo_cuenta": "vip",
+        "id": 7
+    },
+    {
+        "correo": "user10@gmail.com",
+        "pass": "123456",
+        "nombre": "JOB EMILIANO",
+        "telefono": "4491234567",
+        "direccion": "Calle inventada 123, Col. Cumbres",
+        "tipo_cuenta": "cliente",
+        "id": 8
+    },
+    {
+        "correo": "correo@pastel.com",
+        "pass": "$2y$10$TJg7G0t.klzNPyCTiUNt2eQOpaYUkRlA.j6HOJKDWcY.Pxja4gQOG",
+        "nombre": "Jose Reyes",
+        "telefono": "1232345213",
+        "direccion": "Calle falsa 113, Col. Inventin",
+        "tipo_cuenta": "cliente",
+        "id": 9
+    },
+    {
+        "correo": "correo2@pastel.com",
+        "pass": "$2y$10$1iSE3Hlm6CbY8dUUBLfKLegCGTw0x2C5XZnlzVsUkf1hGx8ScggkG",
+        "nombre": "Carlos Amador",
+        "telefono": "449-000-0000",
+        "direccion": "Calle falsa 113, Col. Inventin",
+        "tipo_cuenta": "cliente",
+        "id": 10
     }
 ]

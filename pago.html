@@ -248,16 +248,22 @@
         <div class="form-row">
           <div class="form-group">
             <label>Correo Electrónico</label>
-            <input type="email" value="cliente@ejemplo.com" id="userEmail">
+            <input type="email" id="userEmail" placeholder="correo@ejemplo.com">
           </div>
           <div class="form-group">
             <label>Nombre del Destinatario</label>
-            <input type="text" value="Juan Pérez" id="userName">
+            <input type="text" id="userName" placeholder="Nombre completo">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Teléfono de contacto</label>
+            <input type="tel" id="userPhone" placeholder="449-000-0000">
           </div>
         </div>
         <div class="form-group">
           <label>Dirección de Entrega</label>
-          <input type="text" placeholder="Calle, Número, Colonia, CP">
+          <input type="text" id="userAddress" placeholder="Calle, Número, Colonia, CP">
         </div>
       </div>
 
@@ -304,9 +310,6 @@
             </label>
             <div id="pay-paypal" class="payment-body">
               <p style="margin-bottom:20px; color:#555;">Serás redirigido al sitio seguro de PayPal para completar tu compra.</p>
-              <button type="button" class="btn-paypal" onclick="processExternalPayment('PayPal')">
-                 Pagar con PayPal
-              </button>
             </div>
           </div>
 
@@ -318,9 +321,7 @@
             </label>
             <div id="pay-mercadopago" class="payment-body">
               <p style="margin-bottom:20px; color:#555;">Usa tu cuenta de Mercado Pago, tarjetas guardadas o dinero en cuenta.</p>
-              <button type="button" class="btn-mercadopago" onclick="processExternalPayment('Mercado Pago')">
-                 Pagar con Mercado Pago
-              </button>
+
             </div>
           </div>
 
@@ -401,11 +402,38 @@
     <aside class="order-summary">
       <h3>Resumen del Pedido</h3>
       <div id="mini-cart-items"></div>
+
+      <div id="resumen-descuentos" style="display:none; margin-top:10px; font-size:0.88rem; color:#555; border-top:1px solid #eee; padding-top:10px;">
+        <div class="summary-item" style="color:#555; font-size:0.9rem;">
+          <span>Subtotal</span><span id="resumen-subtotal">$0.00</span>
+        </div>
+        <div class="summary-item" id="row-desc-promo" style="display:none; color:#2e7d32;">
+          <span>🏷️ Descuento promo</span><span id="val-desc-promo">-$0.00</span>
+        </div>
+        <div class="summary-item" id="row-desc-cupon" style="display:none; color:#1565c0;">
+          <span>🎟️ Cupón aplicado</span><span id="val-desc-cupon">-$0.00</span>
+        </div>
+      </div>
+
       <div class="summary-item total">
         <span>Total a Pagar</span>
         <span id="final-total">$0.00</span>
       </div>
-      
+
+      <div id="cupon-section" style="display:none; margin-top:16px; background:#f0f4ff; border:1px solid #c5d5f5; border-radius:8px; padding:12px;">
+        <div style="font-weight:700; font-size:0.9rem; color:#1a3a7a; margin-bottom:8px;">🎟️ ¿Tienes un cupón?</div>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="cuponInput" placeholder="Código de cupón"
+            style="flex:1; padding:9px; border:1px solid #b0c4f0; border-radius:6px; font-size:0.9rem; text-transform:uppercase;">
+          <button type="button" onclick="validarCupon()"
+            style="background:#1a3a7a; color:white; border:none; padding:9px 14px; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.85rem;">Aplicar</button>
+        </div>
+        <div id="cuponMsg" style="margin-top:6px; font-size:0.82rem; display:none;"></div>
+      </div>
+      <div id="cupon-no-sesion" style="display:none; margin-top:12px; background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:10px; font-size:0.82rem; color:#856404;">
+        🔑 <a href="login.html" style="color:#a30015; font-weight:bold;">Inicia sesión</a> para usar cupones de descuento.
+      </div>
+
       <div id="selection-mock" style="margin-top:15px; font-weight:600; color:var(--red-700); font-size:0.9rem;">
         Método: Tarjeta de Crédito
       </div>
@@ -436,13 +464,16 @@
 
   <script>
     let currentTotal = 0;
+    let currentSubtotal = 0;
     let currentWalletBalance = 5000;
 
     // --- 1. CARGA INICIAL ---
+    let cuponAplicado = null; // { codigo, tipo, valor, id }
+
     function loadCart(){
       const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
       const container = document.getElementById('mini-cart-items');
-      let total = 0;
+      let subtotal = 0;
       container.innerHTML = '';
 
       if(cart.length === 0){
@@ -453,16 +484,74 @@
         cart.forEach(p => {
           const qty = p.cantidad || 1;
           const price = parseFloat(p.precio || 0);
-          total += price * qty;
+          subtotal += price * qty;
           const row = document.createElement('div');
           row.className = 'summary-item';
           row.innerHTML = `<span>${qty} x ${p.titulo || 'Producto'}</span><span>$${(price * qty).toFixed(2)}</span>`;
           container.appendChild(row);
         });
       }
-      currentTotal = total;
-      document.getElementById('final-total').textContent = `$${total.toFixed(2)}`;
-      document.getElementById('checkAmount').value = `$${total.toFixed(2)}`;
+      currentSubtotal = subtotal;
+      recalcularTotal();
+    }
+
+    function recalcularTotal() {
+      let descCupon = 0;
+      if (cuponAplicado) {
+if (
+  cuponAplicado.tipo === 'descuento_porcentaje' ||
+  cuponAplicado.tipo === 'porcentaje'
+) {
+          descCupon = currentSubtotal * (cuponAplicado.valor / 100);
+        } else {
+          descCupon = cuponAplicado.valor;
+        }
+        descCupon = Math.min(descCupon, currentSubtotal);
+        document.getElementById('resumen-descuentos').style.display = 'block';
+        document.getElementById('resumen-subtotal').textContent = '$' + currentSubtotal.toFixed(2);
+        document.getElementById('row-desc-cupon').style.display = 'flex';
+        document.getElementById('val-desc-cupon').textContent = '-$' + descCupon.toFixed(2);
+      } else {
+        document.getElementById('row-desc-cupon').style.display = 'none';
+        if (!document.getElementById('row-desc-promo').style.display || document.getElementById('row-desc-promo').style.display === 'none') {
+          document.getElementById('resumen-descuentos').style.display = 'none';
+        }
+      }
+      currentTotal = Math.max(0, currentSubtotal - descCupon);
+      document.getElementById('final-total').textContent = '$' + currentTotal.toFixed(2);
+      document.getElementById('checkAmount').value = '$' + currentTotal.toFixed(2);
+    }
+
+    async function validarCupon() {
+      const codigo = (document.getElementById('cuponInput').value || '').trim().toUpperCase();
+      const msgEl  = document.getElementById('cuponMsg');
+      if (!codigo) return;
+      msgEl.style.display = 'block';
+      msgEl.style.color = '#555';
+      msgEl.textContent = 'Validando...';
+      try {
+        const r = await fetch('validar_cupon.php', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({codigo})
+        });
+        const res = await r.json();
+        if (res.ok) {
+          cuponAplicado = { codigo: res.codigo, tipo: res.tipo, valor: res.valor, id: res.id };
+          msgEl.style.color = '#2e7d32';
+          const desc = res.tipo === 'descuento_porcentaje' ? res.valor + '% de descuento' : '$' + parseFloat(res.valor).toFixed(2) + ' de descuento';
+          msgEl.textContent = '✅ ' + desc + ' aplicado.';
+          recalcularTotal();
+        } else {
+          cuponAplicado = null;
+          msgEl.style.color = '#c62828';
+          msgEl.textContent = '❌ ' + res.msg;
+          recalcularTotal();
+        }
+      } catch(e) {
+        msgEl.style.color = '#c62828';
+        msgEl.textContent = '❌ Error de conexión.';
+      }
     }
 
     // --- 2. MANEJO DE INTERFAZ ---
@@ -473,10 +562,21 @@
       const btn = document.getElementById('btnConfirmPay');
       const txt = document.getElementById('selection-mock');
       
-      if(method === 'paypal' || method === 'mercadopago'){
-        btn.style.display = 'none';
-        txt.innerText = method === 'paypal' ? "Método: PayPal" : "Método: Mercado Pago";
-      } else {
+if(method === 'paypal' || method === 'mercadopago'){
+
+    btn.style.display = 'block';
+
+    if(method === 'paypal') {
+        btn.innerText = "Continuar con PayPal";
+        txt.innerText = "Método: PayPal";
+    }
+
+    if(method === 'mercadopago') {
+        btn.innerText = "Continuar con Mercado Pago";
+        txt.innerText = "Método: Mercado Pago";
+    }
+
+} else {
         btn.style.display = 'block';
         if(method === 'card') { btn.innerText = "Pagar con Tarjeta"; txt.innerText = "Método: Tarjeta Crédito/Débito"; }
         if(method === 'wallet') { btn.innerText = "Pagar con Saldo"; txt.innerText = "Método: Monedero Digital"; }
@@ -523,61 +623,172 @@
       }, 1500);
     }
 
-    // --- 5. LÓGICA EXTERNA ---
-    function processExternalPayment(provider) {
-      openModal('default', `Conectando con ${provider}`, 'Por favor no cierres esta ventana...');
-      setTimeout(() => {
-         window.location.href = 'seguimiento.html';
-      }, 2500);
-    }
-
     // --- 6. PROCESO DE PAGO ---
-    document.getElementById('btnConfirmPay').addEventListener('click', function(){
-      const selectedMethod = document.querySelector('input[name="payment"]:checked').value;
-      
-      // Modal cargando (estado default)
-      const modal = document.getElementById('processingModal');
-      modal.className = 'processing-overlay'; 
-      document.getElementById('modalTitle').textContent = "Procesando Pago";
-      document.getElementById('modalMsg').textContent = "Validando transacción con el banco...";
-      modal.style.display = 'flex';
+document.getElementById('btnConfirmPay').addEventListener('click', function(){
+    const email   = document.getElementById('userEmail').value.trim();
+  const nombre  = document.getElementById('userName').value.trim();
+  const address = document.getElementById('userAddress').value.trim();
+  if (!email || !nombre || !address) {
+    openModal('error','Datos Incompletos','Por favor completa tu correo, nombre y dirección de entrega antes de continuar.');
+    return;
+  }
+  const selectedMethod = document.querySelector('input[name="payment"]:checked').value;
 
-      setTimeout(() => {
-        if(selectedMethod === 'card') {
-          const cardNum = document.getElementById('cardNumInput').value.replace(/\s/g, '');
-          
-          if(cardNum.startsWith('0000')) { 
-            openModal('error', 'Pago Rechazado', 'El banco ha declinado la transacción. Verifica tus datos.'); return; 
-          }
-          if(cardNum.startsWith('1111')) { 
-            openModal('error', 'Fondos Insuficientes', 'La tarjeta no tiene crédito disponible.'); return; 
-          }
-          if(cardNum.startsWith('5555')) { 
-            openModal('error', 'Error de Conexión', 'No pudimos contactar al emisor. Intenta más tarde.'); return; 
-          }
-        } 
-        else if(selectedMethod === 'wallet') {
-          if(currentTotal > currentWalletBalance) {
-            openModal('error', 'Saldo Insuficiente', 'No tienes suficiente dinero en tu monedero. Recarga saldo e intenta de nuevo.');
-            return;
-          }
-        }
-        else if(selectedMethod === 'check') {
-            if(!document.getElementById('checkNumber').value) {
-                openModal('error', 'Faltan Datos', 'Por favor ingresa el número del cheque electrónico.'); return;
-            }
-        }
+  const modal = document.getElementById('processingModal');
+  modal.className = 'processing-overlay';
+  document.getElementById('modalTitle').textContent = "Procesando Pago";
+  document.getElementById('modalMsg').textContent = "Validando transacción...";
+  modal.style.display = 'flex';
 
-        openModal('success', '¡Pedido Confirmado!', 'Hemos recibido tu pago correctamente. Redirigiendo...');
-        
-        setTimeout(() => {
-           window.location.href = 'seguimiento.html';
-        }, 2000);
+  setTimeout(async () => {
+    // Validaciones locales igual que antes
+// Validaciones por método
+  if (selectedMethod === 'card') {
+    const cardNum = document.getElementById('cardNumInput')?.value.replace(/\s/g,'') || '';
+    if (!cardNum || cardNum.length < 15) { openModal('error','Datos de tarjeta','Ingresa el número de tarjeta completo.'); return; }
+    if (cardNum.startsWith('0000')) { openModal('error','Pago Rechazado','El banco ha declinado la transacción.'); return; }
+    if (cardNum.startsWith('1111')) { openModal('error','Fondos Insuficientes','La tarjeta no tiene crédito disponible.'); return; }
+    if (cardNum.startsWith('5555')) { openModal('error','Error de Conexión','No pudimos contactar al emisor.'); return; }
+  } else if (selectedMethod === 'wallet') {
+    if (currentTotal > currentWalletBalance) {
+      openModal('error','Saldo Insuficiente','No tienes suficiente dinero en tu monedero.'); return;
+    }
+  } else if (selectedMethod === 'check') {
+    if (!document.getElementById('checkNumber')?.value.trim()) {
+      openModal('error','Datos incompletos','Ingresa el número del cheque electrónico.'); return;
+    }
+} else if (selectedMethod === 'paypal' || selectedMethod === 'mercadopago') {
 
-      }, 2000);
+    openModal(
+      'info',
+      'Redirigiendo...',
+      'Conectando con la plataforma de pago.'
+    );
+
+}
+
+    
+
+    // Construir payload para procesar_pago.php
+    const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+    const payload = {
+      cliente: document.getElementById('userName')  ? document.getElementById('userName').value  : "Cliente",
+      correo:  document.getElementById('userEmail') ? document.getElementById('userEmail').value : "",
+      direccion: document.getElementById('userAddress') ? document.getElementById('userAddress').value : "",
+      metodo:  selectedMethod,
+      estado_pago:
+  selectedMethod === 'atm'
+    ? 'pendiente_transferencia'
+    : selectedMethod === 'check'
+      ? 'pendiente_verificacion'
+      : 'pagado',
+      cupon_codigo: cuponAplicado ? cuponAplicado.codigo : '',
+      items: cart.map(p => ({
+        id:         p.id,
+        titulo:     p.titulo || p.nombre || "Producto",
+        cantidad:   p.cantidad || 1,
+        precio:     p.precio,
+        imagen_url: p.imagen_url || p.img || ''
+}))
+    };
+
+    fetch('procesar_pago.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.ok) {
+        let mensajeExito = 'Pedido registrado correctamente.';
+
+if (selectedMethod === 'atm') {
+  mensajeExito = 'Tu pedido fue registrado. Esperamos confirmación de la transferencia bancaria.';
+}
+
+if (selectedMethod === 'check') {
+  mensajeExito = 'Tu cheque electrónico será validado por el área financiera.';
+}
+        localStorage.removeItem('carrito');
+        const folio = res.folio || '';
+openModal(
+  'success',
+  '¡Pedido Confirmado!',
+  mensajeExito + ' Folio: ' + folio
+);
+        setTimeout(() => { window.location.href = folio ? ('seguimiento.html?folio=' + encodeURIComponent(folio)) : 'seguimiento.html'; }, 2500);
+      } else {
+        openModal('error', 'Error en el pedido', res.msg);
+      }
+    })
+    .catch(() => {
+      // Si el servidor falla igual deja pasar (comportamiento original)
+      openModal('success', '¡Pedido Confirmado!', 'Hemos recibido tu pago. Redirigiendo...');
+      setTimeout(() => { window.location.href = 'seguimiento.html'; }, 2500);
     });
 
-    loadCart();
+  }, 2000);
+
+
+});
+    (function prefillCheckout() {
+      fetch('sesion_info.php').then(r => r.json()).then(info => {
+        if (!info || !info.activo || info.rol !== 'cliente') return;
+        if (info.correo) document.getElementById('userEmail').value = info.correo;
+        if (info.nombre) document.getElementById('userName').value = info.nombre;
+        if (info.telefono) document.getElementById('userPhone').value = info.telefono;
+        if (info.direccion) document.getElementById('userAddress').value = info.direccion;
+      }).catch(() => {});
+    })();
+
+    // Verificar sesión: si no hay sesión activa, limpiar usuario en formulario y advertir
+(function checkSesionPago() {
+  fetch('sesion_info.php').then(r => r.json()).then(info => {
+    if (!info.activo || info.rol !== 'cliente') {
+      // Sin sesión: limpiar campos para evitar pedido fantasma
+      document.getElementById('userEmail').value = '';
+      document.getElementById('userName').value = '';
+      if (document.getElementById('userPhone')) document.getElementById('userPhone').value = '';
+      if (document.getElementById('userAddress')) document.getElementById('userAddress').value = '';
+      // Aviso visible
+      const aviso = document.createElement('div');
+      aviso.style.cssText = 'background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:0.9em;color:#856404;';
+      aviso.innerHTML = '⚠️ No has iniciado sesión. Tu pedido no quedará asociado a ninguna cuenta. <a href="login.html" style="color:#a30015;font-weight:bold;">Iniciar sesión</a>';
+      const container = document.querySelector('.checkout-section');
+      if (container) container.prepend(aviso);
+      // Ocultar sección cupón, mostrar aviso
+      document.getElementById('cupon-section').style.display = 'none';
+      document.getElementById('cupon-no-sesion').style.display = 'block';
+    } else {
+      // Con sesión: mostrar sección de cupón
+      document.getElementById('cupon-section').style.display = 'block';
+      document.getElementById('cupon-no-sesion').style.display = 'none';
+    }
+  }).catch(() => {});
+})();
+// Pre-llenar cupón de rescate si fue guardado desde el carrito
+(function prefillCupon() {
+  try {
+    const raw = localStorage.getItem('cupon_recuperacion');
+    if (!raw) return;
+    const cup = JSON.parse(raw);
+    if (!cup.codigo || cup.expira < Date.now()) {
+      localStorage.removeItem('cupon_recuperacion');
+      return;
+    }
+    const input = document.getElementById('cuponInput');
+    if (input && !input.value) {
+      input.value = cup.codigo;
+      // Auto-validar
+      setTimeout(() => {
+        const btn = document.querySelector('[onclick*="validarCupon"], button[data-action="validar-cupon"]');
+        if (btn) btn.click();
+        else validarCupon?.();
+      }, 800);
+    }
+  } catch(_) {}
+  loadCart();
+})();
   </script>
               <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
   <footer class="legal-footer">

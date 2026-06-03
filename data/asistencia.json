@@ -1,0 +1,14 @@
+[
+    {
+        "empleado_id": 1,
+        "empleado": "María López",
+        "fecha": "2026-06-03 15:01:28",
+        "id": 1
+    },
+    {
+        "empleado_id": 2,
+        "empleado": "Carlos Ruiz",
+        "fecha": "2026-06-03 15:01:29",
+        "id": 2
+    }
+]

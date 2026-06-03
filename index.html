@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -6,13 +6,13 @@
   <title>La Casa del Pastel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
-    /* ---- Variables mínimas para mantener coherencia visual ---- */
+    /* ---- Variables mÃ­nimas para mantener coherencia visual ---- */
     :root{
       --accent:#e07a5f;
       --accent-dark:#d65a3f;
       --brand:#d59550;
       --muted:#a86340;
-      --card-bg: rgba(4, 2, 0, 0.689); /* MENOR opacidad para que el fondo (logo) sea más visible */
+      --card-bg: rgba(4, 2, 0, 0.689); /* MENOR opacidad para que el fondo (logo) sea mÃ¡s visible */
       --radius:20px;
       --img-width:230px;
       --img-height:130px;
@@ -83,7 +83,7 @@
 
 
 
-    /* Overlay con menor opacidad para que el logo/fondo se note más */
+    /* Overlay con menor opacidad para que el logo/fondo se note mÃ¡s */
     .overlay {
       background-color: var(--card-bg);
       min-height: 100vh;
@@ -92,7 +92,7 @@
     /* Header */
     header {
       text-align: center;
-      padding: 5px 20px 30px; /* reduje un poco bottom para que la flecha quede fuera y no sobre las imágenes */
+      padding: 5px 20px 30px; /* reduje un poco bottom para que la flecha quede fuera y no sobre las imÃ¡genes */
       position: relative;
     }
     header h1 {
@@ -107,7 +107,7 @@
       color: var(--muted);
     }
 
-    /* Badge de campaña, discreto */
+    /* Badge de campaÃ±a, discreto */
     .campaign-badge{
       display:inline-block;
       background: rgba(214, 0, 29, 0.244);
@@ -120,7 +120,7 @@
       border:1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* Botón principal */
+    /* BotÃ³n principal */
     .btn {
       background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       color: white;
@@ -139,7 +139,7 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
-    /* Sección de beneficios */
+    /* SecciÃ³n de beneficios */
     .benefits {
       display: flex;
       justify-content: center;
@@ -163,7 +163,7 @@
       transition: transform 0.3s ease;
     }
     .benefit:hover { transform: scale(1.04); }
-    /* imágenes de beneficios con uniformidad */
+    /* imÃ¡genes de beneficios con uniformidad */
     .benefit img {
       width: var(--img-width);
       height: var(--img-height);
@@ -205,7 +205,7 @@
       text-align:left;
     }
     .offer-card:hover { transform: translateY(-5px); }
-    /* imágenes de ofertas con la misma medida que beneficios */
+    /* imÃ¡genes de ofertas con la misma medida que beneficios */
     .offer-card img {
       width: var(--img-width);
       height: var(--img-height);
@@ -320,7 +320,7 @@
       max-width: 500px;
       text-align: center;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-      /* Animación de entrada */
+      /* AnimaciÃ³n de entrada */
       transform: scale(0.9);
       opacity: 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
@@ -397,7 +397,7 @@
       <div style="margin-top:12px;">
         
         <button class="scroll-down" onclick="document.getElementById('offers').scrollIntoView({behavior:'smooth'})">
-          Baja para ver algunas ofertas disponibles ⬇
+          Baja para ver algunas ofertas disponibles â¬‡
         </button>
       </div>
       </section>
@@ -422,26 +422,23 @@
 
 
     <section id="offers" class="offers" aria-label="Ofertas de la semana">
-      <h2>🎉 Ofertas de la Semana 🎉</h2>
+      <h2>Ofertas de la Semana</h2>
       <div class="offers-grid">
         <div class="offer-card" role="article" aria-label="Pastel de Chocolate">
           <img src="https://cdn.pixabay.com/photo/2016/11/22/18/52/cake-1850011_1280.jpg" alt="Pastel">
           <h3>Pastel de Chocolate</h3>
-          <p><small style="color:var(--muted)">Antes $450 — Ahora</small> <strong>$320</strong></p>
 
         </div>
 
         <div class="offer-card" role="article" aria-label="Cheesecake de Fresa">
           <img src="https://cdn.pixabay.com/photo/2018/11/05/03/03/strawberry-tart-3795363_1280.jpg" alt="Cheesecake">
           <h3>Cheesecake de Fresa</h3>
-          <p class="muted">2x1 en porciones individuales</p>
 
         </div>
 
         <div class="offer-card" role="article" aria-label="Galletas Variadas">
           <img src="https://cdn.pixabay.com/photo/2015/05/07/15/08/cookie-756601_1280.jpg" alt="Galletas">
           <h3>Galletas Variadas</h3>
-          <p class="muted">Combo de 12 piezas a solo <strong>$99</strong></p>
 
 
 
@@ -455,15 +452,15 @@
 
     <section class="testimonials" aria-label="Testimonios">
       <h2>Lo que dicen nuestros clientes</h2>
-      <blockquote>“El pastel de chocolate es una obra de arte. ¡Nunca había probado algo tan delicioso!” – Ana G.</blockquote>
-      <blockquote>“La atención y el sabor de las galletas son insuperables. Repetiré sin duda.” – Luis M.</blockquote>
-      <blockquote>“Toda la familia estuvo hablando por semanas del pastel de bodas de mi hija.” – Salomé H.</blockquote>
-      <blockquote>“En la oficina no quieren donas si en la bolsa no dice que son de La Casa del Pastel.” – Gerardo R.</blockquote>
+      <blockquote>El pastel de chocolate es una obra de arte. ¡Nunca habí­a probado algo tan delicioso!“ Ana G.</blockquote>
+      <blockquote>La atención y el sabor de las galletas son insuperables. Repetiría sin duda.“ Luis M.</blockquote>
+      <blockquote>Toda la familia estuvo hablando por semanas del pastel de bodas de mi hija.“ Salomé H.</blockquote>
+      <blockquote>En la oficina no quieren donas si en la bolsa no dice que son de La Casa del Pastel.“ Gerardo R.</blockquote>
     </section>
 
     <footer>
 
-      <p>📍 Aguascalientes, México | ☎️ 449-123-4567 | 📧 contacto@lacasadelpastel.mx</p>
+      <p>Aguascalientes, México | 449-123-4567 | contacto@lacasadelpastel.mx</p>
     </footer>
   </div>
 
@@ -472,9 +469,9 @@
   <!-- INICIO: MODAL DE COOKIES -->
   <div id="cookie-overlay">
     <div id="cookie-modal">
-      <h2>🍪 Tu Privacidad es Importante</h2>
+      <h2>Tu Privacidad es Importante</h2>
       <p>
-        Usamos cookies técnicas y almacenamiento local para funciones esenciales como el carrito de compras. Al continuar navegando, aceptas nuestra <a href="legales.html#cookies" target="_blank">Política de Cookies</a>.
+        Usamos cookies tÃ©cnicas y almacenamiento local para funciones esenciales como el carrito de compras. Al continuar navegando, aceptas nuestra <a href="legales.html#cookies" target="_blank">Polí­tica de Cookies</a>.
       </p>
       <button class="btn-accept-cookies" onclick="aceptarCookies()">Entendido</button>
     </div>
@@ -482,20 +479,24 @@
   <!-- FIN: MODAL DE COOKIES -->
 
   <script>
-    // Lógica para el modal de cookies (Limpia y funcional)
+    // LÃ³gica para el modal de cookies (Limpia y funcional)
     document.addEventListener("DOMContentLoaded", function() {
-      // Muestra el modal siempre al cargar la página.
-      document.getElementById("cookie-overlay").classList.add("show");
+      // Mostrar modal solo si no ha aceptado cookies anteriormente
+      if (!localStorage.getItem('cookiesAceptadas')) {
+        document.getElementById("cookie-overlay").classList.add("show");
+      }
     });
 
     function aceptarCookies() {
-      // Solo oculta el modal para esta visita actual.
+      // Guardar en localStorage que ha aceptado cookies
+      localStorage.setItem('cookiesAceptadas', '1');
+      // Ocultar el modal
       document.getElementById("cookie-overlay").classList.remove("show");
     }
   </script>
 
 
-            <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
+            <!-- INICIO: PIE DE PÃGINA LEGAL Y CRÃ‰DITOS -->
   <footer class="legal-footer">
     <p>
       <a href="legales.html#terminos">Términos y Condiciones</a> |
@@ -507,7 +508,7 @@
     </p>
     <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
   </footer>
-  <!-- FIN: PIE DE PÁGINA -->
+  <!-- FIN: PIE DE PÃGINA -->
 
 </body>
 </html>

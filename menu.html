@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
   <!-- Fuente Open Sans para textos del modal -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="carrito-drawer.css">
 <style>
 * {
   margin: 0;
@@ -415,7 +416,11 @@ nav a {
       <a href="https://instagram.com" target="_blank"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" class="icon-img" alt="Instagram"></a>
       <a href="https://facebook.com" target="_blank"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" class="icon-img" alt="Facebook"></a>
       <a href="https://x.com" target="_blank"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" class="icon-img" alt="Twitter"></a>
-      <a href="carritoCompra.html">🛒</a>
+          <a href="#" id="btn-abrir-carrito"
+             onclick="abrirCarritoDrawer();return false;">
+            🛒 <span id="cart-nav-badge" class="cart-nav-badge hidden">0</span>
+          </a>
+        <a href="pantallaUsuario.html">👤</a>
     </div>
   </header>
 
@@ -434,10 +439,8 @@ nav a {
 </div>
         <ul id="lista-categorias"></ul>
         <div class="filter-box">
-          <label>Precio mínimo</label>
-          <input type="number" id="precio-min" placeholder="Ej: 10">
-          <label>Precio máximo</label>
-          <input type="number" id="precio-max" placeholder="Ej: 100">
+          <input type="hidden" id="precio-min" placeholder="Ej: 10">
+          <input type="hidden" id="precio-max" placeholder="Ej: 100">
           <label for="tamano-filtro">Tamaño</label>
           <select id="tamano-filtro">
             <option value="">Todos los tamaños</option>
@@ -499,47 +502,46 @@ function closeModal() {
 // === NUEVA FUNCIÓN PARA AÑADIR AL CARRITO ===
 // Lógica adaptada de 'detalle_postre.php'
 function agregarAlCarrito(productoId) {
-  // 1. Encontrar el producto en la lista global
   const producto = todosLosPostres.find(p => p.id == productoId);
   if (!producto) {
-    console.error("Producto no encontrado:", productoId);
-    // REEMPLAZO: Alert nativo por modal
     showModal("Error: No se pudo encontrar el producto.", "Error", "❌");
     return;
   }
 
-  // 2. Crear el objeto para el carrito (usando el precio de lista del menú)
-  // Nota: Usamos producto.precio, no el precio con descuento de la otra página.
+  const qtyEl = document.getElementById('qty_menu_' + productoId);
+  let addQty = qtyEl ? parseInt(qtyEl.value, 10) : 1;
+  if (isNaN(addQty) || addQty < 1) addQty = 1;
+  const maxStock = parseInt(producto.stock || 0, 10);
+  if (maxStock > 0 && addQty > maxStock) {
+    showModal(`Lo sentimos, solo hay <strong>${maxStock}</strong> unidades disponibles.`, "Stock Insuficiente", "⚠️");
+    return;
+  }
+
   const productoParaCarrito = {
     id: producto.id,
     titulo: producto.titulo,
-    precio: parseFloat(producto.precio), // Usamos el precio del menú
+    precio: parseFloat(producto.precio),
     descripcion: producto.descripcion,
     imagen_url: producto.imagen_url,
-    cantidad: 1,
-    stock: parseInt(producto.stock || 10) // Asumimos un stock de 10 si no se define
+    cantidad: addQty,
+    stock: maxStock || 9999
   };
 
-  // 3. Lógica de localStorage (copiada de detalle_postre.php)
   let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
   const indexExistente = carrito.findIndex(p => p.id === productoParaCarrito.id);
 
   if (indexExistente !== -1) {
-    // Producto ya existe, solo incrementar cantidad
     const existente = carrito[indexExistente];
-    if (existente.cantidad + 1 > existente.stock) {
-      // REEMPLAZO: Alert nativo por modal
+    if (existente.cantidad + addQty > existente.stock) {
       showModal(`Lo sentimos, solo hay <strong>${existente.stock}</strong> unidades disponibles.`, "Stock Insuficiente", "⚠️");
       return;
     }
-    carrito[indexExistente].cantidad += 1;
+    carrito[indexExistente].cantidad += addQty;
   } else {
-    // Producto nuevo, añadir al carrito
     carrito.push(productoParaCarrito);
   }
 
   localStorage.setItem("carrito", JSON.stringify(carrito));
-  // REEMPLAZO: Alert nativo por modal de éxito
   showModal("¡Producto añadido al carrito!", "Éxito", "✅");
 }
 // === FIN DE LA NUEVA FUNCIÓN ===
@@ -568,7 +570,6 @@ function renderizarProductos(productos) {
         <img src="${p.imagen_url}" alt="${p.titulo}">
         <div class="product-info">
           <h3 class="product-name">${p.titulo}</h3>
-          <p class="product-price">$${parseFloat(p.precio).toFixed(2)}</p>
           <p class="product-details">
             <strong>Sabor:</strong> ${p.sabor || 'N/A'}<br>
             <strong>Tamaño:</strong> ${p.tamanio.toUpperCase()}
@@ -576,14 +577,10 @@ function renderizarProductos(productos) {
           <p class="product-description">${p.descripcion}</p>
           
           <!-- Contenedor de acciones añadido -->
-          <div class="product-actions">
+          <div class="product-actions" style="align-items:center;gap:8px;flex-wrap:wrap;">
             <button class="select-btn" 
                     onclick="window.location='detalle_postre.php?id=${p.id}'">
               Ver detalle
-            </button>
-            <!-- Icono de carrito añadido -->
-            <button class="btn-add-cart" onclick="agregarAlCarrito(${p.id})" title="Añadir al carrito">
-              🛒
             </button>
           </div>
 
@@ -650,7 +647,7 @@ function inicializarFiltros() {
 
 
 // Cargar postres
-fetch("listar_postres.php")
+fetch("listar_postres.php?tienda=1")
   .then(res => res.json())
   .then(data => {
     todosLosPostres = data;
@@ -659,6 +656,149 @@ fetch("listar_postres.php")
     inicializarFiltros();
     renderizarProductos(todosLosPostres);
   });
+  // ── CARRITO DRAWER ─────────────────────────────────────
+function abrirCarritoDrawer() {
+  renderCartDrawer();
+  document.getElementById('cart-drawer').classList.add('open');
+  document.getElementById('cart-drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Aviso de abandono si no pagan en 90s
+  clearTimeout(window._drawerAbandonTimer);
+  const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+  if (carrito.length) {
+    window._drawerAbandonTimer = setTimeout(mostrarAvisoAbandonoDrawer, 90000);
+  }
+}
+
+function cerrarCarritoDrawer() {
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.getElementById('cart-drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderCartDrawer() {
+  const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+  const itemsDiv = document.getElementById('cd-items');
+  const emptyDiv = document.getElementById('cd-empty');
+  const totalDiv = document.getElementById('cd-total');
+  const pagarBtn = document.getElementById('cd-btn-pagar');
+
+  itemsDiv.innerHTML = '';
+  let total = 0;
+
+  if (!carrito.length) {
+    emptyDiv.style.display = 'block';
+    pagarBtn.disabled = true;
+    totalDiv.textContent = 'Total: $0.00';
+    actualizarBadge(0);
+    return;
+  }
+  emptyDiv.style.display = 'none';
+  pagarBtn.disabled = false;
+
+  carrito.forEach((p, i) => {
+    const qty = p.cantidad || 1;
+    const precio = parseFloat(p.precio || 0);
+    total += qty * precio;
+    const div = document.createElement('div');
+    div.className = 'cd-item';
+    div.innerHTML = `
+      <img src="${p.imagen_url || p.img || 'https://placehold.co/60x60/F8D7DA/A30015?text=🍰'}" alt="${p.titulo||''}">
+      <div class="cd-item-info">
+        <div class="cd-item-title">${p.titulo || p.nombre || 'Producto'}</div>
+        <div class="cd-item-price">$${precio.toFixed(2)} c/u · Subtotal: $${(qty*precio).toFixed(2)}</div>
+        <div class="cd-qty">
+          <button onclick="cdCantidad(${i},-1)">−</button>
+          <span>${qty}</span>
+          <button onclick="cdCantidad(${i},1)">+</button>
+        </div>
+      </div>
+      <button class="cd-item-remove" onclick="cdQuitarConRescate(${i})" title="Quitar">✕</button>`;
+    itemsDiv.appendChild(div);
+  });
+
+  totalDiv.textContent = `Total: $${total.toFixed(2)}`;
+  actualizarBadge(carrito.reduce((s,p) => s+(p.cantidad||1), 0));
+}
+
+function actualizarBadge(n) {
+  const badge = document.getElementById('cart-count-badge');
+  if (!badge) return;
+  badge.textContent = n;
+  badge.style.display = n > 0 ? 'inline' : 'none';
+}
+
+function cdCantidad(index, delta) {
+  const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+  const nuevo = (carrito[index].cantidad || 1) + delta;
+  const maxStock = carrito[index].stock ?? Infinity;
+  if (nuevo < 1) { cdQuitarConRescate(index); return; }
+  if (nuevo > maxStock) return;
+  carrito[index].cantidad = nuevo;
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  renderCartDrawer();
+}
+
+function cdQuitarConRescate(index) {
+  const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+  const producto = carrito[index];
+  // Toast de rescate
+  const toastId = 'cd-toast-rescate-' + index;
+  if (document.getElementById(toastId)) return;
+  const toast = document.createElement('div');
+  toast.id = toastId;
+  toast.style.cssText = `position:fixed;bottom:80px;right:20px;background:#fff;border:2px solid #a30015;border-radius:12px;padding:14px 18px;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:9999;max-width:300px;`;
+  toast.innerHTML = `
+    <div style="font-weight:700;color:#a30015;margin-bottom:6px;">🎁 ¡Un momento!</div>
+    <div style="font-size:.88em;color:#444;margin-bottom:10px;">Llévate <strong>${producto.titulo||'este producto'}</strong> y obtén <strong>10% de descuento</strong> en tu próximo pedido.</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="cdAceptarDescuento('${toastId}')" style="flex:1;padding:8px;background:#a30015;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:.82em;">¡Lo quiero!</button>
+      <button onclick="cdConfirmarQuitar(${index},'${toastId}')" style="flex:1;padding:8px;background:#eee;color:#555;border:none;border-radius:6px;cursor:pointer;font-size:.82em;">Quitar igual</button>
+    </div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => { if(document.getElementById(toastId)) cdConfirmarQuitar(index, toastId); }, 10000);
+}
+
+function cdAceptarDescuento(toastId) {
+  document.getElementById(toastId)?.remove();
+  localStorage.setItem('cupon_recuperacion', JSON.stringify({ tipo:'porcentaje', valor:10, expira: Date.now()+86400000 }));
+  // Mostrar notificación breve
+  const n = document.createElement('div');
+  n.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#28a745;color:#fff;padding:12px 18px;border-radius:8px;z-index:9999;font-weight:700;';
+  n.textContent = '✅ ¡Cupón 10% guardado para tu próxima compra!';
+  document.body.appendChild(n);
+  setTimeout(() => n.remove(), 3500);
+}
+
+function cdConfirmarQuitar(index, toastId) {
+  document.getElementById(toastId)?.remove();
+  const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+  carrito.splice(index, 1);
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  renderCartDrawer();
+}
+
+function irApagoDesdeDrawer() {
+  clearTimeout(window._drawerAbandonTimer);
+  window.location.href = 'pago.html';
+}
+
+function mostrarAvisoAbandonoDrawer() {
+  const ya = document.getElementById('drawer-abandono');
+  if (ya) return;
+  const aviso = document.createElement('div');
+  aviso.id = 'drawer-abandono';
+  aviso.style.cssText = 'position:fixed;top:20px;right:20px;background:#fff7ed;border:2px solid #f97316;border-radius:12px;padding:14px 18px;box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:9999;max-width:280px;';
+  aviso.innerHTML = `
+    <div style="font-weight:700;color:#ea580c;margin-bottom:4px;">⏰ ¿Aún decides?</div>
+    <div style="font-size:.86em;color:#555;margin-bottom:10px;">¡No pierdas tus productos! Completa tu compra ahora.</div>
+    <button onclick="aviso.remove();window.location.href='pago.html';" style="width:100%;padding:8px;background:#ea580c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700;">Comprar ahora →</button>
+    <button onclick="document.getElementById('drawer-abandono').remove();" style="width:100%;margin-top:5px;padding:6px;background:none;border:none;color:#999;cursor:pointer;font-size:.82em;">Cerrar</button>`;
+  document.body.appendChild(aviso);
+}
+
+// Actualizar badge al cargar
+actualizarBadge((JSON.parse(localStorage.getItem('carrito')||'[]')).reduce((s,p)=>s+(p.cantidad||1),0));
 </script>
 
             <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
@@ -674,6 +814,25 @@ fetch("listar_postres.php")
     <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
   </footer>
   <!-- FIN: PIE DE PÁGINA -->
-
+<!-- CARRITO FLOTANTE -->
+<div id="cart-drawer-overlay" onclick="cerrarCarritoDrawer()"></div>
+<div id="cart-drawer" role="dialog" aria-label="Carrito de compras">
+  <div id="cart-drawer-header">
+    <h3>🛒 Tu Carrito</h3>
+    <button id="cart-drawer-close" onclick="cerrarCarritoDrawer()">✕</button>
+  </div>
+  <div id="cart-drawer-body">
+    <div id="cd-empty" style="display:none;">Tu carrito está vacío 🍰<br><a href="menu.html" style="color:#a30015;">Ver productos</a></div>
+    <div id="cd-items"></div>
+  </div>
+  <div id="cart-drawer-footer">
+    <div id="cd-total">Total: $0.00</div>
+    <button id="cd-btn-pagar" onclick="irApagoDesdeDrawer()">Confirmar y Pagar</button>
+    <div style="text-align:center;margin-top:8px;">
+      <a href="carritoCompra.html" style="font-size:.82em;color:#666;text-decoration:none;">Ver carrito completo →</a>
+    </div>
+  </div>
+</div>
+<script src="carrito-drawer.js" defer></script>
 </body>
 </html>

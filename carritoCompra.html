@@ -396,6 +396,36 @@
       });
     }
 
+    // ── GESTIÓN DE CARRITO POR SESIÓN DE USUARIO ──────────────────────
+let _carritoUsuarioId = null;
+
+async function initCarritoSesion() {
+  try {
+    const r = await fetch('sesion_info.php');
+    const info = await r.json();
+    if (info.activo && info.usuario_id) {
+      const nuevoId = String(info.usuario_id);
+      const idGuardado = localStorage.getItem('carrito_usuario_id');
+      if (idGuardado && idGuardado !== nuevoId) {
+        // Cambió de cuenta: guardar carrito del usuario anterior y limpiar
+        localStorage.setItem('carrito_backup_' + idGuardado, localStorage.getItem('carrito') || '[]');
+        localStorage.removeItem('carrito');
+      }
+      _carritoUsuarioId = nuevoId;
+      localStorage.setItem('carrito_usuario_id', nuevoId);
+    } else {
+      // Sin sesión: limpiar referencia de usuario (pero dejar carrito visible)
+      const idAnterior = localStorage.getItem('carrito_usuario_id');
+      if (idAnterior) {
+        // Se cerró sesión: guardar carrito del usuario y limpiar
+        localStorage.setItem('carrito_backup_' + idAnterior, localStorage.getItem('carrito') || '[]');
+        localStorage.removeItem('carrito');
+        localStorage.removeItem('carrito_usuario_id');
+      }
+    }
+  } catch(e) {}
+}
+
     // --- LOGICA DEL CARRITO ---
     function mostrarCarrito() {
       const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
@@ -428,6 +458,7 @@
         const item = document.createElement("div");
         item.className = "item";
         item.innerHTML = `
+        
           <img src="${producto.imagen_url || producto.img || 'https://via.placeholder.com/150'}" alt="${producto.titulo || producto.nombre || 'Producto'}">
           <div class="item-body">
             <div class="item-title">${producto.titulo || producto.nombre || 'Producto sin nombre'}</div>
@@ -443,6 +474,11 @@
             <div>Total: $${totalPorProducto.toFixed(2)}</div>
           </div>
         `;
+        const btnEliminar = document.createElement('button');
+btnEliminar.textContent = '✕ Quitar';
+btnEliminar.style.cssText = 'border:none;background:none;color:#a30015;cursor:pointer;font-size:0.85em;margin-top:8px;';
+btnEliminar.onclick = () => ofrecerDescuentoAntesEliminar(index, producto);
+item.querySelector('.item-body').appendChild(btnEliminar);
         lista.appendChild(item);
       });
 
@@ -475,6 +511,52 @@
       mostrarCarrito();
     }
 
+    function ofrecerDescuentoAntesEliminar(index, producto) {
+  // Mostrar toast de recuperación
+  const toast = document.createElement('div');
+  toast.id = 'toast-rescate-' + index;
+  toast.style.cssText = `
+    position:fixed;bottom:30px;right:20px;background:#fff;
+    border:2px solid #a30015;border-radius:12px;padding:16px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:9999;max-width:320px;
+    animation:slideIn 0.3s ease;
+  `;
+  toast.innerHTML = `
+    <div style="font-weight:700;color:#a30015;margin-bottom:6px;">🎁 ¡Espera un momento!</div>
+    <div style="font-size:0.9em;color:#444;margin-bottom:12px;">
+      Si te llevas <strong>${producto.titulo||'este producto'}</strong>,
+      te damos <strong>10% de descuento</strong> en tu próxima compra.
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="aplicarDescuentoRecuperacion(${index},'${toast.id}')" 
+        style="flex:1;padding:8px;background:#a30015;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:0.85em;">
+        ¡Acepto el descuento!
+      </button>
+      <button onclick="confirmarEliminar(${index},'${toast.id}')"
+        style="flex:1;padding:8px;background:#eee;color:#555;border:none;border-radius:6px;cursor:pointer;font-size:0.85em;">
+        Quitar igual
+      </button>
+    </div>
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => { if(document.getElementById(toast.id)) confirmarEliminar(index, toast.id); }, 10000);
+}
+
+function aplicarDescuentoRecuperacion(index, toastId) {
+  document.getElementById(toastId)?.remove();
+  // Guardar cupón en localStorage
+  localStorage.setItem('cupon_recuperacion', JSON.stringify({ tipo:'porcentaje', valor:10, expira: Date.now() + 86400000 }));
+  showNotification('¡Cupón guardado! Se aplicará 10% de descuento en tu siguiente compra.', 'Cupón activado', 'success');
+}
+
+function confirmarEliminar(index, toastId) {
+  document.getElementById(toastId)?.remove();
+  const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+  carrito.splice(index, 1);
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  mostrarCarrito();
+}
+
     // ACTUALIZACIÓN: Uso de showConfirmation asíncrono
     async function vaciarCarrito() {
       const confirmado = await showConfirmation('¿Seguro que quieres vaciar todo el carrito? No podrás deshacer esta acción.', 'Vaciar Carrito');
@@ -490,8 +572,55 @@
       window.location.href = 'pago.html';
     }
 
-    // Inicializar
-    mostrarCarrito();
+// Inicializar
+initCarritoSesion().then(() => mostrarCarrito());
+// Aviso de abandono de carrito
+let _carritoAbierto = false;
+let _avisoAbandonoTimer = null;
+
+function registrarAperturaCarrito() {
+  const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+  if (!carrito.length) return;
+  _carritoAbierto = true;
+  // Si pasan 90 segundos sin hacer clic en Pagar, mostrar aviso
+  clearTimeout(_avisoAbandonoTimer);
+  _avisoAbandonoTimer = setTimeout(() => {
+    if (_carritoAbierto) mostrarAvisoAbandono();
+  }, 90000);
+}
+
+function mostrarAvisoAbandono() {
+  if (document.getElementById('aviso-abandono')) return;
+  const aviso = document.createElement('div');
+  aviso.id = 'aviso-abandono';
+  aviso.style.cssText = `
+    position:fixed;top:20px;right:20px;background:#fff7ed;
+    border:2px solid #f97316;border-radius:12px;padding:16px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.15);z-index:9999;max-width:300px;
+  `;
+  aviso.innerHTML = `
+    <div style="font-weight:700;color:#ea580c;margin-bottom:6px;">⏰ ¿Sigues ahí?</div>
+    <div style="font-size:0.88em;color:#555;margin-bottom:10px;">Tienes productos en tu carrito. ¡No los dejes escapar!</div>
+    <button onclick="document.getElementById('aviso-abandono').remove();window.location.href='pago.html';"
+      style="width:100%;padding:9px;background:#ea580c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700;">
+      Completar mi compra →
+    </button>
+    <button onclick="document.getElementById('aviso-abandono').remove();"
+      style="width:100%;margin-top:6px;padding:7px;background:none;border:none;color:#999;cursor:pointer;font-size:.85em;">
+      No, gracias
+    </button>
+  `;
+  document.body.appendChild(aviso);
+}
+
+// Disparar al cargar la página del carrito
+registrarAperturaCarrito();
+
+// Si el usuario hace clic en Pagar, cancelar el aviso
+document.querySelector('button[onclick="irAPago()"]')?.addEventListener('click', () => {
+  _carritoAbierto = false;
+  clearTimeout(_avisoAbandonoTimer);
+});
   </script>
 
     <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
   <!-- Fuente para el modal y footer -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="carrito-drawer.css">
   <style>
     * {
       margin: 0;
@@ -39,6 +40,133 @@
         url('https://cdn.pixabay.com/photo/2023/09/04/20/39/cake-8233676_1280.jpg') no-repeat center center/cover;
       z-index: -1;
     }
+    /* =========================================
+   BANNER DE PROMOCIONES CRM
+========================================= */
+
+.promo-banner-container{
+
+    width:100%;
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        90deg,
+        #7d0011,
+        #b30018,
+        #d1001c
+    );
+
+    color:white;
+
+    box-shadow:
+    0 4px 15px rgba(0,0,0,0.15);
+
+    position:relative;
+
+    z-index:3;
+
+    border-top:
+    2px solid rgba(255,255,255,0.15);
+
+    border-bottom:
+    2px solid rgba(255,255,255,0.15);
+
+    min-height:58px;
+
+    display:flex;
+    align-items:center;
+}
+
+.promo-banner-container.hidden{
+    display:none;
+}
+
+.promo-banner-track{
+
+    display:flex;
+    align-items:center;
+    gap:50px;
+
+    white-space:nowrap;
+
+    padding:16px 30px;
+
+    animation:
+    promoScroll 25s linear infinite;
+
+    width:max-content;
+}
+
+.promo-item{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font-family:'Open Sans',sans-serif;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    letter-spacing:0.3px;
+
+    text-shadow:
+    0 1px 3px rgba(0,0,0,0.25);
+}
+
+.promo-item span{
+
+    background:
+    rgba(255,255,255,0.15);
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:.85rem;
+}
+
+.promo-loading{
+
+    font-weight:bold;
+
+    opacity:.9;
+}
+
+@keyframes promoScroll{
+
+    from{
+        transform:translateX(0);
+    }
+
+    to{
+        transform:translateX(-50%);
+    }
+}
+
+@media(max-width:768px){
+
+    .promo-banner-track{
+
+        gap:30px;
+
+        padding:14px 20px;
+
+        animation-duration:18s;
+    }
+
+    .promo-item{
+
+        font-size:.88rem;
+    }
+
+    .promo-item span{
+
+        font-size:.75rem;
+    }
+}
 
     header {
       display: flex;
@@ -87,7 +215,7 @@
       display: none;
       position: absolute;
       top: 100%;
-      /* debajo del botón */
+      /* debajo del botÃ³n */
       left: 0;
       background-color: rgba(0, 0, 0, 0.9);
       min-width: 220px;
@@ -107,7 +235,7 @@
       background-color: rgba(255, 255, 255, 0.1);
     }
 
-    /* Mantener abierto mientras esté en hover el contenedor */
+    /* Mantener abierto mientras estÃ© en hover el contenedor */
     .submenu:hover .submenu-content {
       display: block;
     }
@@ -205,7 +333,7 @@
       max-width: 500px;
       text-align: center;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-      /* Animación de entrada */
+      /* AnimaciÃ³n de entrada */
       transform: scale(0.9);
       opacity: 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
@@ -300,35 +428,37 @@
       <a href="conocenos.html">Conócenos</a>
       <a href="ofertas.php">Ofertas</a>
       <a href="contacto.html">Contacto</a>
-
-      <!-- Nuevo menú para documentos -->
-      <div class="submenu">
-        <a>Proyecto ▼</a>
-        <div class="submenu-content">
-          <a href="infraestructura.html">Justificación de Recursos</a>
-          <a href="ind.html">Plataformas abiertas/cerradas</a>
-          <a href="status.html">Estado de servicio/recursos</a>
-        </div>
-      </div>
-
       <a href="login.html">Iniciar Sesión</a>
     </nav>
     <div class="icons">
       <a href="https://www.instagram.com/"><img src="https://static.vecteezy.com/system/resources/previews/016/716/469/non_2x/instagram-icon-free-png.png" alt="Instagram" class="icon-img"></a>
       <a href="https://www.facebook.com/"><img src="https://cliply.co/wp-content/uploads/2019/04/371903520_SOCIAL_ICONS_FACEBOOK.png" alt="Facebook" class="icon-img"></a>
       <a href="https://www.x.com/"><img src="https://vectorseek.com/wp-content/uploads/2023/07/Twitter-X-Logo-Vector-01-2.jpg" alt="X" class="icon-img"></a>
-      <a href="carritoCompra.html">🛒</a>
+          <a href="#" id="btn-abrir-carrito"
+             onclick="abrirCarritoDrawer();return false;">
+            🛒<span id="cart-nav-badge" class="cart-nav-badge hidden">0</span>
+          </a>
       <a href="pantallaUsuario.html">👤</a>
     </div>
   </header>
+<section id="promoBannerContainer" class="promo-banner-container hidden">
+  
+  <div class="promo-banner-track" id="promoBannerTrack">
 
+    <div class="promo-loading">
+      🔥 Cargando promociones...
+    </div>
+
+  </div>
+
+</section>
   <div class="hero">
     <h1>Pasteles, galletas y muchas más delicias</h1>
-    <p>¡Ofertas de Temporada!</p>
+    <p>Ofertas de Temporada!</p>
     <a href="menu.html" class="btn">Comprar ahora</a>
   </div>
 
-  <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
+  <!-- INICIO: PIE DE PÃGINA LEGAL Y CRÃ‰DITOS -->
   <footer class="legal-footer">
     <p>
       <a href="legales.html#terminos">Términos y Condiciones</a> |
@@ -340,14 +470,14 @@
     </p>
     <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
   </footer>
-  <!-- FIN: PIE DE PÁGINA -->
+  <!-- FIN: PIE DE PÃGINA -->
 
   <!-- INICIO: MODAL DE COOKIES -->
   <div id="cookie-overlay">
     <div id="cookie-modal">
-      <h2>🍪 Tu Privacidad es Importante</h2>
+      <h2>Tu privacidad es Importante</h2>
       <p>
-        Usamos cookies técnicas y almacenamiento local para funciones esenciales como el carrito de compras. Al continuar navegando, aceptas nuestra <a href="legales.html#cookies" target="_blank">Política de Cookies</a>.
+        Usamos cookies técnicas y almacenamiento local para funciones esenciales como el carrito de compras. Al continuar navegando, aceptas nuestra <a href="legales.html#cookies" target="_blank">PolÃ­tica de Cookies</a>.
       </p>
       <button class="btn-accept-cookies" onclick="aceptarCookies()">Entendido</button>
     </div>
@@ -355,17 +485,140 @@
   <!-- FIN: MODAL DE COOKIES -->
 
   <script>
-    // Lógica para el modal de cookies (Limpia y funcional)
+    // LÃ³gica para el modal de cookies (Limpia y funcional)
     document.addEventListener("DOMContentLoaded", function() {
-      // Muestra el modal siempre al cargar la página.
-      document.getElementById("cookie-overlay").classList.add("show");
+      // Mostrar modal solo si no ha aceptado cookies anteriormente
+      if (!localStorage.getItem('cookiesAceptadas')) {
+        document.getElementById("cookie-overlay").classList.add("show");
+      }
     });
 
     function aceptarCookies() {
-      // Solo oculta el modal para esta visita actual.
+      // Guardar en localStorage que ha aceptado cookies
+      localStorage.setItem('cookiesAceptadas', '1');
+      // Ocultar el modal
       document.getElementById("cookie-overlay").classList.remove("show");
     }
-  </script>
+async function cargarBannerPromos(){
 
+    try{
+
+        const res = await fetch('listar_promociones_activas.php');
+
+        const promos = await res.json();
+
+        if(
+            !Array.isArray(promos)
+            ||
+            promos.length === 0
+        ){
+            return;
+        }
+
+        const container =
+        document.getElementById(
+            'promoBannerContainer'
+        );
+
+        const track =
+        document.getElementById(
+            'promoBannerTrack'
+        );
+
+        let html = '';
+
+        promos.forEach(p => {
+
+            let texto = '';
+
+            if(p.tipo === 'descuento_porcentaje'){
+
+                texto =
+                `${p.valor}% OFF`;
+            }
+
+            else if(p.tipo === '2x1'){
+
+                texto =
+                `2x1`;
+            }
+
+            else if(
+                p.tipo === 'precio_especial'
+            ){
+
+                texto =
+                `Precio especial`;
+            }
+
+            // aplica a
+            if(p.aplica_a === 'categoria'){
+
+                texto +=
+                ` en ${p.referencia}`;
+            }
+
+            else if(
+                p.aplica_a === 'producto'
+            ){
+
+                texto +=
+                ` en productos seleccionados`;
+            }
+
+            // segmento
+            if(p.clientes === 'vip'){
+
+                texto +=
+                ` · VIP`;
+            }
+
+            else if(
+                p.clientes === 'frecuente'
+            ){
+
+                texto +=
+                ` · Frecuentes`;
+            }
+
+            html += `
+            <div class="promo-item">
+
+                🔥 ${texto}
+
+                <span>
+                    ${p.nombre || 'Promoción'}
+                </span>
+
+            </div>
+            `;
+        });
+
+        // duplicamos para scroll infinito fluido
+        track.innerHTML =
+        html + html;
+
+        container.classList.remove(
+            'hidden'
+        );
+
+    }catch(error){
+
+        console.error(
+            'Error promociones:',
+            error
+        );
+    }
+}
+
+document.addEventListener(
+    'DOMContentLoaded',
+    cargarBannerPromos
+);
+document.addEventListener('DOMContentLoaded', () => {
+  cargarBannerPromos();
+});
+  </script>
+<script src="carrito-drawer.js" defer></script>
 </body>
 </html>

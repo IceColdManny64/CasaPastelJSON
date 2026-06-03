@@ -1,0 +1,30 @@
+[
+    {
+        "folio": "OC-20260517-3FD2",
+        "fecha": "2026-05-17 23:51:35",
+        "proveedor": "Chocolates del Norte",
+        "producto": "Chocolate amargo",
+        "tipo_linea": "insumo",
+        "producto_id": 0,
+        "insumo_id": 5,
+        "cantidad": 30,
+        "costo_unitario": 450,
+        "total": 13500,
+        "estado": "Recibida",
+        "id": 1
+    },
+    {
+        "folio": "OC-20260601-AA25",
+        "fecha": "2026-06-01 15:23:14",
+        "proveedor": "Chocolates del Norte",
+        "producto": "Mantequilla",
+        "tipo_linea": "insumo",
+        "producto_id": 0,
+        "insumo_id": 4,
+        "cantidad": 500,
+        "costo_unitario": 0.5,
+        "total": 250,
+        "estado": "Recibida",
+        "id": 2
+    }
+]

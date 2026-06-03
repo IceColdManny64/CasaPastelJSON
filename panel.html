@@ -2,13 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel de Administración</title>
-  <!-- FUENTES AÑADIDAS -->
+  <title>Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
-  <!-- Chart.js para las métricas -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
-  <a href="index.html" style="position:fixed; top:20px; right:20px; color:white; text-decoration:none; z-index:20; font-weight:bold; text-shadow:0 1px 3px rgba(0,0,0,0.5);">Salir</a>
+  <button onclick="cerrarSesionPanel()" style="position:fixed; top:20px; right:20px; color:white; background:transparent; border:none; cursor:pointer; z-index:20; font-weight:bold; font-size:1em; text-shadow:0 1px 3px rgba(0,0,0,0.5);">Salir</button>
   
   <style>
     /* === ESTILOS GENERALES (INTACTOS) === */
@@ -68,6 +66,31 @@
       font-family: 'Playfair Display', serif;
       margin: 0;
     }
+
+#badgePerfil {
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      display: flex !important;
+    }
+
+    #badgePerfil.admin {
+      background: rgba(163, 0, 21, 0.2);
+      color: #a30015;
+      border: 1px solid rgba(163, 0, 21, 0.4);
+    }
+
+    #badgePerfil.gerente {
+      background: rgba(41, 128, 185, 0.2);
+      color: #2980b9;
+      border: 1px solid rgba(41, 128, 185, 0.4);
+    }
+
+    #badgePerfil.vendedor {
+      background: rgba(39, 174, 96, 0.2);
+      color: #27ae60;
+      border: 1px solid rgba(39, 174, 96, 0.4);
+    }
+
 
     .botones {
       display: flex;
@@ -247,28 +270,39 @@
 </head>
 <body>
 
-<header>
-  <h1>Panel del Administrador</h1>
+<header style="display: flex; justify-content: space-between; align-items: center;">
+  <h1 style="flex: 1; margin: 0;">Panel de administración</h1>
+  
+  <div id="badgePerfil" style="display: none; align-items: center; gap: 10px; padding: 5px 15px; border-radius: 20px; margin-right: 60px;">
+    👤 <span id="badgeNombre"></span> - <strong id="badgeRol" style="text-transform: uppercase; font-size: 0.85em;"></strong>
+  </div>
 </header>
 
-<div class="botones">
-  <button onclick="mostrarProductos()">Gestión de Productos</button>
-  <button onclick="mostrarFormularioAgregarPostre()">Agregar Postre</button>
-  <button onclick="mostrarUsuarios()">Gestión de Usuarios</button>
-  <button onclick="mostrarMetricas()">Ver Métricas</button>
-  <button onclick="mostrarSeguimiento()">Gestión de Pedidos</button>
+<div class="botones" id="menuBotones">
+<button data-roles="admin,vendedor,gerente" onclick="mostrarProductos()">🥐Productos</button>
+<button data-roles="admin" onclick="mostrarFormularioAgregarPostre()">➕Agregar Postre</button>
+<button data-roles="admin" onclick="mostrarUsuariosClientes()">👤Usuarios</button>
+<button data-roles="admin,gerente" onclick="mostrarMetricas()">📊 Métricas</button>
+<button data-roles="admin,vendedor" onclick="mostrarSeguimiento()">📋 Pedidos</button>
+<button data-roles="admin,gerente" onclick="mostrarInventarioSCM()">📦 Inventario</button>
+<button data-roles="admin" onclick="mostrarProduccion()">🏭 Producción</button>
+<button data-roles="admin,vendedor,gerente" onclick="mostrarCRM()">💼 CRM</button>
+<button data-roles="admin,vendedor" onclick="mostrarCompras()">🛒 Compras</button>
+<button data-roles="admin,gerente" onclick="mostrarFinanzas()">💰 Finanzas</button>
+<button data-roles="admin" onclick="mostrarRRHH()">👥 RR.HH.</button>
+<button data-roles="admin" onclick="mostrarAdmins()">🔑 Usuarios Panel</button>
+<button data-roles="admin" onclick="mostrarAuditoria()">🔍 Auditoría</button>
+</div>
+
 </div>
 
 <div id="contenido">
   <p class="titulo-contenido" style="text-align:center;">Selecciona una opción para comenzar</p>
 </div>
 
-<!-- ========================================== -->
-<!-- MODALES DE EDICIÓN (Formularios) -->
-<!-- ========================================== -->
 <div id="modalEditar" class="modal-overlay">
   <div class="modal-contenido">
-    <h2>Editar Receta</h2>
+    <h2>Editar postre</h2>
     <form id="formEditarPostre">
       <input type="hidden" id="editar_id" name="id">
       <label>Título</label><input type="text" id="editar_titulo" name="titulo" required>
@@ -279,6 +313,12 @@
       <label>Sabor</label><input type="text" id="editar_sabor" name="sabor">
       <label>URL Imagen</label><input type="text" id="editar_imagen_url" name="imagen_url">
       <label>Stock</label><input type="number" id="editar_stock" name="stock">
+      <label>Stock mínimo (alerta)</label><input type="number" id="editar_stock_minimo" name="stock_minimo" min="0" value="5">
+      <label>Activo en tienda</label>
+      <select id="editar_activo" name="activo">
+        <option value="1">Sí (visible)</option>
+        <option value="0">No (oculto)</option>
+      </select>
       <div class="modal-botones">
         <button type="submit" class="btn-editar">Guardar</button>
         <button type="button" class="btn-eliminar" onclick="cerrarModalesEdicion()">Cancelar</button>
@@ -302,9 +342,6 @@
   </div>
 </div>
 
-<!-- ========================================== -->
-<!-- MODAL DE NOTIFICACIÓN (Nuevo Diseño) -->
-<!-- ========================================== -->
 <div id="custom-modal-overlay" class="custom-modal-overlay">
   <div class="custom-modal-box">
     <div id="custom-modal-icon" class="custom-modal-icon"></div>
@@ -395,199 +432,141 @@
     document.getElementById('modalEditarUsuario').style.display = 'none';
   }
 
-  // =========================================
-  // 2. GESTIÓN DE PEDIDOS (Restaurada - Estática)
-  // =========================================
-  function mostrarSeguimiento() {
-    const html = `
-      <p class="titulo-contenido">Gestión de Pedidos</p>
-      <div style="margin-bottom:15px;">
-        <input type="text" placeholder="Buscar por ID o cliente..." style="width:100%; max-width:400px; padding:10px; border:1px solid #ccc; border-radius:6px;">
-      </div>
-      
-      <div class="admin-layout">
-        <!-- Columna Izquierda: Lista (Placeholders Fijos) -->
-        <div class="pedidos-lista-cont">
-          <div class="pedido-card-mini active" onclick="cargarDetallePedido(923153)">
-            <div class="pedido-header"><span>Pedido #923153</span> <span class="status-badge bg-recibido">Recibido</span></div>
-            <div class="pedido-meta"><span>Ana García</span> <span>$23.98</span></div>
-          </div>
-          <div class="pedido-card-mini" onclick="cargarDetallePedido(923152)">
-            <div class="pedido-header"><span>Pedido #923152</span> <span class="status-badge bg-proceso">En preparación</span></div>
-            <div class="pedido-meta"><span>Carlos Mendoza</span> <span>$150.00</span></div>
-          </div>
-          <div class="pedido-card-mini" onclick="cargarDetallePedido(923150)">
-            <div class="pedido-header"><span>Pedido #923150</span> <span class="status-badge bg-camino">En camino</span></div>
-            <div class="pedido-meta"><span>Sofía Reyes</span> <span>$95.50</span></div>
-          </div>
-        </div>
+  // ════════════════════════════════════════════════════════════════════════
+  //  CONTROL DE ACCESO POR ROL (frontend)
+  // ════════════════════════════════════════════════════════════════════════
 
-        <!-- Columna Derecha: Detalle -->
-        <div class="pedidos-detalle-cont" id="detallePedidoArea">
-          <!-- Cargar el primero por defecto -->
-          ${getDetalleHTML(923153)}
-        </div>
-      </div>
-    `;
-    document.getElementById('contenido').innerHTML = html;
-  }
-
-  // Datos simulados fijos (sin generador)
-  const pedidosData = {
-    923153: { id: 923153, cliente: "Ana García", tel: "4491234567", status: "Recibido", items: [{n:"Gelatina de frutas", p:11.99, q:2}], total: 23.98 },
-    923152: { id: 923152, cliente: "Carlos Mendoza", tel: "4498765432", status: "En preparación", items: [{n:"Pastel de Chocolate", p:150.00, q:1}], total: 150.00 },
-    923150: { id: 923150, cliente: "Sofía Reyes", tel: "4491112222", status: "En camino", items: [{n:"Cheesecake Fresa", p:60.00, q:1}, {n:"Caja Galletas", p:35.50, q:1}], total: 95.50 }
-  };
-
-  function cargarDetallePedido(id) {
-    document.getElementById('detallePedidoArea').innerHTML = getDetalleHTML(id);
-    document.querySelectorAll('.pedido-card-mini').forEach(el => el.classList.remove('active'));
-  }
-
-  function getDetalleHTML(id) {
-    const p = pedidosData[id];
-    if(!p) return '';
-    let itemsHtml = p.items.map(i => `<li>(${i.q}x) ${i.n} - <strong>$${(i.p * i.q).toFixed(2)}</strong></li>`).join('');
-    return `
-      <div class="pedido-detalle">
-        <h3 style="margin-top:0; color:#b33f4f;">Detalle Pedido #${p.id}</h3>
-        <p><strong>Cliente:</strong> ${p.cliente} <br><small style="color:#666">${p.tel}</small></p>
-        <div style="background:#f9f9f9; padding:10px; border-radius:6px; margin:15px 0;">
-          <ul style="margin:0; padding-left:20px;">${itemsHtml}</ul>
-          <p style="text-align:right; margin:5px 0 0; font-weight:bold;">Total: $${p.total.toFixed(2)}</p>
-        </div>
-        <h4>Estado Actual: <span class="status-badge bg-recibido">${p.status}</span></h4>
-        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
-          <button class="btn-editar" onclick="simularActualizacion()">Avanzar Estado</button>
-          <button class="btn-eliminar" onclick="simularCancelacion()">Cancelar Pedido</button>
-        </div>
-      </div>
-    `;
-  }
-
-  function simularActualizacion() {
-    showModal("El estado del pedido ha sido actualizado (Simulación).", "Actualizado", "✅");
-  }
-  
-  function simularCancelacion() {
-    showConfirmation("¿Seguro que deseas cancelar este pedido?").then(yes => {
-      if(yes) showModal("Pedido cancelado (Simulación).", "Cancelado", "ℹ️", true);
-    });
-  }
 
   // =========================================
   // 3. MÉTRICAS (Reparadas y Locales)
   // =========================================
-  function mostrarMetricas() {
-    // Generar datos aleatorios para que siempre se vea vivo
-    const visitas = Math.floor(Math.random() * 5000) + 3000;
-    const pedidos = Math.floor(visitas * 0.08);
-    const conversion = ((pedidos/visitas)*100).toFixed(2);
-    
-    let html = `
-      <p class="titulo-contenido">Panel de Métricas</p>
-      <div class="kpis">
-        <div class="kpi"><div class="label">Visitas (30d)</div><div class="value">${visitas.toLocaleString()}</div></div>
-        <div class="kpi"><div class="label">Pedidos</div><div class="value">${pedidos}</div></div>
-        <div class="kpi"><div class="label">Tasa Conversión</div><div class="value">${conversion}%</div></div>
-        <div class="kpi"><div class="label">Ingresos Aprox.</div><div class="value">$${(pedidos * 120).toLocaleString()}</div></div>
-      </div>
-      
-      <div class="charts">
-        <div class="chart-wrap">
-          <canvas id="chartVisitas" height="250"></canvas>
-        </div>
-        <div class="chart-wrap">
-          <canvas id="chartCanales" height="250"></canvas>
-        </div>
-      </div>
-    `;
-    document.getElementById('contenido').innerHTML = html;
+async function mostrarMetricas() {
+  const [pedRes, posRes] = await Promise.all([
+    fetch('listar_pedidos.php'),
+    fetch('listar_postres.php')
+  ]);
+  const pedidos = await pedRes.json();
+  const postres = await posRes.json();
 
-    // Renderizar gráficos con Chart.js
-    setTimeout(() => {
-      // Destruir instancias previas si existen (para evitar errores de canvas en reuso)
-      if(window.myChart1) window.myChart1.destroy();
-      if(window.myChart2) window.myChart2.destroy();
+  const hoy   = new Date();
+  const mes   = hoy.getMonth();
+  const anio  = hoy.getFullYear();
+  const esMes = f => { const d = new Date(f); return d.getMonth()===mes && d.getFullYear()===anio; };
 
-      const ctx1 = document.getElementById('chartVisitas');
-      if(ctx1) {
-        window.myChart1 = new Chart(ctx1, {
-          type: 'line',
-          data: {
-            labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
-            datasets: [{
-              label: 'Visitas',
-              data: [1200, 1900, 1500, 2200],
-              borderColor: '#d6001c',
-              backgroundColor: 'rgba(214,0,28,0.1)',
-              tension: 0.3, fill: true
-            }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: { y: { beginAtZero: true } }
-          }
-        });
-      }
+  const activos    = pedidos.filter(p => p.estado !== 'Cancelado');
+  const delMes     = activos.filter(p => esMes(p.fecha));
+  const entregados = activos.filter(p => p.estado === 'Entregado');
+  const totalMes   = delMes.reduce((s,p) => s + parseFloat(p.total||0), 0);
+  const totalGral  = activos.reduce((s,p) => s + parseFloat(p.total||0), 0);
+  const ticketProm = activos.length ? (totalGral / activos.length) : 0;
 
-      const ctx2 = document.getElementById('chartCanales');
-      if(ctx2) {
-        window.myChart2 = new Chart(ctx2, {
-          type: 'doughnut',
-          data: {
-            labels: ['Instagram', 'Facebook', 'Directo', 'Google'],
-            datasets: [{
-              data: [45, 30, 15, 10],
-              backgroundColor: ['#E1306C', '#4267B2', '#d6001c', '#F4B400']
-            }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-          }
-        });
-      }
-    }, 100);
+  const STOCK_MIN_DEFAULT = 5;
+  const bajosStock = postres.filter(p => parseInt(p.stock) <= parseInt(p.stock_minimo ?? STOCK_MIN_DEFAULT));
+
+  // Ventas por mes (últimos 6)
+  const labels6 = [], datos6 = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(anio, mes - i, 1);
+    labels6.push(d.toLocaleString('es-MX', { month: 'short', year: '2-digit' }));
+    datos6.push(activos
+      .filter(p => { const dp = new Date(p.fecha); return dp.getMonth()===d.getMonth() && dp.getFullYear()===d.getFullYear(); })
+      .reduce((s,p) => s + parseFloat(p.total||0), 0)
+      .toFixed(2));
   }
 
-  // =========================================
-  // 4. GESTIÓN DE PRODUCTOS Y USUARIOS (Backend Real)
-  // =========================================
-  function mostrarProductos() {
+  // Top 5 productos vendidos
+  const conteo = {};
+  activos.forEach(p => (p.items||[]).forEach(it => {
+    conteo[it.titulo] = (conteo[it.titulo]||0) + parseInt(it.cantidad||1);
+  }));
+  const top5 = Object.entries(conteo).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  // Pedidos por estado
+  const estadoCont = {};
+  pedidos.forEach(p => { estadoCont[p.estado] = (estadoCont[p.estado]||0) + 1; });
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">Métricas del Negocio</p>
+    <div class="kpis">
+      <div class="kpi"><div class="label">Pedidos este mes</div><div class="value">${delMes.length}</div></div>
+      <div class="kpi"><div class="label">Ingresos este mes</div><div class="value">$${totalMes.toFixed(2)}</div></div>
+      <div class="kpi"><div class="label">Total pedidos</div><div class="value">${activos.length}</div></div>
+      <div class="kpi"><div class="label">Ticket promedio</div><div class="value">$${ticketProm.toFixed(2)}</div></div>
+      <div class="kpi"><div class="label">Entregados</div><div class="value">${entregados.length}</div></div>
+      <div class="kpi" style="${bajosStock.length?'border-color:#dc3545;':''}" >
+        <div class="label">Productos stock bajo</div>
+        <div class="value" style="${bajosStock.length?'color:#dc3545;':''}">${bajosStock.length}</div>
+      </div>
+    </div>
+    <div class="charts">
+      <div class="chart-wrap"><canvas id="chartVentas" height="250"></canvas></div>
+      <div class="chart-wrap"><canvas id="chartEstados" height="250"></canvas></div>
+    </div>
+    ${top5.length ? `
+    <h3 style="color:#b33f4f;margin-top:24px;">Top 5 productos más vendidos</h3>
+    <table>
+      <thead><tr><th>#</th><th>Producto</th><th>Unidades vendidas</th></tr></thead>
+      <tbody>${top5.map(([nom,cant],i)=>`<tr><td>${i+1}</td><td>${nom}</td><td><strong>${cant}</strong></td></tr>`).join('')}</tbody>
+    </table>` : ''}`;
+
+  setTimeout(() => {
+    if (window.myChart1) window.myChart1.destroy();
+    if (window.myChart2) window.myChart2.destroy();
+
+    const ctx1 = document.getElementById('chartVentas');
+    if (ctx1) window.myChart1 = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: labels6,
+        datasets: [{ label: 'Ingresos ($)', data: datos6,
+          backgroundColor: 'rgba(179,63,79,0.7)', borderColor: '#b33f4f', borderWidth: 1 }]
+      },
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins: { legend:{ display:false }, title:{ display:true, text:'Ingresos últimos 6 meses' } },
+        scales: { y: { beginAtZero:true } } }
+    });
+
+    const ctx2 = document.getElementById('chartEstados');
+    if (ctx2) window.myChart2 = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(estadoCont),
+        datasets: [{ data: Object.values(estadoCont),
+          backgroundColor: ['#6c757d','#ffc107','#007bff','#28a745','#dc3545'] }]
+      },
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins: { title:{ display:true, text:'Pedidos por estado' } } }
+    });
+  }, 100);
+}
+
+function mostrarProductos() {
     fetch('listar_postres.php')
       .then(res => res.json())
       .then(data => {
+        // Verificamos si el usuario actual es admin
+        const esAdmin = window._rolActual === 'admin'; 
+        
         let html = `<p class="titulo-contenido">Gestión de Productos</p>
           <table>
             <tr>
-              <th>ID</th>
-              <th>Título</th>
-              <th>Precio</th>
-              <th>Categoría</th>
-              <th>Tamaño</th>
-              <th>Sabor</th>
-              <th>Imagen</th>
-              <th>Stock</th>
-              <th>Acciones</th>
-            </tr>`;
+              <th>ID</th><th>Título</th><th>Precio</th><th>Categoría</th>
+              <th>Tamaño</th><th>Sabor</th><th>Imagen</th><th>Stock</th>
+              <th>Mín.</th><th>Activo</th>
+              ${esAdmin ? '<th>Acciones</th>' : ''} </tr>`;
         data.forEach(p => {
+          const activo = (p.activo === false || p.activo === 0) ? '<span style="color:#999">No</span>' : '<span style="color:#28a745">Sí</span>';
           html += `
             <tr>
-              <td>${p.id}</td>
-              <td>${p.titulo}</td>
-              <td>$${p.precio}</td>
-              <td>${p.categoria || 'N/A'}</td>
-              <td>${p.tamanio || 'N/A'}</td>
+              <td>${p.id}</td><td>${p.titulo}</td><td>$${p.precio}</td>
+              <td>${p.categoria || 'N/A'}</td><td>${p.tamanio || 'N/A'}</td>
               <td>${p.sabor || 'N/A'}</td>
               <td>${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.titulo}" style="max-width:60px; max-height:40px; border-radius:3px;">` : '—'}</td>
-              <td>${p.stock}</td>
-              <td class="acciones">
+              <td>${p.stock}</td><td>${p.stock_minimo ?? '—'}</td><td>${activo}</td>
+              ${esAdmin ? `<td class="acciones">
                 <button class="btn-editar" onclick="abrirModalEditar(${p.id})">Editar</button>
                 <button class="btn-eliminar" onclick="eliminarPostre(${p.id})">Eliminar</button>
-              </td>
-            </tr>`;
+              </td>` : ''} </tr>`;
         });
         html += `</table>`;
         document.getElementById("contenido").innerHTML = html;
@@ -603,10 +582,11 @@
         <label>Descripción</label><textarea name="descripcion" rows="3" required></textarea>
         <label>Precio</label><input type="number" step="0.01" name="precio" required>
         <label>Categoría</label><input type="text" name="categoria">
-        <label>Tamaño</label><input type="text" name="tamanio"> <!-- RESTAURADO -->
-        <label>Sabor</label><input type="text" name="sabor"> <!-- RESTAURADO -->
-        <label>URL Imagen</label><input type="text" name="imagen_url">
-        <label>Stock</label><input type="number" name="stock">
+        <label>Tamaño</label><input type="text" name="tamanio"> <label>Sabor</label><input type="text" name="sabor"> <label>URL Imagen</label><input type="text" name="imagen_url">
+        <label>Stock</label><input type="number" name="stock" value="0">
+        <label>Stock mínimo</label><input type="number" name="stock_minimo" value="5" min="0">
+        <label>Activo en tienda</label>
+        <select name="activo"><option value="1" selected>Sí</option><option value="0">No</option></select>
         <br><br><button type="submit" class="btn-editar" style="width:100%">Agregar</button>
       </form>
     `;
@@ -647,25 +627,38 @@
       document.getElementById('editar_sabor').value = p.sabor;
       document.getElementById('editar_imagen_url').value = p.imagen_url;
       document.getElementById('editar_stock').value = p.stock;
+      document.getElementById('editar_stock_minimo').value = p.stock_minimo ?? 5;
+      document.getElementById('editar_activo').value = (p.activo === false || p.activo === 0 || p.activo === '0') ? '0' : '1';
       document.getElementById('modalEditar').style.display = 'flex';
     });
   }
 
-  function mostrarUsuarios() {
-    fetch('listar_usuarios.php').then(r=>r.json()).then(data=>{
-      let html = `<p class="titulo-contenido">Gestión de Usuarios</p>
-        <table><tr><th>ID</th><th>Correo</th><th>Acciones</th></tr>`;
-      data.forEach(u => {
-        html += `<tr><td>${u.id}</td><td>${u.correo}</td>
-          <td class="acciones">
-            <button class="btn-editar" onclick="abrirModalUsuario(${u.id})">Editar</button>
-            <button class="btn-eliminar" onclick="eliminarUsuario(${u.id})">Eliminar</button>
-          </td></tr>`;
-      });
-      html += `</table>`;
-      document.getElementById('contenido').innerHTML = html;
+function mostrarUsuarios() {
+  fetch('listar_usuarios.php').then(r=>r.json()).then(data=>{
+    let html = `<p class="titulo-contenido">Gestión de Usuarios</p>
+      <table>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Correo</th><th>Teléfono</th>
+          <th>Dirección</th><th>Tipo de Cuenta</th><th>Acciones</th>
+        </tr>`;
+    data.forEach(u => {
+      html += `<tr>
+        <td>${u.id}</td>
+        <td>${u.nombre || '—'}</td>
+        <td>${u.correo}</td>
+        <td>${u.telefono || '—'}</td>
+        <td>${u.direccion || '—'}</td>
+        <td><span style="background:${u.tipo_cuenta==='vip'?'#e67e22':u.tipo_cuenta==='frecuente'?'#28a745':'#6c757d'};color:#fff;border-radius:4px;padding:2px 8px;font-size:.82em;">${u.tipo_cuenta || 'cliente'}</span></td>
+        <td class="acciones">
+          <button class="btn-editar" onclick="abrirModalUsuario(${u.id})">Editar</button>
+          <button class="btn-eliminar" onclick="eliminarUsuario(${u.id})">Eliminar</button>
+        </td>
+      </tr>`;
     });
-  }
+html += `</table>`;
+    document.getElementById('contenido').innerHTML = html;
+  });
+}
 
   async function eliminarUsuario(id) {
     // Confirmación reemplazada por modal
@@ -692,7 +685,76 @@
   }
 
   // Listeners Edición
+  
+  // =========================================
+  // FUNCIÓN: APLICAR ROL Y VALIDAR SESIÓN
+  // =========================================
+  async function refreshPanelState(skipContentReset = false) {
+    // Limpiar contenido principal si no se está omitiendo
+    if (!skipContentReset) document.getElementById('contenido').innerHTML = '';
+
+    try {
+      // 1. Obtener información de sesión
+      const res = await fetch('sesion_info.php');
+      if (!res.ok) throw new Error('No se pudo obtener sesión');
+      
+      const sesion = await res.json();
+      
+      // 2. Validar que hay sesión activa
+      if (!sesion.activo || !sesion.rol) {
+        window.location.href = 'login_administrador.html';
+        return;
+      }
+
+      // Establecer rol actual global y título
+      const rol = sesion.rol;
+      window._rolActual = rol;
+document.querySelector('header h1').textContent =
+        { admin:'Panel Administrador', gerente:'Panel Gerente', vendedor:'Panel Vendedor' }[rol] || 'Panel';
+
+      // 3. Actualizar badge de perfil
+      const badge = document.getElementById('badgePerfil');
+      const badgeNombre = document.getElementById('badgeNombre');
+      const badgeRol = document.getElementById('badgeRol');
+      
+      badgeNombre.textContent = sesion.nombre || 'Usuario';
+      badgeRol.textContent = sesion.rol.toUpperCase();
+      
+      // Aplicar clase de color según rol
+badge.classList.remove('admin', 'gerente', 'vendedor');
+      badge.classList.add(sesion.rol);
+      badge.style.display = 'flex';
+
+      // 4. Filtrar botones según rol
+      const modulos = sesion.modulos;
+      document.querySelectorAll('#menuBotones button[data-roles]').forEach(btn => {
+        const permitidos = btn.dataset.roles.split(',').map(r => r.trim());
+        btn.style.display = permitidos.includes(rol) ? '' : 'none';
+      });
+
+      // 5. Restaurar contenido inicial
+      if (!skipContentReset) {
+        document.getElementById('contenido').innerHTML = '<p class="titulo-contenido" style="text-align:center;">Selecciona una opción para comenzar</p>';
+      }
+    } catch (error) {
+      console.error('Error en refreshPanelState:', error);
+      window.location.href = 'login_administrador.html';
+    }
+  }
+
+  async function cerrarSesionPanel() {
+    try {
+      await fetch('logout.php');
+      document.getElementById('contenido').innerHTML = '';
+      const badge = document.getElementById('badgePerfil');
+      if (badge) badge.style.display = 'none';
+      document.querySelectorAll('#menuBotones button').forEach(btn => btn.style.display = 'none');
+    } catch (e) {}
+    window.location.href = 'login_administrador.html';
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    refreshPanelState();
     // Postre
     const fP = document.getElementById('formEditarPostre');
     if(fP) fP.addEventListener('submit', async e => {
@@ -718,11 +780,1751 @@
       if(resp.ok){ cerrarModalesEdicion(); mostrarUsuarios(); }
     });
   });
+// ════════════════════════════════════════════════════════════════════════
+//  MÓDULO INVENTARIO
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarInventario() {
+  const res     = await fetch('listar_postres.php');
+  const postres = await res.json();
+  const STOCK_MIN_DEFAULT = 5;
+
+  const alertas = postres.filter(p => parseInt(p.stock) <= parseInt(p.stock_minimo ?? STOCK_MIN_DEFAULT));
+  let alertaHTML = '';
+  if (alertas.length) {
+    alertaHTML = `<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:18px;">
+      <strong>⚠️ Stock bajo</strong> en ${alertas.length} producto(s):
+      ${alertas.map(p => `<span style="margin-left:8px;background:#ffc107;color:#333;border-radius:4px;padding:2px 8px;font-size:0.85em;">${p.titulo} (${p.stock} uds.)</span>`).join('')}
+      <div style="margin-top:8px;font-size:0.85em;color:#856404;">Puedes generar órdenes de compra desde el módulo <strong>Compras</strong>.</div>
+    </div>`;
+  }
+
+  const filas = postres.map(p => {
+    const minimo = parseInt(p.stock_minimo ?? STOCK_MIN_DEFAULT);
+    const bajo   = parseInt(p.stock) <= minimo;
+    const badge  = bajo
+      ? `<span style="background:#dc3545;color:#fff;border-radius:4px;padding:2px 7px;font-size:0.78em;margin-left:6px;">BAJO</span>`
+      : `<span style="background:#28a745;color:#fff;border-radius:4px;padding:2px 7px;font-size:0.78em;margin-left:6px;">OK</span>`;
+    return `<tr>
+      <td>${p.id}</td>
+      <td>${p.titulo}</td>
+      <td>${p.categoria}</td>
+      <td><strong>${p.stock}</strong>${badge}</td>
+      <td>
+        <input type="number" id="smin_${p.id}" value="${minimo}" min="0" max="999"
+          style="width:60px;padding:4px;border:1px solid #ccc;border-radius:4px;text-align:center;">
+        <button class="btn-editar" onclick="guardarStockMin(${p.id},'smin_${p.id}')">✓</button>
+      </td>
+      <td>
+        <input type="number" id="adj_${p.id}" value="0" min="-999" max="9999"
+          style="width:65px;padding:4px;border:1px solid #ccc;border-radius:4px;text-align:center;">
+        <button class="btn-editar" onclick="ajustarStock(${p.id},'adj_${p.id}')">Ajustar</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">📦 Inventario de Productos</p>
+    ${alertaHTML}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Producto</th><th>Categoría</th>
+          <th>Stock actual</th><th>Stock mínimo</th><th>Ajuste manual</th>
+        </tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <p style="color:#999;font-size:0.82em;margin-top:10px;">
+      💡 <em>Ajuste manual: usa números positivos para añadir stock, negativos para reducirlo.</em>
+    </p>`;
+}
+
+async function ajustarStock(id, inputId) {
+  const delta = parseInt(document.getElementById(inputId).value);
+  if (isNaN(delta) || delta === 0) { showModal('Ingresa un número distinto de 0.', 'Aviso'); return; }
+  const res     = await fetch('listar_postres.php');
+  const postres = await res.json();
+  const postre  = postres.find(p => p.id == id);
+  if (!postre) return;
+  const nuevoStock = Math.max(0, parseInt(postre.stock) + delta);
+  const fd = new FormData();
+  Object.entries({ ...postre, stock: nuevoStock }).forEach(([k, v]) => fd.append(k, v));
+  const r = await fetch('editar_postre.php', { method: 'POST', body: fd });
+  if (r.ok) { showModal(`Stock actualizado a ${nuevoStock} unidades.`, 'Inventario', '✅'); mostrarInventarioSCM(); }
+  else showModal('No se pudo actualizar.', 'Error', '❌', true);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  MÓDULO COMPRAS
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarCompras() {
+  const [provRes, ordRes, posRes, insRes] = await Promise.all([
+    fetch('crud_proveedores.php'),
+    fetch('crud_ordenes.php'),
+    fetch('listar_postres.php'),
+    fetch('crud_insumos.php')
+  ]);
+  const proveedores = await provRes.json();
+  const ordenes     = await ordRes.json();
+  const postres     = await posRes.json();
+  const insumos     = await insRes.json();
+
+  const STOCK_MIN_DEFAULT = 5;
+  const alertasP = postres.filter(p => parseInt(p.stock) <= parseInt(p.stock_minimo ?? STOCK_MIN_DEFAULT));
+  const alertasI = insumos.filter(i => parseFloat(i.stock) <= parseFloat(i.stock_minimo ?? STOCK_MIN_DEFAULT));
+
+  const filasP = proveedores.filter(p => p.activo).map(p => `
+    <tr>
+      <td>${p.id}</td><td><strong>${p.nombre}</strong></td>
+      <td>${p.contacto}</td><td>${p.telefono}</td>
+      <td>${p.productos}</td><td>${p.tiempo_entrega}</td>
+      <td class="acciones">
+        <button class="btn-eliminar" onclick="eliminarProveedor(${p.id})">Eliminar</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:#999;">Sin proveedores</td></tr>';
+
+  const optsProv = proveedores.filter(p => p.activo)
+    .map(p => `<option value="${p.nombre.replace(/"/g,'&quot;')}">${p.nombre}</option>`).join('');
+  const optsPost = postres
+    .map(p => `<option value="${p.id}" data-nombre="${(p.titulo||'').replace(/"/g,'&quot;')}">${p.titulo}</option>`).join('');
+  const optsIns = insumos
+    .map(i => `<option value="${i.id}" data-nombre="${(i.nombre||'').replace(/"/g,'&quot;')}">${i.nombre} (${i.unidad})</option>`).join('');
+
+  let alertasHTML = '';
+  if (alertasP.length || alertasI.length) {
+    const btnsP = alertasP.map(p =>
+      `<button class="btn-editar" style="margin:3px;" onclick="precargarOrdenPostre(${p.id})">${p.titulo} <span style="opacity:.7;">(${p.stock} uds.)</span></button>`).join('');
+    const btnsI = alertasI.map(i => {
+      const pr = proveedores.find(x => x.id === i.proveedor_id && x.activo);
+      const pn = (pr ? pr.nombre : (proveedores.find(x => x.activo) || {}).nombre || '').replace(/'/g, "\\'");
+      const nom = (i.nombre || '').replace(/'/g, "\\'");
+      return `<button class="btn-editar" style="margin:3px;background:#fd7e14;color:#fff;border:0;" onclick="precargarOrdenInsumo(${i.id},'${nom}','${pn}')">${i.nombre} <span style="opacity:.85;">(${i.stock} ${i.unidad})</span></button>`;
+    }).join('');
+    alertasHTML = `<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:18px;">
+      <strong>⚠️ Stock bajo — orden de compra rápida:</strong><br>
+      <div style="margin-top:8px;font-size:0.9em;"><em>Productos:</em> ${btnsP || '—'}</div>
+      <div style="margin-top:8px;font-size:0.9em;"><em>Insumos:</em> ${btnsI || '—'}</div>
+    </div>`;
+  }
+
+  const colores = { 'Pendiente':'#ffc107', 'Recibida':'#28a745', 'Cancelada':'#dc3545' };
+  const filasO = ordenes.length
+    ? [...ordenes].reverse().map(o => {
+        const color  = colores[o.estado] || '#6c757d';
+        const tipo = (o.tipo_linea === 'insumo') ? '<span style="background:#fd7e14;color:#fff;border-radius:4px;padding:1px 6px;font-size:0.75em;">Insumo</span>'
+          : '<span style="background:#6c757d;color:#fff;border-radius:4px;padding:1px 6px;font-size:0.75em;">Producto</span>';
+        const btnRec = o.estado === 'Pendiente'
+          ? `<button class="btn-editar" onclick="recibirOrden(${o.id})">✓ Recibir</button>` : '';
+        const btnDel = o.estado === 'Pendiente'
+          ? `<button class="btn-eliminar" onclick="cancelarOrden(${o.id})">✕</button>` : '';
+        return `<tr>
+          <td><strong>${o.folio}</strong><br>${tipo}</td>
+          <td>${(o.fecha||'').split(' ')[0]}</td>
+          <td>${o.proveedor}</td>
+          <td>${o.producto}</td>
+          <td>${o.cantidad}</td>
+          <td>$${parseFloat(o.total||0).toFixed(2)}</td>
+          <td><span style="background:${color};color:#fff;border-radius:4px;padding:2px 8px;font-size:0.8em;">${o.estado}</span></td>
+          <td class="acciones">${btnRec}${btnDel}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="8" style="text-align:center;color:#999;">Sin órdenes registradas</td></tr>';
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">🛒 Módulo de Compras (productos e insumos)</p>
+    ${alertasHTML}
+
+    <h3 style="color:#b33f4f;margin-top:8px;">Proveedores</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Nombre</th><th>Contacto</th><th>Teléfono</th><th>Suministra</th><th>Entrega</th><th></th></tr></thead>
+      <tbody>${filasP}</tbody>
+    </table>
+
+    <details style="margin-top:14px;">
+      <summary style="cursor:pointer;color:#b33f4f;font-weight:bold;">+ Agregar proveedor</summary>
+      <div style="background:#fdf3f3;padding:16px;border-radius:8px;margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <input id="prov_nombre"   placeholder="Nombre *"              style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input id="prov_contacto" placeholder="Email de contacto"     style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input id="prov_tel"      placeholder="Teléfono"              style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input id="prov_prod"     placeholder="Productos que suministra" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input id="prov_entrega"  placeholder="Tiempo de entrega (ej: 2 días)" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" onclick="agregarProveedor()">Guardar proveedor</button>
+      </div>
+    </details>
+
+    <h3 style="color:#b33f4f;margin-top:28px;">Órdenes de Compra</h3>
+    <table>
+      <thead><tr><th>Folio / Tipo</th><th>Fecha</th><th>Proveedor</th><th>Artículo</th><th>Cant.</th><th>Total</th><th>Estado</th><th></th></tr></thead>
+      <tbody>${filasO}</tbody>
+    </table>
+
+    <details style="margin-top:14px;" id="detalleOrden">
+      <summary style="cursor:pointer;color:#b33f4f;font-weight:bold;">+ Nueva orden de compra</summary>
+      <div style="background:#fdf3f3;padding:16px;border-radius:8px;margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <label style="grid-column:1/-1;font-weight:600;color:#555;">Tipo de compra</label>
+        <select id="orden_tipo" style="padding:8px;border:1px solid #ccc;border-radius:4px;grid-column:1/-1;" onchange="toggleOrdenTipo()">
+          <option value="producto">Producto terminado (postre)</option>
+          <option value="insumo">Insumo / materia prima</option>
+        </select>
+        <select id="orden_prov" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <option value="">-- Proveedor *--</option>${optsProv}
+        </select>
+        <div id="wrap_orden_post" style="display:block;">
+          <select id="orden_post" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+            <option value="">-- Postre a comprar *--</option>${optsPost}
+          </select>
+        </div>
+        <div id="wrap_orden_insumo" style="display:none;grid-column:1/-1;">
+          <select id="orden_insumo" style="padding:8px;border:1px solid #ccc;border-radius:4px;width:100%;">
+            <option value="">-- Insumo *--</option>${optsIns}
+          </select>
+        </div>
+        <input id="orden_cant"  type="number" placeholder="Cantidad *" min="0.01" step="any"
+          style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input id="orden_costo" type="number" placeholder="Costo unitario ($)" min="0" step="0.01"
+          style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" style="grid-column:1/-1;" onclick="crearOrden()">Generar orden de compra</button>
+      </div>
+    </details>`;
+    
+  toggleOrdenTipo();
+}
+
+function toggleOrdenTipo() {
+  const t = document.getElementById('orden_tipo').value;
+  const wp = document.getElementById('wrap_orden_post');
+  const wi = document.getElementById('wrap_orden_insumo');
+  if (!wp || !wi) return;
+  if (t === 'insumo') {
+    wp.style.display = 'none';
+    wi.style.display = 'block';
+  } else {
+    wp.style.display = 'block';
+    wi.style.display = 'none';
+  }
+}
+
+function precargarOrdenPostre(id) {
+  document.getElementById('detalleOrden').open = true;
+  document.getElementById('orden_tipo').value = 'producto';
+  toggleOrdenTipo();
+  const sel = document.getElementById('orden_post');
+  for (let i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value == id) { sel.selectedIndex = i; break; }
+  }
+  document.getElementById('orden_cant').value = '';
+  document.getElementById('orden_cant').focus();
+}
+
+function precargarOrdenInsumo(insumoId, nombreInsumo, proveedorNombre) {
+  document.getElementById('detalleOrden').open = true;
+  document.getElementById('orden_tipo').value = 'insumo';
+  toggleOrdenTipo();
+  const pv = document.getElementById('orden_prov');
+  for (let i = 0; i < pv.options.length; i++) {
+    if (pv.options[i].value === proveedorNombre) { pv.selectedIndex = i; break; }
+  }
+  const si = document.getElementById('orden_insumo');
+  for (let j = 0; j < si.options.length; j++) {
+    if (si.options[j].value == insumoId) { si.selectedIndex = j; break; }
+  }
+  document.getElementById('orden_cant').focus();
+}
+
+async function crearOrden() {
+  const tipo = document.getElementById('orden_tipo').value;
+  const prov = document.getElementById('orden_prov').value;
+  const cant = parseFloat(document.getElementById('orden_cant').value);
+  const costo = parseFloat(document.getElementById('orden_costo').value || 0);
+  if (!prov || !cant || cant <= 0) {
+    showModal('Selecciona proveedor y una cantidad válida.', 'Aviso'); return;
+  }
+  let body = {
+    proveedor: prov,
+    cantidad: cant,
+    costo_unitario: costo,
+    tipo_linea: tipo === 'insumo' ? 'insumo' : 'producto'
+  };
+  if (tipo === 'insumo') {
+    const sel = document.getElementById('orden_insumo');
+    const iid = parseInt(sel.value, 10);
+    const nom = sel.options[sel.selectedIndex]?.dataset?.nombre || sel.options[sel.selectedIndex]?.text || '';
+    if (!iid) { showModal('Selecciona un insumo.', 'Aviso'); return; }
+    body.insumo_id = iid;
+    body.producto_id = 0;
+    body.producto = nom;
+  } else {
+    const sel = document.getElementById('orden_post');
+    const pid = parseInt(sel.value, 10);
+    const nom = sel.options[sel.selectedIndex]?.dataset?.nombre || sel.options[sel.selectedIndex]?.text || '';
+    if (!pid) { showModal('Selecciona un postre.', 'Aviso'); return; }
+    body.producto_id = pid;
+    body.insumo_id = 0;
+    body.producto = nom;
+    body.cantidad = parseInt(document.getElementById('orden_cant').value, 10);
+    if (!body.cantidad || body.cantidad <= 0) { showModal('Cantidad inválida.', 'Aviso'); return; }
+  }
+  const r   = await fetch('crud_ordenes.php', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+  });
+  const res = await r.json();
+  if (res.ok) { showModal(`Orden ${res.orden.folio} generada correctamente.`, 'Compras', '✅'); mostrarCompras(); }
+  else showModal(res.msg || 'Error al crear la orden.', 'Error', '❌', true);
+}
+
+async function guardarStockMin(id, inputId) {
+  const val = parseInt(document.getElementById(inputId).value);
+  if (isNaN(val) || val < 0) { showModal('Ingresa un número válido (≥ 0).', 'Aviso'); return; }
+  const res    = await fetch('listar_postres.php');
+  const postres = await res.json();
+  const postre  = postres.find(p => p.id == id);
+  if (!postre) return;
+  const fd = new FormData();
+  Object.entries({ ...postre, stock_minimo: val }).forEach(([k, v]) => fd.append(k, v));
+  const r = await fetch('editar_postre.php', { method: 'POST', body: fd });
+  if (r.ok) mostrarInventarioSCM();
+  else showModal('Error al guardar.', 'Error', '❌', true);
+}
+
+async function agregarProveedor() {
+  const body = {
+    nombre:         document.getElementById('prov_nombre').value.trim(),
+    contacto:       document.getElementById('prov_contacto').value.trim(),
+    telefono:       document.getElementById('prov_tel').value.trim(),
+    productos:      document.getElementById('prov_prod').value.trim(),
+    tiempo_entrega: document.getElementById('prov_entrega').value.trim()
+  };
+  if (!body.nombre) { showModal('El nombre del proveedor es obligatorio.','Aviso'); return; }
+  const r = await fetch('crud_proveedores.php', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+  });
+  const res = await r.json();
+  if (res.ok) { showModal('Proveedor agregado.','Compras','✅'); mostrarCompras(); }
+  else showModal('Error al guardar.','Error','❌',true);
+}
+
+async function eliminarProveedor(id) {
+  const conf = await showConfirmation('¿Eliminar este proveedor?','Confirmar');
+  if (!conf) return;
+  await fetch('crud_proveedores.php', {
+    method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id})
+  });
+  mostrarCompras();
+}
+
+async function recibirOrden(id) {
+  const conf = await showConfirmation('¿Confirmar recepción de mercancía? El stock del producto se actualizará automáticamente.', 'Recibir orden');
+  if (!conf) return;
+  const r   = await fetch('crud_ordenes.php', {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
+  });
+  const res = await r.json();
+  if (res.ok) { showModal('Recepción confirmada. Stock actualizado.', 'Compras', '✅'); mostrarCompras(); }
+  else showModal(res.msg || 'Error al confirmar recepción.', 'Error', '❌', true);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  MÓDULO FINANZAS
+// ════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════
+//  MÓDULO FINANZAS (Actualizado con Nóminas)
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarFinanzas() {
+  const [pedRes, ordRes, finRes] = await Promise.all([
+    fetch('listar_pedidos.php'),
+    fetch('crud_ordenes.php'),
+    fetch('listar_finanzas.php')
+  ]);
+  const pedidos = await pedRes.json();
+  const ordenes = await ordRes.json();
+  const finanzas = await finRes.json();
+
+  const hoy   = new Date();
+  const mesA  = hoy.getMonth();
+  const anioA = hoy.getFullYear();
+
+  const esMes = fecha => {
+    const d = new Date(fecha);
+    return d.getMonth() === mesA && d.getFullYear() === anioA;
+  };
+
+  const ingresos    = pedidos.filter(p => p.estado !== 'Cancelado');
+  const cancelados  = pedidos.filter(p => p.estado === 'Cancelado');
+  const entregados  = pedidos.filter(p => p.estado === 'Entregado');
+  const totalIngresos    = ingresos.reduce((s,p) => s + parseFloat(p.total||0), 0);
+  const ingresosDelMes   = ingresos.filter(p => esMes(p.fecha));
+  const totalIngresosMes = ingresosDelMes.reduce((s,p) => s + parseFloat(p.total||0), 0);
+
+  const egresos         = ordenes.filter(o => o.estado === 'Recibida');
+  const totalEgresos    = egresos.reduce((s,o) => s + parseFloat(o.total||0), 0);
+  const egresosDelMes   = egresos.filter(o => esMes(o.fecha));
+  const totalEgresosMes = egresosDelMes.reduce((s,o) => s + parseFloat(o.total||0), 0);
+  
+  const reembolsos = finanzas.filter(f => (f.referencia_tipo || '') === 'reembolso');
+  const reembolsosDelMes = reembolsos.filter(f => esMes(f.fecha));
+  const totalReembolsos = reembolsos.reduce((s, f) => s + parseFloat(f.monto || 0), 0);
+  const totalReembolsosMes = reembolsosDelMes.reduce((s, f) => s + parseFloat(f.monto || 0), 0);
+
+  // NUEVO: Filtramos los egresos por nómina
+  const nominas = finanzas.filter(f => (f.referencia_tipo || '') === 'nomina');
+  const nominasDelMes = nominas.filter(f => esMes(f.fecha));
+  const totalNominas = nominas.reduce((s, f) => s + parseFloat(f.monto || 0), 0);
+  const totalNominasMes = nominasDelMes.reduce((s, f) => s + parseFloat(f.monto || 0), 0);
+
+  // ACTUALIZADO: Restamos las nóminas a la utilidad y el balance
+  const utilidadMes     = totalIngresosMes - totalEgresosMes - totalReembolsosMes - totalNominasMes;
+  const balanceTotal    = totalIngresos - totalEgresos - totalReembolsos - totalNominas;
+  const colorBalance    = balanceTotal >= 0 ? '#28a745' : '#dc3545';
+  const colorUtilidad   = utilidadMes  >= 0 ? '#28a745' : '#dc3545';
+
+  const ticketProm = ingresos.length ? (totalIngresos / ingresos.length) : 0;
+  const diasMes     = new Date(anioA, mesA + 1, 0).getDate();
+  const diaActual   = hoy.getDate();
+  const promDiario  = diaActual > 0 ? totalIngresosMes / diaActual : 0;
+  const proyeccion  = promDiario * diasMes;
+
+  const metodos = {};
+  ingresos.forEach(p => {
+    const m = p.metodo_pago || p.metodo || 'otro';
+    metodos[m] = (metodos[m] || 0) + 1;
+  });
+  const metodoTop = Object.entries(metodos).sort((a,b) => b[1]-a[1])[0];
+
+  const movimientos = [
+    ...ingresos.map(p => ({
+      fecha: p.fecha,
+      tipo: 'Ingreso',
+      concepto: `Pedido ${p.folio}`,
+      monto: parseFloat(p.total || 0),
+      metodo: p.metodo_pago || p.metodo || '—'
+    })),
+    ...egresos.map(o => ({
+      fecha: o.fecha,
+      tipo: 'Egreso',
+      concepto: `Orden ${o.folio} – ${o.proveedor}`,
+      monto: parseFloat(o.total || 0),
+      metodo: 'Compra a proveedor'
+    })),
+    ...reembolsos.map(f => ({
+      fecha: f.fecha,
+      tipo: 'Egreso',
+      concepto: f.concepto || `Reembolso ${f.referencia_id || ''}`,
+      monto: parseFloat(f.monto || 0),
+      metodo: f.metodo_pago || 'reembolso'
+    })),
+    // NUEVO: Agregamos la nómina al listado de movimientos
+    ...nominas.map(f => ({
+      fecha: f.fecha,
+      tipo: 'Egreso',
+      concepto: f.concepto || `Pago de nómina`,
+      monto: parseFloat(f.monto || 0),
+      metodo: f.metodo_pago || 'transferencia'
+    }))
+  ].sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 30);
+
+  const filasMov = movimientos.length
+    ? movimientos.map(m => {
+        const color = m.tipo==='Ingreso' ? '#28a745' : '#dc3545';
+        const signo = m.tipo==='Ingreso' ? '+' : '-';
+        return `<tr>
+          <td>${(m.fecha||'').split(' ')[0]}</td>
+          <td><span style="background:${color};color:#fff;border-radius:4px;padding:2px 8px;font-size:0.8em;">${m.tipo}</span></td>
+          <td>${m.concepto}</td>
+          <td>${m.metodo}</td>
+          <td style="font-weight:bold;color:${color};">${signo}$${m.monto.toFixed(2)}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="5" style="text-align:center;color:#999;">Sin movimientos</td></tr>';
+
+  // ACTUALIZADO: Sumamos todos los egresos (compras + reembolsos + nómina) para visualización
+  const totalEgresosAbsolutos = totalEgresos + totalReembolsos + totalNominas;
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">💰 Módulo de Finanzas</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:24px;">
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #28a745;text-align:center;">
+        <div style="font-size:0.78em;color:#666;margin-bottom:4px;">INGRESOS ESTE MES</div>
+        <div style="font-size:1.6em;font-weight:bold;color:#28a745;">$${totalIngresosMes.toFixed(2)}</div>
+        <div style="font-size:0.75em;color:#999;">${ingresosDelMes.length} pedido(s)</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #dc3545;text-align:center;">
+        <div style="font-size:0.78em;color:#666;margin-bottom:4px;">COMPRAS / PROVEEDORES</div>
+        <div style="font-size:1.6em;font-weight:bold;color:#dc3545;">$${totalEgresosMes.toFixed(2)}</div>
+        <div style="font-size:0.75em;color:#999;">${egresosDelMes.length} orden(es)</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #a30015;text-align:center;">
+        <div style="font-size:0.78em;color:#666;margin-bottom:4px;">PAGO DE NÓMINAS</div>
+        <div style="font-size:1.6em;font-weight:bold;color:#a30015;">$${totalNominasMes.toFixed(2)}</div>
+        <div style="font-size:0.75em;color:#999;">Sueldos del mes</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid ${colorUtilidad};text-align:center;">
+        <div style="font-size:0.78em;color:#666;margin-bottom:4px;">UTILIDAD DEL MES</div>
+        <div style="font-size:1.6em;font-weight:bold;color:${colorUtilidad};">$${utilidadMes.toFixed(2)}</div>
+        <div style="font-size:0.75em;color:#999;">${utilidadMes >= 0 ? '✅ Positivo' : '⚠️ Negativo'}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid ${colorBalance};text-align:center;">
+        <div style="font-size:0.78em;color:#666;margin-bottom:4px;">BALANCE TOTAL</div>
+        <div style="font-size:1.6em;font-weight:bold;color:${colorBalance};">$${balanceTotal.toFixed(2)}</div>
+        <div style="font-size:0.75em;color:#999;">${balanceTotal >= 0 ? '✅ En positivo' : '⚠️ Déficit'}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #007bff;text-align:center;">
+        <div style="font-size:0.78em;color:#666;margin-bottom:4px;">TICKET PROMEDIO</div>
+        <div style="font-size:1.6em;font-weight:bold;color:#007bff;">$${ticketProm.toFixed(2)}</div>
+        <div style="font-size:0.75em;color:#999;">${ingresos.length} pedido(s) total</div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #eee;border-radius:10px;padding:18px;margin-bottom:20px;">
+      <h3 style="color:#b33f4f;margin-bottom:12px;">📊 Balance Financiero Histórico</h3>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
+        <div style="flex:1;min-width:200px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.9em;"><span>Ingresos totales</span><strong style="color:#28a745;">+$${totalIngresos.toFixed(2)}</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.9em;"><span>Egresos totales (Compras, Nómina, Reembolsos)</span><strong style="color:#dc3545;">-$${totalEgresosAbsolutos.toFixed(2)}</strong></div>
+          <div style="border-top:2px solid #333;padding-top:8px;display:flex;justify-content:space-between;font-weight:bold;"><span>Balance neto</span><strong style="color:${colorBalance};">$${balanceTotal.toFixed(2)}</strong></div>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div style="font-size:.85em;color:#666;margin-bottom:8px;">Distribución de ingresos este mes (día ${diaActual}/${diasMes})</div>
+          <div style="background:#e9ecef;border-radius:20px;height:14px;overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#28a745,#20c997);height:100%;width:${Math.min(100,(diaActual/diasMes)*100).toFixed(0)}%;border-radius:20px;"></div>
+          </div>
+          <div style="font-size:.8em;color:#999;margin-top:4px;">Proyección: $${proyeccion.toFixed(2)} para fin de mes</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="color:#b33f4f;">Últimos movimientos</h3>
+    <table>
+      <thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Método</th><th>Monto</th></tr></thead>
+      <tbody>${filasMov}</tbody>
+    </table>`;
+}
+async function cancelarOrden(id) {
+  const conf = await showConfirmation('¿Eliminar esta orden pendiente?', 'Cancelar orden');
+  if (!conf) return;
+  await fetch('crud_ordenes.php', {
+    method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
+  });
+  mostrarCompras();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  MÓDULO PEDIDOS (reemplaza el simulado)
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarSeguimiento() {
+  const res     = await fetch('listar_pedidos.php');
+  const pedidos = await res.json();
+
+  const colores = {
+    'Recibido':'#6c757d','En preparación':'#ffc107',
+    'En camino':'#007bff','Entregado':'#28a745','Cancelado':'#dc3545'
+  };
+
+  const filas = pedidos.length
+    ? [...pedidos].reverse().map(p => {
+        const color = colores[p.estado] || '#6c757d';
+        const opciones = ['Recibido','En preparación','En camino','Entregado','Cancelado']
+          .map(e => `<option value="${e}" ${e===p.estado?'selected':''}>${e}</option>`).join('');
+        return `<tr>
+          <td><strong>${p.folio}</strong></td>
+          <td>${p.fecha ? p.fecha.split(' ')[0] : ''}</td>
+          <td>${p.cliente}</td>
+          <td>${p.correo}</td>
+          <td>$${parseFloat(p.total||0).toFixed(2)}</td>
+          <td>${p.metodo_pago || p.metodo || '—'}</td>
+          <td><span style="background:${color};color:#fff;border-radius:4px;padding:2px 8px;font-size:0.8em;">${p.estado}</span></td>
+          <td>
+            <select id="est_${p.id}" style="padding:4px;border:1px solid #ccc;border-radius:4px;font-size:0.85em;">${opciones}</select>
+            <button class="btn-editar" onclick="actualizarEstadoPedido(${p.id},'est_${p.id}')">Guardar</button>
+          </td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="8" style="text-align:center;color:#999;">Sin pedidos registrados aún</td></tr>';
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">📋 Gestión de Pedidos</p>
+    <p style="color:#666;font-size:0.9em;margin-bottom:12px;">El <strong>folio</strong> (ej. CP-20260515-4841) es el mismo identificador de referencia en finanzas y seguimiento del cliente.</p>
+    <table>
+      <thead><tr><th>Folio</th><th>Fecha</th><th>Cliente</th><th>Correo</th><th>Total</th><th>Método</th><th>Estado</th><th>Cambiar estado</th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table>`;
+}
+
+async function actualizarEstadoPedido(id, selectId) {
+  const estado = document.getElementById(selectId).value;
+  const r   = await fetch('actualizar_pedido.php', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id, estado })
+  });
+  const res = await r.json();
+  if (res.ok) { showModal('Estado actualizado.','Pedidos','✅'); mostrarSeguimiento(); }
+  else showModal('Error al actualizar.','Error','❌',true);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  MÓDULO RECURSOS HUMANOS
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarRRHH() {
+  const res       = await fetch('crud_empleados.php');
+  const empleados = await res.json();
+
+  const activos   = empleados.filter(e => e.activo !== false);
+  const inactivos = empleados.filter(e => e.activo === false);
+
+  const turnos  = ['Mañana','Tarde','Noche'];
+  const puestos = ['Administrador','Supervisor','Vendedor','Empleado','Repartidor','Caja'];
+
+  const optsTurno  = turnos.map(t  => `<option value="${t}">${t}</option>`).join('');
+  const optsPuesto = puestos.map(p => `<option value="${p}">${p}</option>`).join('');
+
+  const filas = activos.map(e => `
+    <tr>
+      <td>${e.id}</td>
+      <td><strong>${e.nombre}</strong></td>
+      <td>${e.puesto}</td>
+      <td>${e.turno}</td>
+      <td>${e.correo || '—'}</td>
+      <td>${e.telefono || '—'}</td>
+      <td>${e.fecha_ingreso || '—'}</td>
+      <td class="acciones">
+        <button class="btn-editar" onclick="editarEmpleado(${e.id})">Editar</button>
+        <button class="btn-eliminar" onclick="bajaEmpleado(${e.id},'${e.nombre.replace(/'/g,"\\'")}')">Baja</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:#999;">Sin empleados activos</td></tr>';
+
+  const filasInact = inactivos.length
+    ? inactivos.map(e => `
+      <tr style="opacity:.55;">
+        <td>${e.id}</td><td>${e.nombre}</td><td>${e.puesto}</td>
+        <td colspan="4" style="color:#999;font-style:italic;">Dado de baja</td>
+        <td class="acciones">
+          <button class="btn-editar" onclick="reactivarEmpleado(${e.id})">Reactivar</button>
+        </td>
+      </tr>`).join('')
+    : '';
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">👥 Recursos Humanos</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px;">
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #b33f4f;text-align:center;">
+        <div style="font-size:.8em;color:#666;">EMPLEADOS ACTIVOS</div>
+        <div style="font-size:2em;font-weight:bold;color:#b33f4f;">${activos.length}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #6c757d;text-align:center;">
+        <div style="font-size:.8em;color:#666;">BAJAS</div>
+        <div style="font-size:2em;font-weight:bold;color:#6c757d;">${inactivos.length}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #28a745;text-align:center;">
+        <div style="font-size:.8em;color:#666;">TURNO MAÑANA</div>
+        <div style="font-size:2em;font-weight:bold;color:#28a745;">${activos.filter(e=>e.turno==='Mañana').length}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:16px;border-left:4px solid #ffc107;text-align:center;">
+        <div style="font-size:.8em;color:#666;">TURNO TARDE/NOCHE</div>
+        <div style="font-size:2em;font-weight:bold;color:#e67e22;">${activos.filter(e=>e.turno!=='Mañana').length}</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+      <button class="btn-editar" onclick="mostrarNomina()">💵 Nómina</button>
+      <button class="btn-editar" onclick="mostrarAsistencia()">🕒 Asistencia</button>
+      <button class="btn-editar" onclick="mostrarMovimientos()">📋 Movimientos de Inventario</button>
+    </div>
+    </div>
+
+    <h3 style="color:#b33f4f;">Empleados Activos</h3>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Nombre</th><th>Puesto</th><th>Turno</th><th>Correo</th><th>Teléfono</th><th>Ingreso</th><th></th></tr>
+      </thead>
+      <tbody>${filas}${filasInact}</tbody>
+    </table>
+
+<details style="margin-top:16px;" id="detalleNuevoEmp">
+      <summary style="cursor:pointer;color:#b33f4f;font-weight:bold;">+ Agregar empleado</summary>
+      <div style="background:#fdf3f3;padding:16px;border-radius:8px;margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <input  id="emp_nombre"  placeholder="Nombre completo *"   style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <select id="emp_puesto"  style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <option value="">-- Puesto *--</option>${optsPuesto}
+        </select>
+        <select id="emp_turno"   style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          ${optsTurno}
+        </select>
+        <input  id="emp_correo"  placeholder="Correo"              style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input  id="emp_tel"     placeholder="Teléfono"            style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input  id="emp_ingreso" type="date" style="padding:8px;border:1px solid #ccc;border-radius:4px;" title="Fecha de Ingreso">
+        <input  id="emp_salario" type="number" placeholder="Salario base ($)" step="0.01" min="0" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        
+        <button class="btn-editar" style="grid-column:1/-1;" onclick="agregarEmpleado()">Guardar empleado</button>
+      </div>
+    </details>
+
+    <div id="modalEditEmp" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;">
+      <div style="background:#fff;border-radius:12px;padding:28px;width:420px;max-width:95vw;">
+        <h3 style="color:#b33f4f;margin-top:0;">Editar empleado</h3>
+        <input type="hidden" id="eemp_id">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <input  id="eemp_nombre"  placeholder="Nombre *"  style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <select id="eemp_puesto"  style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+            ${optsPuesto}
+          </select>
+          <select id="eemp_turno"   style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+            ${optsTurno}
+          </select>
+          <input  id="eemp_correo"  placeholder="Correo"    style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <input  id="eemp_tel"     placeholder="Teléfono"  style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <input  id="eemp_ingreso" type="date"             style="padding:8px;border:1px solid #ccc;border-radius:4px;" title="Fecha de Ingreso">
+          <input  id="eemp_salario" type="number" placeholder="Salario base ($)" step="0.01" min="0" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button class="btn-modal-cancel" onclick="cerrarModalEmp()">Cancelar</button>
+          <button class="btn-editar" onclick="guardarEdicionEmpleado()">Guardar cambios</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+async function agregarEmpleado() {
+const body = {
+    nombre:        document.getElementById('emp_nombre').value.trim(),
+    puesto:        document.getElementById('emp_puesto').value,
+    turno:         document.getElementById('emp_turno').value,
+    correo:        document.getElementById('emp_correo').value.trim(),
+    telefono:      document.getElementById('emp_tel').value.trim(),
+    fecha_ingreso: document.getElementById('emp_ingreso').value,
+    salario_base:  parseFloat(document.getElementById('emp_salario').value || 0) // <-- NUEVA LÍNEA
+  };
+  if (!body.nombre || !body.puesto) {
+    showModal('Nombre y puesto son obligatorios.', 'Aviso'); return;
+  }
+  const r   = await fetch('crud_empleados.php', {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+  const res = await r.json();
+  if (res.ok) { showModal('Empleado registrado correctamente.', 'RR.HH.', '✅'); mostrarRRHH(); }
+  else showModal(res.msg || 'Error al guardar.', 'Error', '❌', true);
+}
+
+async function editarEmpleado(id) {
+const res      = await fetch('crud_empleados.php');
+  const empleados= await res.json();
+  const e        = empleados.find(x => x.id == id);
+  if (!e) return;
+  document.getElementById('eemp_id').value      = e.id;
+  document.getElementById('eemp_nombre').value  = e.nombre;
+  document.getElementById('eemp_correo').value  = e.correo  || '';
+  document.getElementById('eemp_tel').value     = e.telefono|| '';
+  document.getElementById('eemp_ingreso').value = e.fecha_ingreso || '';
+  document.getElementById('eemp_salario').value = e.salario_base || ''; // <-- NUEVA LÍNEA
+  // Selects
+  ['eemp_puesto','eemp_turno'].forEach(selId => {
+    const key = selId === 'eemp_puesto' ? 'puesto' : 'turno';
+    const sel = document.getElementById(selId);
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === e[key]) { sel.selectedIndex = i; break; }
+    }
+  });
+  const modal = document.getElementById('modalEditEmp');
+  modal.style.display = 'flex';
+}
+
+function cerrarModalEmp() {
+  document.getElementById('modalEditEmp').style.display = 'none';
+}
+
+async function guardarEdicionEmpleado() {
+  const body = {
+id:            parseInt(document.getElementById('eemp_id').value),
+    nombre:        document.getElementById('eemp_nombre').value.trim(),
+    puesto:        document.getElementById('eemp_puesto').value,
+    turno:         document.getElementById('eemp_turno').value,
+    correo:        document.getElementById('eemp_correo').value.trim(),
+    telefono:      document.getElementById('eemp_tel').value.trim(),
+    fecha_ingreso: document.getElementById('eemp_ingreso').value,
+    salario_base:  parseFloat(document.getElementById('eemp_salario').value || 0) // <-- NUEVA LÍNEA
+  };
+  if (!body.nombre) { showModal('El nombre es obligatorio.', 'Aviso'); return; }
+  const r   = await fetch('crud_empleados.php', {
+    method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+  const res = await r.json();
+  if (res.ok) { cerrarModalEmp(); showModal('Datos actualizados.', 'RR.HH.', '✅'); mostrarRRHH(); }
+  else showModal('Error al actualizar.', 'Error', '❌', true);
+}
+
+async function bajaEmpleado(id, nombre) {
+  const conf = await showConfirmation(`¿Dar de baja a ${nombre}? El registro se conservará en el historial.`, 'Confirmar baja');
+  if (!conf) return;
+  const r   = await fetch('crud_empleados.php', {
+    method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id})
+  });
+  const res = await r.json();
+  if (res.ok) { showModal('Empleado dado de baja.', 'RR.HH.', 'ℹ️'); mostrarRRHH(); }
+  else showModal('Error al dar de baja.', 'Error', '❌', true);
+}
+
+async function reactivarEmpleado(id) {
+  const r   = await fetch('crud_empleados.php', {
+    method: 'PUT', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({id, activo: true})
+  });
+  const res = await r.json();
+  if (res.ok) { showModal('Empleado reactivado.', 'RR.HH.', '✅'); mostrarRRHH(); }
+  else showModal('Error al reactivar.', 'Error', '❌', true);
+}
+// ════════════════════════════════════════════════════════════════════════
+//  HISTORIAL DE MOVIMIENTOS (dentro de mostrarInventario)
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarMovimientos() {
+  const [movRes, posRes] = await Promise.all([
+    fetch('listar_movimientos.php'),
+    fetch('listar_postres.php')
+  ]);
+  const movs    = await movRes.json();
+  const postres = await posRes.json();
+  const postMap = {};
+  postres.forEach(p => postMap[p.id] = p.titulo);
+
+  const filas = movs.length
+    ? [...movs].reverse().slice(0, 50).map(m => {
+        const color = m.tipo === 'entrada' ? '#28a745' : '#dc3545';
+        const signo = m.tipo === 'entrada' ? '+' : '-';
+        return `<tr>
+          <td>${(m.fecha||'').split(' ')[0]}</td>
+          <td><span style="background:${color};color:#fff;border-radius:4px;padding:2px 8px;font-size:.8em;">${m.tipo}</span></td>
+          <td>${m.producto || postMap[m.producto_id] || '—'}</td>
+          <td style="font-weight:bold;color:${color};">${signo}${m.cantidad}</td>
+          <td>${m.motivo || '—'}</td>
+          <td style="font-size:.85em;color:#999;">${m.referencia || '—'}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="6" style="text-align:center;color:#999;">Sin movimientos registrados</td></tr>';
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">📋 Historial de Movimientos de Inventario</p>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th>Cantidad</th><th>Motivo</th><th>Referencia</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <p style="color:#999;font-size:.82em;margin-top:8px;">Mostrando los últimos 50 movimientos.</p>`;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  NÓMINA (parte adicional del módulo RR.HH.)
+// ════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════
+//  NÓMINA (parte adicional del módulo RR.HH.)
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarNomina() {
+  const [empRes, nomRes] = await Promise.all([
+    fetch('crud_empleados.php'),
+    fetch('listar_nomina.php')
+  ]);
+  const empleados = await empRes.json();
+  const nominas   = await nomRes.json();
+
+  const activos = empleados.filter(e => e.activo !== false);
+
+  // Determinar el periodo actual para compararlo
+  const hoy = new Date();
+  const periodoActual = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}`;
+
+  // Extraer IDs de empleados que YA recibieron pago este mes
+  const pagadosEsteMes = nominas
+    .filter(n => n.periodo === periodoActual)
+    .map(n => parseInt(n.empleado_id));
+
+  const filas = activos.map(e => {
+    // Verificar si el empleado ya está en la lista de pagados
+    const yaPagado = pagadosEsteMes.includes(parseInt(e.id));
+
+    return `
+    <tr>
+      <td>${e.nombre}</td>
+      <td>${e.puesto}</td>
+      <td>$${parseFloat(e.salario_base || 0).toFixed(2)}</td>
+      <td>
+        ${yaPagado 
+          ? '<span style="color:#28a745; font-weight:bold;">✓ Liquidado</span>' 
+          : `<input type="number" id="bono_${e.id}" value="0" min="0" step="0.01" style="width:80px;padding:4px;border:1px solid #ccc;border-radius:4px;">`
+        }
+      </td>
+      <td>
+        ${yaPagado 
+          ? `<button class="btn-editar" style="background-color:#ccc; cursor:not-allowed;" disabled>Pago Completado</button>`
+          : `<button class="btn-editar" onclick="pagarNomina(${e.id},'${e.nombre.replace(/'/g,"\\'")}',${e.salario_base||0})">Registrar pago</button>`
+        }
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="5" style="text-align:center;color:#999;">Sin empleados activos</td></tr>';
+
+  const filasHist = nominas.length
+    ? [...nominas].reverse().slice(0, 20).map(n => `
+        <tr>
+          <td>${n.empleado}</td>
+          <td>${n.periodo}</td>
+          <td>$${parseFloat(n.salario_base||0).toFixed(2)}</td>
+          <td>$${parseFloat(n.bono||0).toFixed(2)}</td>
+          <td><strong>$${parseFloat(n.total||0).toFixed(2)}</strong></td>
+          <td>${(n.fecha||'').split(' ')[0]}</td>
+        </tr>`).join('')
+    : '<tr><td colspan="6" style="text-align:center;color:#999;">Sin registros de nómina</td></tr>';
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">💵 Nómina</p>
+    <h3 style="color:#b33f4f;">Registrar pago del mes (${periodoActual})</h3>
+    <table>
+      <thead><tr><th>Empleado</th><th>Puesto</th><th>Salario base</th><th>Bono ($)</th><th>Acción</th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <h3 style="color:#b33f4f;margin-top:24px;">Historial de nómina</h3>
+    <table>
+      <thead><tr><th>Empleado</th><th>Período</th><th>Salario base</th><th>Bono</th><th>Total</th><th>Fecha</th></tr></thead>
+      <tbody>${filasHist}</tbody>
+    </table>`;
+}
+
+// La función pagarNomina() se queda igual que como ya la tenías:
+async function pagarNomina(id, nombre, salarioBase) {
+  const bono   = parseFloat(document.getElementById('bono_' + id).value || 0);
+  const total  = salarioBase + bono;
+  const hoy    = new Date();
+  const periodo= `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}`;
+
+  const r   = await fetch('crud_nomina.php', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ empleado_id: id, empleado: nombre, salario_base: salarioBase, bono, total, periodo })
+  });
+  const res = await r.json();
+  if (res.ok) { showModal(`Nómina de ${nombre} registrada: $${total.toFixed(2)}`, 'Nómina', '✅'); mostrarNomina(); }
+  else showModal(res.msg || 'Error al registrar.', 'Error', '❌', true);
+}
+async function pagarNomina(id, nombre, salarioBase) {
+  const bono   = parseFloat(document.getElementById('bono_' + id).value || 0);
+  const total  = salarioBase + bono;
+  const hoy    = new Date();
+  const periodo= `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}`;
+
+  const r   = await fetch('crud_nomina.php', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ empleado_id: id, empleado: nombre, salario_base: salarioBase, bono, total, periodo })
+  });
+  const res = await r.json();
+  if (res.ok) { showModal(`Nómina de ${nombre} registrada: $${total.toFixed(2)}`, 'Nómina', '✅'); mostrarNomina(); }
+  else showModal(res.msg || 'Error al registrar.', 'Error', '❌', true);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  ASISTENCIA
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarAsistencia() {
+  const [empRes, asistRes] = await Promise.all([
+    fetch('crud_empleados.php'),
+    fetch('listar_asistencia.php')
+  ]);
+  const empleados  = await empRes.json();
+  const asistencia = await asistRes.json();
+
+  const activos = empleados.filter(e => e.activo !== false);
+  const hoy     = new Date().toISOString().split('T')[0];
+
+  const registradosHoy = asistencia
+    .filter(a => (a.fecha||'').startsWith(hoy))
+    .map(a => a.empleado_id);
+
+  const filasReg = activos.map(e => {
+    const yaRegistro = registradosHoy.includes(e.id);
+    return `<tr>
+      <td>${e.nombre}</td>
+      <td>${e.puesto}</td>
+      <td>${e.turno}</td>
+      <td>${yaRegistro
+        ? '<span style="background:#28a745;color:#fff;border-radius:4px;padding:2px 10px;">✓ Registrado</span>'
+        : `<button class="btn-editar" onclick="registrarAsistencia(${e.id},'${e.nombre.replace(/'/g,"\\'")}')">Registrar entrada</button>`
+      }</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:#999;">Sin empleados activos</td></tr>';
+
+  const filasHist = asistencia.length
+    ? [...asistencia].reverse().slice(0, 30).map(a => `
+        <tr>
+          <td>${a.empleado}</td>
+          <td>${(a.fecha||'').split(' ')[0]}</td>
+          <td>${(a.fecha||'').split(' ')[1] || '—'}</td>
+        </tr>`).join('')
+    : '<tr><td colspan="3" style="text-align:center;color:#999;">Sin registros</td></tr>';
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">🕒 Asistencia</p>
+    <h3 style="color:#b33f4f;">Registro del día — ${hoy}</h3>
+    <table>
+      <thead><tr><th>Empleado</th><th>Puesto</th><th>Turno</th><th>Asistencia</th></tr></thead>
+      <tbody>${filasReg}</tbody>
+    </table>
+    <h3 style="color:#b33f4f;margin-top:24px;">Historial reciente</h3>
+    <table>
+      <thead><tr><th>Empleado</th><th>Fecha</th><th>Hora entrada</th></tr></thead>
+      <tbody>${filasHist}</tbody>
+    </table>`;
+}
+
+async function registrarAsistencia(id, nombre) {
+  const r   = await fetch('crud_asistencia.php', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ empleado_id: id, empleado: nombre, fecha: new Date().toISOString().replace('T',' ').slice(0,19) })
+  });
+  const res = await r.json();
+  if (res.ok) { showModal(`Asistencia de ${nombre} registrada.`, 'Asistencia', '✅'); mostrarAsistencia(); }
+  else showModal('Error al registrar.', 'Error', '❌', true);
+}
+// ════════════════════════════════════════════════════════════════════════
+//  INVENTARIO (módulo SCM — reemplaza el anterior)
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarInventarioSCM() {
+  const [posRes, insRes, provRes] = await Promise.all([
+    fetch('listar_postres.php'),
+    fetch('crud_insumos.php'),
+    fetch('crud_proveedores.php')
+  ]);
+  const postres     = await posRes.json();
+  const insumos     = await insRes.json();
+  const proveedores = await provRes.json();
+  const optsProvIns = proveedores.filter(p => p.activo !== false)
+    .map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+  const SMIN    = 5;
+
+  const alertasP = postres.filter(p => parseInt(p.stock) <= parseInt(p.stock_minimo ?? SMIN));
+  const alertasI = insumos.filter(i => parseFloat(i.stock) <= parseFloat(i.stock_minimo ?? SMIN));
+  let alertaHTML = '';
+  if (alertasP.length || alertasI.length) {
+    alertaHTML = `<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+      <strong>⚠️ Stock bajo:</strong>
+      ${alertasP.map(p=>`<span style="background:#ffc107;color:#333;border-radius:4px;padding:2px 8px;margin:2px;font-size:.83em;display:inline-block;">${p.titulo} (${p.stock} uds.)</span>`).join('')}
+      ${alertasI.map(i=>`<span style="background:#fd7e14;color:#fff;border-radius:4px;padding:2px 8px;margin:2px;font-size:.83em;display:inline-block;">${i.nombre} (${i.stock} ${i.unidad})</span>`).join('')}
+    </div>`;
+  }
+
+  const filasP = postres.map(p => {
+    const bajo  = parseInt(p.stock) <= parseInt(p.stock_minimo ?? SMIN);
+    const badge = bajo ? `<span style="background:#dc3545;color:#fff;border-radius:4px;padding:1px 7px;font-size:.78em;">BAJO</span>`
+                       : `<span style="background:#28a745;color:#fff;border-radius:4px;padding:1px 7px;font-size:.78em;">OK</span>`;
+    return `<tr>
+      <td>${p.id}</td><td>${p.titulo}</td><td>${p.categoria}</td>
+      <td><strong>${p.stock}</strong> uds. ${badge}</td>
+      <td><input type="number" id="smin_${p.id}" value="${p.stock_minimo??SMIN}" min="0"
+          style="width:55px;padding:3px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" onclick="guardarStockMin(${p.id},'smin_${p.id}')">✓</button></td>
+      <td><input type="number" id="adj_${p.id}" value="0" min="-999" max="9999"
+          style="width:65px;padding:3px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" onclick="ajustarStock(${p.id},'adj_${p.id}')">Ajustar</button></td>
+    </tr>`;
+  }).join('');
+
+  const filasI = insumos.map(i => {
+    const bajo  = parseFloat(i.stock) <= parseFloat(i.stock_minimo ?? SMIN);
+    const badge = bajo ? `<span style="background:#dc3545;color:#fff;border-radius:4px;padding:1px 7px;font-size:.78em;">BAJO</span>`
+                       : `<span style="background:#28a745;color:#fff;border-radius:4px;padding:1px 7px;font-size:.78em;">OK</span>`;
+    return `<tr>
+      <td>${i.id}</td><td>${i.nombre}</td><td>${i.unidad}</td>
+      <td><strong>${i.stock}</strong> ${badge}</td>
+      <td><input type="number" id="iadj_${i.id}" value="0" step="0.01"
+          style="width:65px;padding:3px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" onclick="ajustarInsumo(${i.id},'iadj_${i.id}')">Ajustar</button>
+        <button class="btn-eliminar" onclick="eliminarInsumo(${i.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">📦 Inventario SCM</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+      <button class="btn-editar" onclick="mostrarMovimientos()">📋 Movimientos de inventario</button>
+      <button class="btn-editar" onclick="mostrarProduccion()">🍰 Producción</button>
+      <button class="btn-editar" onclick="mostrarCompras()">🛒 Órdenes de compra / proveedores</button>
+    </div>
+    ${alertaHTML}
+
+    <h3 style="color:#b33f4f;">Postres (productos terminados)</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Producto</th><th>Categoría</th><th>Stock</th><th>Mín.</th><th>Ajuste</th></tr></thead>
+      <tbody>${filasP}</tbody>
+    </table>
+
+    <h3 style="color:#b33f4f;margin-top:24px;">Insumos</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Insumo</th><th>Unidad</th><th>Stock</th><th>Ajuste</th></tr></thead>
+      <tbody>${filasI || '<tr><td colspan="5" style="text-align:center;color:#999;">Sin insumos</td></tr>'}</tbody>
+    </table>
+
+    <details style="margin-top:14px;">
+      <summary style="cursor:pointer;color:#b33f4f;font-weight:bold;">+ Agregar insumo</summary>
+      <div style="background:#fdf3f3;padding:14px;border-radius:8px;margin-top:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <input id="ins_nombre" placeholder="Nombre *" style="padding:7px;border:1px solid #ccc;border-radius:4px;">
+        <select id="ins_unidad" style="padding:7px;border:1px solid #ccc;border-radius:4px;">
+          <option value="kg">kg</option><option value="gr">gr</option><option value="lt">lt</option>
+          <option value="ml">ml</option><option value="pza">pza</option><option value="lata">lata</option>
+        </select>
+        <select id="ins_prov" style="padding:7px;border:1px solid #ccc;border-radius:4px;">
+          <option value="">Proveedor preferido (opcional)</option>${optsProvIns}
+        </select>
+        <input id="ins_stock" type="number" placeholder="Stock inicial" min="0" step="0.01" style="padding:7px;border:1px solid #ccc;border-radius:4px;">
+        <input id="ins_min"   type="number" placeholder="Stock mínimo"  min="0" step="0.01" style="padding:7px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" style="grid-column:1/-1;" onclick="agregarInsumo()">Guardar insumo</button>
+      </div>
+    </details>`;
+}
+
+async function agregarInsumo() {
+  const pv = document.getElementById('ins_prov').value;
+  const body = {
+    nombre: document.getElementById('ins_nombre').value.trim(),
+    unidad: document.getElementById('ins_unidad').value,
+    stock:  parseFloat(document.getElementById('ins_stock').value || 0),
+    stock_minimo: parseFloat(document.getElementById('ins_min').value || 5),
+    proveedor_id: pv ? parseInt(pv, 10) : null
+  };
+  if (!body.nombre) { showModal('El nombre es obligatorio.','Aviso'); return; }
+  const r = await fetch('crud_insumos.php', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const res = await r.json();
+  if (res.ok) { showModal('Insumo agregado.','SCM','✅'); mostrarInventarioSCM(); }
+  else showModal(res.msg||'Error.','Error','❌',true);
+}
+
+async function ajustarInsumo(id, inputId) {
+  const delta = parseFloat(document.getElementById(inputId).value);
+  if (!delta) { showModal('Ingresa un valor distinto de 0.','Aviso'); return; }
+  const ins = (await (await fetch('crud_insumos.php')).json()).find(i=>i.id==id);
+  if (!ins) return;
+  const r = await fetch('crud_insumos.php',{method:'PUT',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({id, stock: Math.max(0, parseFloat(ins.stock)+delta)})});
+  const res = await r.json();
+  if (res.ok) { showModal('Stock actualizado.','SCM','✅'); mostrarInventarioSCM(); }
+  else showModal('Error.','Error','❌',true);
+}
+
+async function eliminarInsumo(id) {
+  if (!await showConfirmation('¿Eliminar este insumo?','Confirmar')) return;
+  await fetch('crud_insumos.php',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  mostrarInventarioSCM();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  PRODUCCIÓN
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarProduccion() {
+  const [recRes, posRes, insRes] = await Promise.all([
+    fetch('crud_recetas.php'),
+    fetch('listar_postres.php'),
+    fetch('crud_insumos.php')
+  ]);
+  const recetas = await recRes.json();
+  const postres = await posRes.json();
+  const insumos = await insRes.json();
+
+  const optsPostre = postres.map(p=>`<option value="${p.id}" data-nombre="${p.titulo}">${p.titulo}</option>`).join('');
+  const optsInsumo = insumos.map(i=>`<option value="${i.id}" data-unidad="${i.unidad}">${i.nombre} (${i.unidad})</option>`).join('');
+
+  const filasR = recetas.map(r => {
+    const ings = (r.ingredientes||[]).map(i=>`${i.cantidad} ${i.unidad} de ${i.insumo_nombre}`).join(', ');
+    return `<tr>
+      <td><strong>${r.nombre}</strong></td>
+      <td>${r.postre_nombre}</td>
+      <td>Rinde ${r.rinde} uds.</td>
+      <td style="font-size:.85em;color:#666;">${ings}</td>
+      <td class="acciones">
+        <input type="number" id="lotes_${r.id}" value="1" min="1" style="width:50px;padding:4px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" onclick="producir(${r.id})">▶ Producir</button>
+        <button class="btn-eliminar" onclick="eliminarReceta(${r.id})">✕</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="5" style="text-align:center;color:#999;">Sin recetas. Crea una abajo.</td></tr>';
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">🍰 Producción</p>
+
+    <h3 style="color:#b33f4f;">Recetas</h3>
+    <table>
+      <thead><tr><th>Receta</th><th>Postre</th><th>Rendimiento</th><th>Ingredientes</th><th>Producir</th></tr></thead>
+      <tbody>${filasR}</tbody>
+    </table>
+
+    <details style="margin-top:16px;" id="detalleReceta">
+      <summary style="cursor:pointer;color:#b33f4f;font-weight:bold;">+ Nueva receta</summary>
+      <div style="background:#fdf3f3;padding:16px;border-radius:8px;margin-top:8px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+          <input id="rec_nombre" placeholder="Nombre de la receta *" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <select id="rec_postre" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+            <option value="">-- Postre que produce *--</option>${optsPostre}
+          </select>
+          <input id="rec_rinde" type="number" placeholder="Rinde (uds. por lote)" min="1" value="1" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        </div>
+        <div id="ingsContainer"></div>
+        <button class="btn-editar" style="margin-bottom:10px;" onclick="agregarIngredienteUI()">+ Ingrediente</button>
+        <br>
+        <button class="btn-editar" style="width:100%;margin-top:4px;" onclick="guardarReceta()">Guardar receta</button>
+        <div id="ingsOpts" style="display:none">${optsInsumo}</div>
+      </div>
+    </details>`;
+}
+
+let _ingCounter = 0;
+function agregarIngredienteUI() {
+  const n   = _ingCounter++;
+  const sel = document.getElementById('ingsOpts').innerHTML;
+  const div = document.createElement('div');
+  div.id    = `ing_row_${n}`;
+  div.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:8px;';
+  div.innerHTML = `
+    <select id="ing_ins_${n}" style="padding:7px;border:1px solid #ccc;border-radius:4px;">${sel}</select>
+    <input  id="ing_cant_${n}" type="number" placeholder="Cantidad" min="0.01" step="0.01" style="padding:7px;border:1px solid #ccc;border-radius:4px;">
+    <span   id="ing_unit_${n}" style="padding:7px;color:#666;align-self:center;"></span>
+    <button class="btn-eliminar" onclick="document.getElementById('ing_row_${n}').remove()">✕</button>`;
+  document.getElementById('ingsContainer').appendChild(div);
+  document.getElementById(`ing_ins_${n}`).addEventListener('change', function() {
+    const opt = this.options[this.selectedIndex];
+    document.getElementById(`ing_unit_${n}`).textContent = opt.dataset.unidad || '';
+  });
+  // Trigger inicial
+  document.getElementById(`ing_ins_${n}`).dispatchEvent(new Event('change'));
+}
+
+async function guardarReceta() {
+  const nombre   = document.getElementById('rec_nombre').value.trim();
+  const postreSel= document.getElementById('rec_postre');
+  const postId   = postreSel.value;
+  const postNom  = postreSel.options[postreSel.selectedIndex]?.dataset?.nombre || '';
+  const rinde    = parseInt(document.getElementById('rec_rinde').value);
+  if (!nombre || !postId) { showModal('Nombre y postre son obligatorios.','Aviso'); return; }
+
+  const ingredientes = [];
+  document.querySelectorAll('[id^="ing_row_"]').forEach(row => {
+    const n    = row.id.replace('ing_row_','');
+    const sel  = document.getElementById(`ing_ins_${n}`);
+    const cant = parseFloat(document.getElementById(`ing_cant_${n}`).value);
+    if (!sel || !cant) return;
+    ingredientes.push({
+      insumo_id:     parseInt(sel.value),
+      insumo_nombre: sel.options[sel.selectedIndex].text.split(' (')[0],
+      cantidad:      cant,
+      unidad:        sel.options[sel.selectedIndex].dataset.unidad || ''
+    });
+  });
+  if (!ingredientes.length) { showModal('Agrega al menos un ingrediente.','Aviso'); return; }
+
+  const r = await fetch('crud_recetas.php',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({nombre,postre_id:postId,postre_nombre:postNom,rinde,ingredientes})});
+  const res = await r.json();
+  if (res.ok) { _ingCounter=0; showModal('Receta guardada.','SCM','✅'); mostrarProduccion(); }
+  else showModal(res.msg||'Error.','Error','❌',true);
+}
+
+async function producir(recetaId) {
+  const lotes = parseInt(document.getElementById('lotes_'+recetaId).value);
+  if (!lotes || lotes < 1) { showModal('Ingresa al menos 1 lote.','Aviso'); return; }
+  if (!await showConfirmation(`¿Producir ${lotes} lote(s)? Se descontarán los insumos correspondientes.`,'Confirmar producción')) return;
+  const r   = await fetch('producir_postre.php',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({receta_id:recetaId,lotes})});
+  const res = await r.json();
+  if (res.ok) showModal(`Producción exitosa. +${res.producido} unidades de "${res.postre}" agregadas al inventario.`,'SCM','✅');
+  else showModal(res.msg||'Error en producción.','Error','❌',true);
+  mostrarProduccion();
+}
+
+async function eliminarReceta(id) {
+  if (!await showConfirmation('¿Eliminar esta receta?','Confirmar')) return;
+  await fetch('crud_recetas.php',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  mostrarProduccion();
+}
+
+
+//  CRM
+
+async function mostrarCRM() {
+  const [crmRes, promoRes, postRes] = await Promise.all([
+    fetch('listar_crm.php'),
+    fetch('crud_promociones.php'),
+    fetch('crud_postventa.php')
+  ]);
+
+  const clientes = await crmRes.json();
+  const promociones = await promoRes.json();
+  const solicitudesRaw = await postRes.json();
+
+  const solicitudes = Array.isArray(solicitudesRaw) ? solicitudesRaw : [];
+
+  const etiqColor = { vip:'#e67e22', frecuente:'#28a745', nuevo:'#6c757d' };
+
+  const filasC = clientes.map(c => {
+    const col = etiqColor[c.etiqueta] || '#6c757d';
+    return `<tr>
+      <td>${c.nombre || '—'}</td>
+      <td>${c.correo}</td>
+      <td>${c.total_pedidos}</td>
+      <td>$${Number(c.ltv || 0).toFixed(2)}</td>
+      <td><span style="background:${col};color:#fff;border-radius:4px;padding:2px 10px;font-size:.82em;">${c.etiqueta}</span></td>
+      <td class="acciones">
+        <select id="etq_${c.id}" style="padding:4px;border:1px solid #ccc;border-radius:4px;font-size:.85em;">
+          <option value="nuevo" ${c.etiqueta==='nuevo'?'selected':''}>Nuevo</option>
+          <option value="frecuente" ${c.etiqueta==='frecuente'?'selected':''}>Frecuente</option>
+          <option value="vip" ${c.etiqueta==='vip'?'selected':''}>VIP</option>
+        </select>
+        <button class="btn-editar" onclick="cambiarEtiqueta(${c.id},'etq_${c.id}')">✓</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="6" style="text-align:center;color:#999;">Sin clientes registrados aún</td></tr>';
+
+  const filasPromo = promociones.map(pr => {
+    const badge = pr.activa
+      ? `<span style="background:#28a745;color:#fff;border-radius:4px;padding:1px 8px;font-size:.8em;">Activa</span>`
+      : `<span style="background:#6c757d;color:#fff;border-radius:4px;padding:1px 8px;font-size:.8em;">Inactiva</span>`;
+
+    const desc = pr.tipo === 'descuento_porcentaje'
+      ? `-${pr.valor}%`
+      : pr.tipo === 'precio_especial'
+        ? `$${pr.valor} fijo`
+        : '2x1';
+
+    return `<tr>
+      <td><strong>${pr.nombre}</strong></td>
+      <td>${desc}</td>
+      <td>${pr.aplica_a === 'todos' ? 'Todos los productos' : (pr.referencia || pr.aplica_a)}</td>
+      <td>${pr.clientes}</td>
+      <td>${pr.fecha_inicio || '—'} → ${pr.fecha_fin || 'sin fecha'}</td>
+      <td>${badge}</td>
+      <td class="acciones">
+        <button class="btn-editar" onclick="togglePromo(${pr.id},${!pr.activa})">${pr.activa ? 'Pausar' : 'Activar'}</button>
+        <button class="btn-eliminar" onclick="eliminarPromo(${pr.id})">✕</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="7" style="text-align:center;color:#999;">Sin promociones activas</td></tr>';
+
+  const filasPostventa = solicitudes.map(req => {
+    const badge = req.estado === 'pendiente'
+      ? '<span style="background:#ffc107;color:#333;border-radius:4px;padding:1px 8px;font-size:.8em;">Pendiente</span>'
+      : req.estado === 'aprobada'
+        ? '<span style="background:#28a745;color:#fff;border-radius:4px;padding:1px 8px;font-size:.8em;">Aprobada</span>'
+        : '<span style="background:#6c757d;color:#fff;border-radius:4px;padding:1px 8px;font-size:.8em;">Rechazada</span>';
+
+    return `<tr>
+      <td><strong>${req.folio || '—'}</strong></td>
+      <td>${req.cliente || '—'}</td>
+      <td>${req.tipo === 'cancelacion' ? 'Cancelación' : 'Devolución'}</td>
+      <td>${badge}</td>
+      <td>${req.motivo || '—'}</td>
+      <td class="acciones">
+        ${
+          req.estado === 'pendiente'
+            ? `
+              <button class="btn-editar" onclick="resolverPostventa('${req.folio}','aprobar')">Aprobar</button>
+              <button class="btn-eliminar" onclick="resolverPostventa('${req.folio}','rechazar')">Rechazar</button>
+            `
+            : '<span style="color:#666;font-weight:bold;">Procesada</span>'
+        }
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="6" style="text-align:center;color:#999;">Sin solicitudes postventa</td></tr>';
+
+  let html = `
+    <p class="titulo-contenido">🤝 CRM – Gestión de Clientes</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;">
+      <div style="background:#f8f9fa;border-radius:10px;padding:14px;border-left:4px solid #b33f4f;text-align:center;">
+        <div style="font-size:.8em;color:#666;">TOTAL CLIENTES</div>
+        <div style="font-size:1.8em;font-weight:bold;color:#b33f4f;">${clientes.length}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:14px;border-left:4px solid #e67e22;text-align:center;">
+        <div style="font-size:.8em;color:#666;">VIP</div>
+        <div style="font-size:1.8em;font-weight:bold;color:#e67e22;">${clientes.filter(c=>c.etiqueta==='vip').length}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:14px;border-left:4px solid #28a745;text-align:center;">
+        <div style="font-size:.8em;color:#666;">FRECUENTES</div>
+        <div style="font-size:1.8em;font-weight:bold;color:#28a745;">${clientes.filter(c=>c.etiqueta==='frecuente').length}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:14px;border-left:4px solid #6c757d;text-align:center;">
+        <div style="font-size:.8em;color:#666;">NUEVOS</div>
+        <div style="font-size:1.8em;font-weight:bold;color:#6c757d;">${clientes.filter(c=>c.etiqueta==='nuevo').length}</div>
+      </div>
+    </div>
+
+    <h3 style="color:#b33f4f;">Clientes</h3>
+    <table>
+      <thead><tr><th>Nombre</th><th>Correo</th><th>Pedidos</th><th>LTV</th><th>Segmento</th><th>Gestionar</th></tr></thead>
+      <tbody>${filasC}</tbody>
+    </table>
+
+    <h3 style="color:#b33f4f;margin-top:24px;">Promociones y Reglas de Negocio</h3>
+    <table>
+      <thead><tr><th>Nombre</th><th>Descuento</th><th>Aplica a</th><th>Clientes</th><th>Vigencia</th><th>Estado</th><th></th></tr></thead>
+      <tbody>${filasPromo}</tbody>
+    </table>
+
+    <h3 style="color:#b33f4f;margin-top:24px;">Solicitudes postventa</h3>
+    <table>
+      <thead><tr><th>Folio</th><th>Cliente</th><th>Tipo</th><th>Estado</th><th>Motivo</th><th>Acciones</th></tr></thead>
+      <tbody>${filasPostventa}</tbody>
+    </table>
+
+    <details style="margin-top:14px;">
+      <summary style="cursor:pointer;color:#b33f4f;font-weight:bold;">+ Nueva promoción / regla</summary>
+      <div style="background:#fdf3f3;padding:14px;border-radius:8px;margin-top:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+        <input id="pr_nombre" placeholder="Nombre *" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <select id="pr_tipo" style="padding:8px;border:1px solid #ccc;border-radius:4px;" onchange="actualizarLabelPromo()">
+          <option value="descuento_porcentaje">Descuento %</option>
+          <option value="precio_especial">Precio especial ($)</option>
+          <option value="2x1">2x1</option>
+        </select>
+        <input id="pr_valor" type="number" placeholder="Valor (% o $)" min="0" step="0.01" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <select id="pr_aplica" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <option value="todos">Todos los productos</option>
+          <option value="categoria">Por categoría</option>
+          <option value="producto">Producto específico</option>
+        </select>
+        <input id="pr_ref" placeholder="Categoría o producto (si aplica)" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <select id="pr_clientes" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <option value="todos">Todos los clientes</option>
+          <option value="frecuente">Solo frecuentes</option>
+          <option value="vip">Solo VIP</option>
+        </select>
+        <input id="pr_inicio" type="date" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input id="pr_fin" type="date" placeholder="Fecha fin (opcional)" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <button class="btn-editar" style="grid-column:1/-1;" onclick="crearPromo()">Guardar promoción</button>
+      </div>
+    </details>
+  `;
+
+  document.getElementById('contenido').innerHTML = html;
+}
+
+async function resolverPostventa(folio, accion) {
+  const res = await fetch('crud_postventa.php', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ folio, accion })
+  });
+
+  const data = await res.json();
+
+  if (data.ok) {
+    await showModal('Solicitud procesada correctamente.', 'CRM', '✅');
+    mostrarCRM();
+  } else {
+    await showModal(data.msg || 'No se pudo procesar.', 'Error', '❌', true);
+  }
+}
+async function cambiarEtiqueta(id, selId) {
+  const etiqueta = document.getElementById(selId).value;
+  // Mapear etiqueta CRM a tipo_cuenta equivalente
+  const tipoCuentaMap = { vip: 'vip', frecuente: 'frecuente', nuevo: 'cliente' };
+  const tipo_cuenta = tipoCuentaMap[etiqueta] || 'cliente';
+
+  await fetch('actualizar_crm_cliente.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, etiqueta, tipo_cuenta })
+  });
+  await showModal('Segmento y tipo de cuenta actualizados.', 'CRM', '✅');
+  await refreshPanelState(true);
+  mostrarCRM();
+}
+
+async function crearPromo() {
+  const body = {
+    nombre:      document.getElementById('pr_nombre').value.trim(),
+    tipo:        document.getElementById('pr_tipo').value,
+    valor:       parseFloat(document.getElementById('pr_valor').value||0),
+    aplica_a:    document.getElementById('pr_aplica').value,
+    referencia:  document.getElementById('pr_ref').value.trim(),
+    clientes:    document.getElementById('pr_clientes').value,
+    fecha_inicio:document.getElementById('pr_inicio').value,
+    fecha_fin:   document.getElementById('pr_fin').value || null
+  };
+  if (!body.nombre) { showModal('El nombre es obligatorio.','Aviso'); return; }
+  const r   = await fetch('crud_promociones.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const res = await r.json();
+  if (res.ok) { showModal('Promoción creada.','CRM','✅'); mostrarCRM(); }
+  else showModal(res.msg||'Error.','Error','❌',true);
+}
+
+async function togglePromo(id, activa) {
+  await fetch('crud_promociones.php',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,activa})});
+  mostrarCRM();
+}
+
+async function eliminarPromo(id) {
+  if (!await showConfirmation('¿Eliminar esta promoción?','Confirmar')) return;
+  await fetch('crud_promociones.php',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  mostrarCRM();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  USUARIOS DE CLIENTES (renombrada para no pisar la original)
+// ════════════════════════════════════════════════════════════════════════
+function mostrarUsuariosClientes() {
+  mostrarUsuarios(); // llama la que ya existe
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  USUARIOS DEL PANEL (admons.json)
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarAdmins() {
+  const res    = await fetch('crud_admons.php');
+  const admins = await res.json();
+
+const rolColor = {admin:'#b33f4f', gerente:'#6f42c1', vendedor:'#28a745'};
+  const filas = admins.map(a => {
+    const col = rolColor[a.rol] || '#6c757d';
+    return `<tr>
+      <td>${a.id}</td>
+      <td><strong>${a.nombre}</strong></td>
+      <td style="font-family:monospace;font-size:.9em;">${a.usuario}</td>
+      <td><span style="background:${col};color:#fff;border-radius:4px;padding:2px 10px;font-size:.82em;">${a.rol}</span></td>
+      <td class="acciones">
+        <button class="btn-editar"   onclick="editarAdmin(${a.id},'${a.nombre.replace(/'/g,"\\'")}','${a.usuario}','${a.rol}')">Editar</button>
+        ${a.id===1?'':`<button class="btn-eliminar" onclick="eliminarAdmin(${a.id})">✕</button>`}
+      </td>
+    </tr>`;
+  }).join('');
+
+const optsRol = ['admin','gerente','vendedor']
+    .map(r=>`<option value="${r}">${r.charAt(0).toUpperCase() + r.slice(1)}</option>`).join('');
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">🔑 Usuarios del Panel</p>
+    <table>
+      <thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Rol</th><th></th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table>
+
+    <details style="margin-top:14px;">
+      <summary style="cursor:pointer;color:#b33f4f;font-weight:bold;">+ Nuevo usuario del panel</summary>
+      <div style="background:#fdf3f3;padding:14px;border-radius:8px;margin-top:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
+        <input  id="adm_nombre"  placeholder="Nombre completo *" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input  id="adm_usuario" placeholder="Usuario (email) *" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <input  id="adm_pass"    type="password" placeholder="Contraseña *" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+        <select id="adm_rol"     style="padding:8px;border:1px solid #ccc;border-radius:4px;">${optsRol}</select>
+        <button class="btn-editar" style="grid-column:1/-1;" onclick="crearAdmin()">Crear usuario</button>
+      </div>
+    </details>
+
+    <div id="modalEditAdmin" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;">
+      <div style="background:#fff;border-radius:12px;padding:28px;width:400px;max-width:95vw;">
+        <h3 style="color:#b33f4f;margin-top:0;">Editar usuario</h3>
+        <input type="hidden" id="eadm_id">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <input  id="eadm_nombre"  placeholder="Nombre" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <select id="eadm_rol"     style="padding:8px;border:1px solid #ccc;border-radius:4px;">${optsRol}</select>
+          <input  id="eadm_pass"    type="password" placeholder="Nueva contraseña (opcional)" style="padding:8px;border:1px solid #ccc;border-radius:4px;grid-column:1/-1;">
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button class="btn-modal-cancel" onclick="document.getElementById('modalEditAdmin').style.display='none'">Cancelar</button>
+          <button class="btn-editar" onclick="guardarAdmin()">Guardar</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+async function crearAdmin() {
+  const body = {
+    nombre:  document.getElementById('adm_nombre').value.trim(),
+    usuario: document.getElementById('adm_usuario').value.trim(),
+    passw:   document.getElementById('adm_pass').value,
+    rol:     document.getElementById('adm_rol').value
+  };
+  if (!body.nombre||!body.usuario||!body.passw) { showModal('Todos los campos son obligatorios.','Aviso'); return; }
+  const r   = await fetch('crud_admons.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const res = await r.json();
+  if (res.ok) { showModal('Usuario creado.','Panel','✅'); mostrarAdmins(); }
+  else showModal(res.msg||'Error.','Error','❌',true);
+}
+
+function editarAdmin(id, nombre, usuario, rol) {
+  document.getElementById('eadm_id').value    = id;
+  document.getElementById('eadm_nombre').value= nombre;
+  document.getElementById('eadm_pass').value  = '';
+  const sel = document.getElementById('eadm_rol');
+  for (let i=0;i<sel.options.length;i++) { if(sel.options[i].value===rol){sel.selectedIndex=i;break;} }
+  document.getElementById('modalEditAdmin').style.display='flex';
+}
+
+async function guardarAdmin() {
+  const body = {
+    id:     parseInt(document.getElementById('eadm_id').value),
+    nombre: document.getElementById('eadm_nombre').value.trim(),
+    rol:    document.getElementById('eadm_rol').value
+  };
+  const pass = document.getElementById('eadm_pass').value;
+  if (pass) body.passw = pass;
+  const r   = await fetch('crud_admons.php',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const res = await r.json();
+  if (res.ok) { document.getElementById('modalEditAdmin').style.display='none'; showModal('Actualizado.','Panel','✅'); mostrarAdmins(); }
+  else showModal('Error.','Error','❌',true);
+}
+
+async function eliminarAdmin(id) {
+  if (!await showConfirmation('¿Eliminar este usuario del panel?','Confirmar')) return;
+  const r   = await fetch('crud_admons.php',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  const res = await r.json();
+  if (res.ok) mostrarAdmins();
+  else showModal(res.msg||'Error.','Error','❌',true);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  AUDITORÍA
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarAuditoria() {
+  const res    = await fetch('listar_auditoria.php');
+  const eventos= await res.json();
+
+  const moduloColor = {
+    Ventas:'#007bff',SCM:'#28a745',CRM:'#e67e22',
+    Compras:'#6f42c1',Finanzas:'#dc3545',Admin:'#b33f4f',
+    'RR.HH.':'#6c757d','Sistema':'#495057',
+    Postventa:'#9c27b0',
+    Otros:'#6c757d'
+  };
+
+  const filas = eventos.length
+    ? [...eventos].reverse().slice(0,100).map(e => {
+        const col = moduloColor[e.modulo] || '#6c757d';
+        return `<tr>
+          <td style="font-size:.85em;white-space:nowrap;">${e.fecha}</td>
+          <td><span style="background:${col};color:#fff;border-radius:4px;padding:1px 8px;font-size:.8em;">${e.modulo}</span></td>
+          <td style="font-family:monospace;font-size:.85em;color:#555;">${e.accion}</td>
+          <td>${e.usuario} <span style="font-size:.8em;color:#999;">(${e.rol})</span></td>
+          <td>${e.descripcion}</td>
+          <td style="font-size:.78em;color:#999;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${e.detalle||''}">${e.detalle||'—'}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="6" style="text-align:center;color:#999;">Sin eventos registrados aún. Las operaciones del sistema aparecerán aquí.</td></tr>';
+
+  // Conteo por módulo
+  const conteo = {};
+  eventos.forEach(e => { conteo[e.modulo]=(conteo[e.modulo]||0)+1; });
+  const resumenBadges = Object.entries(conteo).map(([m,n]) => {
+    const col = moduloColor[m]||'#6c757d';
+    return `<span style="background:${col};color:#fff;border-radius:4px;padding:3px 10px;font-size:.85em;margin:2px;display:inline-block;">${m}: ${n}</span>`;
+  }).join('');
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">🔎 Auditoría del Sistema</p>
+    <div style="margin-bottom:16px;">${resumenBadges || '<span style="color:#999;">Sin actividad registrada</span>'}</div>
+    <table>
+      <thead><tr><th>Fecha</th><th>Módulo</th><th>Acción</th><th>Usuario</th><th>Descripción</th><th>Detalle</th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <p style="color:#999;font-size:.82em;margin-top:8px;">Mostrando los últimos 100 eventos.</p>`;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  MÉTRICAS MEJORADAS (reemplaza mostrarMetricas original)
+// ════════════════════════════════════════════════════════════════════════
+async function mostrarMetricas() {
+  const [pedRes, posRes, insRes, ordRes] = await Promise.all([
+    fetch('listar_pedidos.php'),
+    fetch('listar_postres.php'),
+    fetch('crud_insumos.php'),
+    fetch('crud_ordenes.php')
+  ]);
+  const pedidos = await pedRes.json();
+  const postres = await posRes.json();
+  const insumos = await insRes.json();
+  const ordenes = await ordRes.json();
+
+  const hoy   = new Date();
+  const mes   = hoy.getMonth();
+  const anio  = hoy.getFullYear();
+  const esMes = f => { const d=new Date(f); return d.getMonth()===mes && d.getFullYear()===anio; };
+
+  const activos    = pedidos.filter(p => p.estado !== 'Cancelado');
+  const delMes     = activos.filter(p => esMes(p.fecha));
+  const entregados = activos.filter(p => p.estado === 'Entregado');
+  const totalMes   = delMes.reduce((s,p) => s+parseFloat(p.total||0), 0);
+  const totalGral  = activos.reduce((s,p) => s+parseFloat(p.total||0), 0);
+  const ticketProm = activos.length ? (totalGral/activos.length) : 0;
+  const SMIN       = 5;
+  const bajosPost  = postres.filter(p => parseInt(p.stock) <= parseInt(p.stock_minimo??SMIN));
+  const bajosIns   = insumos.filter(i => parseFloat(i.stock) <= parseFloat(i.stock_minimo??SMIN));
+
+  // Ventas por mes (últimos 6)
+  const labels6=[], datos6=[];
+  for (let i=5;i>=0;i--) {
+    const d = new Date(anio, mes-i, 1);
+    labels6.push(d.toLocaleString('es-MX',{month:'short',year:'2-digit'}));
+    datos6.push(activos.filter(p=>{const dp=new Date(p.fecha);return dp.getMonth()===d.getMonth()&&dp.getFullYear()===d.getFullYear();})
+      .reduce((s,p)=>s+parseFloat(p.total||0),0).toFixed(2));
+  }
+
+  // Top 5 productos
+  const conteo={};
+  activos.forEach(p=>(p.items||[]).forEach(it=>{conteo[it.titulo]=(conteo[it.titulo]||0)+parseInt(it.cantidad||1);}));
+  const top5=Object.entries(conteo).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  // Estados
+  const estCont={};
+  pedidos.forEach(p=>{estCont[p.estado]=(estCont[p.estado]||0)+1;});
+
+  // OC
+  const ocPend = ordenes.filter(o=>o.estado==='Pendiente').length;
+  const ocRec  = ordenes.filter(o=>o.estado==='Recibida').length;
+
+  document.getElementById('contenido').innerHTML = `
+    <p class="titulo-contenido">📊 Métricas del Negocio</p>
+    <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));">
+      <div class="kpi"><div class="label">Pedidos este mes</div><div class="value">${delMes.length}</div></div>
+      <div class="kpi"><div class="label">Ingresos mes</div><div class="value">$${totalMes.toFixed(0)}</div></div>
+      <div class="kpi"><div class="label">Total pedidos</div><div class="value">${activos.length}</div></div>
+      <div class="kpi"><div class="label">Ticket promedio</div><div class="value">$${ticketProm.toFixed(0)}</div></div>
+      <div class="kpi"><div class="label">Entregados</div><div class="value">${entregados.length}</div></div>
+      <div class="kpi" style="${bajosPost.length?'background:rgba(220,53,69,.08)':''}">
+        <div class="label">Postres stock bajo</div>
+        <div class="value" style="${bajosPost.length?'color:#dc3545':''}">${bajosPost.length}</div>
+      </div>
+      <div class="kpi" style="${bajosIns.length?'background:rgba(253,126,20,.08)':''}">
+        <div class="label">Insumos stock bajo</div>
+        <div class="value" style="${bajosIns.length?'color:#fd7e14':''}">${bajosIns.length}</div>
+      </div>
+      <div class="kpi"><div class="label">OC pendientes</div><div class="value">${ocPend}</div></div>
+    </div>
+
+    <div class="charts">
+      <div class="chart-wrap"><canvas id="chartVentas"  height="250"></canvas></div>
+      <div class="chart-wrap"><canvas id="chartEstados" height="250"></canvas></div>
+    </div>
+
+    ${top5.length?`
+    <h3 style="color:#b33f4f;margin-top:20px;">🏆 Top 5 productos más vendidos</h3>
+    <div class="chart-wrap" style="height:220px;margin-top:8px;"><canvas id="chartTop5" height="200"></canvas></div>`:''}`;
+
+  setTimeout(() => {
+    ['myChart1','myChart2','myChart3'].forEach(k=>{if(window[k])window[k].destroy();});
+
+    window.myChart1 = new Chart(document.getElementById('chartVentas'),{
+      type:'bar',
+      data:{ labels:labels6, datasets:[{label:'Ingresos ($)',data:datos6,backgroundColor:'rgba(179,63,79,.7)',borderColor:'#b33f4f',borderWidth:1}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Ingresos últimos 6 meses'}},scales:{y:{beginAtZero:true}}}
+    });
+
+    window.myChart2 = new Chart(document.getElementById('chartEstados'),{
+      type:'doughnut',
+      data:{ labels:Object.keys(estCont), datasets:[{data:Object.values(estCont),backgroundColor:['#6c757d','#ffc107','#007bff','#28a745','#dc3545']}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{title:{display:true,text:'Pedidos por estado'}}}
+    });
+
+    if (top5.length) {
+      window.myChart3 = new Chart(document.getElementById('chartTop5'),{
+        type:'bar',
+        data:{ labels:top5.map(([n])=>n), datasets:[{label:'Unidades',data:top5.map(([,c])=>c),backgroundColor:'rgba(40,167,69,.7)',borderColor:'#28a745',borderWidth:1}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Top 5 productos'}},scales:{x:{beginAtZero:true}}}
+      });
+    }
+  },100);
+}
 
 </script>
 
-            <!-- INICIO: PIE DE PÁGINA LEGAL Y CRÉDITOS -->
-  <footer class="legal-footer">
+            <footer class="legal-footer">
     <p>
       <a href="legales.html#terminos">Términos y Condiciones</a> |
       <a href="legales.html#privacidad">Aviso de Privacidad</a> |
@@ -733,7 +2535,5 @@
     </p>
     <p>© 2025 La Casa del Pastel. Todos los derechos reservados.</p>
   </footer>
-  <!-- FIN: PIE DE PÁGINA -->
-
-</body>
+  </body>
 </html>
